@@ -1,10 +1,13 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   return (
-    <div>
-      <h1>Ticket Booking</h1>
-    </div>
+    <Router>
+      <div className='ui container'>
+        <h1>Ticket Booking</h1>
+      </div>
+    </Router>
   );
 }
 
