@@ -1,37 +1,42 @@
 import React from 'react';
-import { Card, Item } from 'semantic-ui-react';
+import { Card, Image, Header, Item, Label } from 'semantic-ui-react';
 
 function VCard() {
   const url = 'https://image.freepik.com/free-vector/blank-circus-border_1308-28544.jpg';
 
   return (
-    <Card link className='asd'>
-      <div className="content" style={{ padding: 0 }}>
+    <Card link style={card}>
+      <Card.Content style={{ padding: 0 }}>
         <Item.Group>
           <Item>
-            <div className="content" style={{ padding: '1rem' }}>
-              <a className="header">Ajolähtö</a>
-              <div className="meta">
-                <span className="cinema">12.4.2021</span>
-              </div>
-              <div className="description">
+            <Item.Content style={{ padding: '1rem' }}>
+              <Header>Ajolähtö</Header>
+              <Item.Meta>12.4.2021</Item.Meta>
+              <Item.Description>
                 <p>Epic adventure of people whose car is shite</p>
-              </div>
-              <div className="extra">
-                <div className="ui label">Child 15€</div>
-                <div className="ui label">Adult 20€</div>
-                <div className="ui label">Clan 500€</div>
-                <div className="ui label">Ghosts FREE</div>
-              </div>
-            </div>
-            <div className='ui image medium'>
-              <img src={url} className='grad' style={{ borderRadius: 3 }} />
-            </div>
+              </Item.Description>
+              <Item.Extra>
+                <Label>Child 15€</Label>
+                <Label>Adult 20€</Label>
+              </Item.Extra>
+            </Item.Content>
+            <Image size='medium' src={url} style={image} />
           </Item>
         </Item.Group>
-      </div>
+      </Card.Content>
     </Card>
   );
 }
+
+const card: React.CSSProperties = {
+  minWidth: '100%',
+  maxWidth: '100%'
+};
+
+const image: React.CSSProperties = {
+  WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0))',
+  maskImage: 'linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0))',
+  borderRadius: 3
+};
 
 export default VCard;

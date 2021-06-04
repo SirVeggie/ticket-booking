@@ -12,19 +12,3 @@ div.vcenter {
     vertical-align: middle;
 }
 
-div.fillv {
-    width: 100%;
-}
-
-.asd {
-    min-width: 100%;
-    max-width: 100%;
-}
-
-.nopadding {
-    padding: 0;
-}
-
-img.grad {
-    mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0));
-}
