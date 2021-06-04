@@ -1,30 +1,33 @@
 import React from 'react';
 import { Card, Image, Header, Item, Label } from 'semantic-ui-react';
 
-function VCard() {
-  const url = 'https://image.freepik.com/free-vector/blank-circus-border_1308-28544.jpg';
-
+function VCard({ data, action }: { data: CardInfo, action: any }) {
   return (
-    <Card link style={card}>
+    <Card link style={card} onClick={action}>
       <Card.Content style={{ padding: 0 }}>
         <Item.Group>
           <Item>
             <Item.Content style={{ padding: '1rem' }}>
-              <Header>Ajolähtö</Header>
-              <Item.Meta>12.4.2021</Item.Meta>
-              <Item.Description>
-                <p>Epic adventure of people whose car is shite</p>
-              </Item.Description>
-              <Item.Extra>
-                <Label>Child 15€</Label>
-                <Label>Adult 20€</Label>
-              </Item.Extra>
+              <Header>{data.title}</Header>
+              <Item.Meta>{data.meta}</Item.Meta>
+              <Item.Description><p>{data.description}</p></Item.Description>
+              <Tags data={data.tags} />
             </Item.Content>
-            <Image size='medium' src={url} style={image} />
+            <Image size='medium' src={data.imageUrl} style={image} />
           </Item>
         </Item.Group>
       </Card.Content>
     </Card>
+  );
+}
+
+function Tags({ data }: Prop<string[] | undefined>) {
+  if (!data)
+    return <></>;
+  return (
+    <Item.Extra>
+      {data.map(tag => <Label key={tag}>{tag}</Label>)}
+    </Item.Extra>
   );
 }
 
