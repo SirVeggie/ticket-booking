@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, Image, Header, Item, Label } from 'semantic-ui-react';
 
-function VCard({ data, action }: { data: CardInfo, action: any }) {
+function VCard({ data, onClick }: { data: CardInfo, onClick: (card: CardInfo) => void }) {
   return (
-    <Card link style={card} onClick={action}>
+    <Card link style={card} onClick={() => onClick(data)}>
       <Card.Content style={{ padding: 0 }}>
         <Item.Group>
           <Item>

@@ -8,19 +8,18 @@ function App() {
 
   const card: CardInfo = {
     title: 'Ajolähtö',
-    description: 'Some description',
+    description: 'Tässäpä erittäin hieno kuvaus',
     meta: '12.4.2021 - 24.7.2021',
     imageUrl: url,
-    tags: ['Child 15€', 'Adult 20€']
+    tags: ['Lapsi 15€', 'Aikuinen 20€']
   };
   
   return (
     <Router>
       <div className='ui container'>
-        <h1>YOU SUCK</h1>
-        <p>basically youre gay</p>
-        <button className='ui yellow basic button'>Muokkaa lippuja</button>
-        <VCard data={card} action={() => console.log('Clicked ' + card.title)}/>
+        <h1>Arctic Ensemble Lipunvaraus</h1>
+        <h2>Näytökset</h2>
+        <VCard data={card} onClick={() => console.log('Clicked ' + card.title)}/>
       </div>
     </Router>
   );
