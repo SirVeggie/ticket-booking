@@ -10,3 +10,4 @@
 | 4.6. | 6 | Further designing the home page and the cards. Now works well on mobile as well |
 | 5.6. | 1 | Smooth gradient generator |
 | 5.6. | 1 | Creating Showtimes view and trying to fix scrolling |
+| 5.6. | 11 | Fine tuning all pages, creating new ticket form page and page not found page, as well as some discussion with client |

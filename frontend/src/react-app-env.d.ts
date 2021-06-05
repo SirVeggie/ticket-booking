@@ -11,11 +11,20 @@ interface CardInfo {
     tags?: string[] | undefined,
     imageUrl?: string | undefined,
     color?: string | undefined,
-    height?: number | undefined
+    height?: number | undefined,
+    action?: () => void | undefined
 }
 
 interface ShowInfo {
+    id: number,
     title: string,
-    description: string,
+    description?: string | undefined,
     imageUrl?: string | undefined
+}
+
+interface ShowtimeInfo {
+    id: number,
+    showid: number,
+    date: Date,
+    location: string
 }

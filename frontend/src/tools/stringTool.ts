@@ -9,3 +9,11 @@ export function chunkSubstr(str: string, size: number) {
 
     return chunks;
 }
+
+export function printDate(date: Date) {
+    return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+}
+
+export function printTime(date: Date) {
+    return `${date.getHours()}:${date.getMinutes()}`;
+}

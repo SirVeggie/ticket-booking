@@ -39,7 +39,6 @@ function Tags({ data }: Prop<string[] | undefined>) {
   );
 }
 
-// const grad = gradient('to left', '#000000ff', '#00000000', t => 1 - ((1 - t) ** 2));
 const grad = gradient('to left', '#000000ff', '#00000000', curves.easeInOutSine);
 
 const card: React.CSSProperties = {
