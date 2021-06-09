@@ -11,3 +11,4 @@
 | 5.6. | 1 | Smooth gradient generator |
 | 5.6. | 1 | Creating Showtimes view and trying to fix scrolling |
 | 5.6. | 11 | Fine tuning all pages, creating new ticket form page and page not found page, as well as some discussion with client |
+| 9.6. | 7 | Implemented basic backend (without database, a debug version) |
