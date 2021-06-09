@@ -6,20 +6,20 @@ interface Prop<Type> {
 
 interface CardInfo {
     title: string,
-    description?: string | undefined,
-    meta?: string | undefined,
-    tags?: string[] | undefined,
-    imageUrl?: string | undefined,
-    color?: string | undefined,
-    height?: number | undefined,
-    action?: () => void | undefined
+    description?: string,
+    meta?: string,
+    tags?: string[],
+    imageUrl?: string,
+    color?: string,
+    height?: number,
+    action?: () => void
 }
 
 interface ShowInfo {
     id: number,
     title: string,
-    description?: string | undefined,
-    imageUrl?: string | undefined
+    description?: string,
+    imageUrl?: string
 }
 
 interface ShowtimeInfo {
