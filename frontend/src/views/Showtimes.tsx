@@ -1,48 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import Cards from '../components/Cards';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
+import { Show, Showtime } from '../datatypes';
+import database from '../tools/database';
+import { printDate, printTime } from '../tools/stringTool';
 
-function Showtimes({ show }: { show: ShowInfo; }) {
+const cardList: CardInfo[] | undefined = undefined;
+
+function Showtimes() {
+  const [valid, setValid] = useState(true);
+  const [show, setShow] = useState(new Show());
+  const [cards, setCards] = useState(cardList);
   const history = useHistory();
-  const params: any = useParams();
-  const id = params.id;
+  const id = (useParams() as any).id;
 
-  const cards: CardInfo[] = [{
-    title: show.title,
-    meta: '12.4.2021',
-    tags: ['12:30', 'Aikuinen 20€', 'Alennus 10€', 'Perhe 50€'],
-    height: 110,
-    action: () => history.push('/show/' + id + '/ticket/' + 0)
-  },
-  {
-    title: show.title,
-    meta: '12.4.2021',
-    tags: ['16:00', 'Aikuinen 20€', 'Alennus 10€', 'Perhe 50€'],
-    height: 110,
-    action: () => history.push('/show/' + id + '/ticket/' + 1)
-  },
-  {
-    title: show.title,
-    meta: '14.4.2021',
-    tags: ['12:00', 'Aikuinen FREE', 'Alennus FREE', 'Perhe FREE'],
-    height: 110,
-    action: () => history.push('/show/' + id + '/ticket/' + 2)
-  },
-  {
-    title: show.title,
-    meta: '16.4.2021',
-    tags: ['15:30', 'Aikuinen 20€', 'Alennus 10€', 'Perhe 50€'],
-    height: 110,
-    action: () => history.push('/show/' + id + '/ticket/' + 3)
-  }];
-
+  useEffect(() => {
+    database.shows.get(id).then(async x => {
+      setShow(x);
+      const showtimes = await database.showtimes.getall();
+      setCards(showtimes.filter(st => st.showid === id).map(showtime => {
+        return {
+          title: x.name,
+          meta: printDate(showtime.date),
+          tags: showtimeTags(showtime),
+          height: 110,
+          action: () => history.push('/show/' + id + '/ticket/' + showtime.id)
+        };
+      }));
+    }).catch(() => {
+      setValid(false);
+    });
+  }, []);
+  
+  if (!valid)
+    return null;
   return (
     <div>
-      <TitleStrip title={show.title} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
+      <TitleStrip title={show.name} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
       {show.imageUrl ? <Banner src={show.imageUrl!} /> : ''}
       <BackButton />
       {show.description ? <Description desc={show.description!} /> : ''}
@@ -51,6 +49,15 @@ function Showtimes({ show }: { show: ShowInfo; }) {
       <Footer />
     </div>
   );
+}
+
+function showtimeTags(showtime: Showtime) {
+  return [
+    printTime(showtime.date),
+    'Peruslippu ' + showtime.prices.normal + '€',
+    'Alennuslippu ' + showtime.prices.discount + '€',
+    'Perhelippu ' + showtime.prices.family + '€'
+  ];
 }
 
 function BackButton() {

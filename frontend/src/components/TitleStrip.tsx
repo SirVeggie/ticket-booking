@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import gradient from '../tools/gradient';
 
 function TitleStrip({ title, button, onClick }: { title: string, button: string, onClick: () => void; }) {
   return (
@@ -18,7 +17,6 @@ function TitleStrip({ title, button, onClick }: { title: string, button: string,
 }
 
 const strip: React.CSSProperties = {
-  // backgroundImage: gradient('to bottom', '#ffffff', '#ffffff', t => t),
   backgroundColor: '#232333',
   color: '#eeeeee',
   position: 'sticky',

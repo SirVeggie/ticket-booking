@@ -1,7 +1,7 @@
 import errors from './errors';
 
 function extract(object: Record<string, unknown>, model: any): any {
-    const result = {};
+    const result: any = {};
     Object.keys(model).forEach(key => {
         if (!object[key])
             throw errors.invalidData;

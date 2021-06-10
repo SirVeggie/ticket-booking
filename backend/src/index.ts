@@ -8,6 +8,7 @@ import 'express-async-errors';
 import database from './database';
 import extractType from './tools/extractType';
 import errors from './tools/errors';
+import { Show, Showtime, Ticket } from './datatypes';
 
 //====| middleware |====//
 
@@ -21,41 +22,23 @@ server.use(morgan(':method :url :status :res[content-length] - :response-time ms
 
 //===| models |===//
 
-const showModel: Show = {
-    id: undefined,
-    name: undefined
-};
-
-const showtimeModel: Showtime = {
-    id: undefined,
-    showid: undefined,
-    date: undefined,
-    location: undefined
-};
-
-const ticketModel: Ticket = {
-    id: undefined,
-    showtimeid: undefined,
-    confirmed: undefined,
-    name: undefined,
-    email: undefined,
-    phonenumber: undefined,
-    seats: undefined
-};
+const showModel: Show = new Show();
+const showtimeModel: Showtime = new Showtime();
+const ticketModel: Ticket = new Ticket();
 
 //===| generic |===//
 
-type DataType = 'show' | 'showtime' | 'ticket';
+type DataType = 'shows' | 'showtimes' | 'tickets';
 
 function getall(target: DataType) {
-    return async (req, res) => {
+    return async (req: any, res: any) => {
         const result = await database[target].getall();
         res.json(result);
     };
 }
 
 function getone(target: DataType) {
-    return async (req, res) => {
+    return async (req: any, res: any) => {
         const id = req.params.id;
         const data = await database[target].get(id);
         res.json(data);
@@ -63,7 +46,7 @@ function getone(target: DataType) {
 }
 
 function add(target: DataType, model: any) {
-    return async (req, res) => {
+    return async (req: any, res: any) => {
         const data = extractType(req.body, model);
         const result = await database[target].add(data);
         res.json(result);
@@ -71,7 +54,7 @@ function add(target: DataType, model: any) {
 }
 
 function replace(target: DataType, model: any) {
-    return async (req, res) => {
+    return async (req: any, res: any) => {
         const data = extractType(req.body, model);
         data.id = req.params.id;
         const result = await database[target].replace(data.id, data);
@@ -80,7 +63,7 @@ function replace(target: DataType, model: any) {
 }
 
 function del(target: DataType) {
-    return async (req, res) => {
+    return async (req: any, res: any) => {
         const id = req.params.id;
         await database[target].delete(id);
         res.status(204).end();
@@ -89,27 +72,27 @@ function del(target: DataType) {
 
 //====| shows |====//
 
-server.get('/api/shows', getall('show'));
-server.get('/api/shows/:id', getone('show'));
-server.post('/api/shows', add('show', showModel));
-server.put('/api/shows/:id', replace('show', showModel));
-server.delete('/api/shows/:id', del('show'));
+server.get('/api/shows', getall('shows'));
+server.get('/api/shows/:id', getone('shows'));
+server.post('/api/shows', add('shows', showModel));
+server.put('/api/shows/:id', replace('shows', showModel));
+server.delete('/api/shows/:id', del('shows'));
 
 //===| showtimes |===//
 
-server.get('/api/shows', getall('showtime'));
-server.get('/api/shows/:id', getone('showtime'));
-server.post('/api/shows', add('showtime', showtimeModel));
-server.put('/api/shows/:id', replace('showtime', showtimeModel));
-server.delete('/api/shows/:id', del('showtime'));
+server.get('/api/showtimes', getall('showtimes'));
+server.get('/api/showtimes/:id', getone('showtimes'));
+server.post('/api/showtimes', add('showtimes', showtimeModel));
+server.put('/api/showtimes/:id', replace('showtimes', showtimeModel));
+server.delete('/api/showtimes/:id', del('showtimes'));
 
 //===| tickets |===//
 
-server.get('/api/shows', getall('ticket'));
-server.get('/api/shows/:id', getone('ticket'));
-server.post('/api/shows', add('ticket', ticketModel));
-server.put('/api/shows/:id', replace('ticket', ticketModel));
-server.delete('/api/shows/:id', del('ticket'));
+server.get('/api/tickets', getall('tickets'));
+server.get('/api/tickets/:id', getone('tickets'));
+server.post('/api/tickets', add('tickets', ticketModel));
+server.put('/api/tickets/:id', replace('tickets', ticketModel));
+server.delete('/api/tickets/:id', del('tickets'));
 
 //====| other |====//
 

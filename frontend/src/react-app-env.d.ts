@@ -14,17 +14,3 @@ interface CardInfo {
     height?: number,
     action?: () => void
 }
-
-interface ShowInfo {
-    id: number,
-    title: string,
-    description?: string,
-    imageUrl?: string
-}
-
-interface ShowtimeInfo {
-    id: number,
-    showid: number,
-    date: Date,
-    location: string
-}

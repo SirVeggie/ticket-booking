@@ -1,31 +1,46 @@
-import React from 'react';
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { Form, Input, Dropdown, Button, Icon, Popup, Label, Checkbox, Table, Message } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
+import { Show, Showtime, Ticket } from '../datatypes';
+import database from '../tools/database';
 
-function TicketForm({ showtimeInfo }: { showtimeInfo: ShowtimeInfo; }) {
-  const history = useHistory();
-  const show: ShowInfo = { id: 0, title: 'Ajolähtö' };
+function TicketForm() {
+  const [valid, setValid] = useState(true);
+  const [show, setShow] = useState(new Show());
+  const [showtime, setShowtime] = useState(new Showtime());
+  const id = (useParams() as any).id;
 
+  useEffect(() => {
+    database.showtimes.get(id).then(async x => {
+      setShowtime(x);
+      setShow(await database.shows.get(x.showid));
+    }).catch(() => {
+      setValid(false);
+    });
+  }, []);
+
+  if (!valid)
+    return null;
   return (
     <div>
-      <TitleStrip title={show.title} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
+      <TitleStrip title={show.name} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
       <div style={{ height: 50 }} />
-      <FormBlock show={show} />
+      <FormBlock show={show} showtime={showtime} />
       <Footer />
     </div>
   );
 }
 
-function FormBlock({ show }: { show: ShowInfo; }) {
+function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   const history = useHistory();
 
   return (
     <div className='ui container' style={{ marginBottom: 15 }}>
       <h3>Valitun näytöksen tiedot</h3>
-      <ActInfo name={show.title} date={new Date()} location={'Siilinjärvi, keskusta'} />
+      <ActInfo name={show.name} date={showtime.date} location={showtime.location} />
 
       <Form>
         <div style={{ marginBottom: 20 }}>
@@ -42,8 +57,6 @@ function FormBlock({ show }: { show: ShowInfo; }) {
           <TextInput label='Sähköposti' />
           <TextInput label='Puhelinnumero' extra='- koronatilanteen vuoksi' />
         </div>
-
-        {/* <h3>Huomio</h3> */}
 
         <Notice text={'Tule ajoissa paikalle, noin 1 tunti ennen näytöksen alkamista.'} />
 
@@ -132,7 +145,6 @@ function Notice({ text }: { text: string; }) {
       <Message.Content>{text}</Message.Content>
       <div style={{ marginTop: 10 }}>
         <Checkbox label='Ymmärrän' />
-        {/* <Checkbox />Hello */}
       </div>
     </Message>
   );
