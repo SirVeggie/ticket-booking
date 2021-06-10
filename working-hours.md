@@ -13,4 +13,4 @@
 | 5.6.  | 11 | Fine tuning all pages, creating new ticket form page and page not found page, as well as some discussion with client |
 | 9.6.  | 7 | Implemented basic backend (without database, a debug version) |
 | 10.6. | 7 | Modifying frontend logic to use backend |
-| 10.6. | 2 | Trying to fix broken dates caused by JSON parsing |
+| 10.6. | 2 | Trying to fix broken dates caused by JSON parsing among other smaller bugs |
