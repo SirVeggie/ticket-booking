@@ -1,43 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import Cards from '../components/Cards';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
-import { Show, Showtime } from '../datatypes';
-import database from '../tools/database';
+import { Showtime } from '../datatypes';
+import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
 
-const cardList: CardInfo[] | undefined = undefined;
-
 function Showtimes() {
-  const [valid, setValid] = useState(true);
-  const [show, setShow] = useState(new Show());
-  const [cards, setCards] = useState(cardList);
+  const { shows, showtimes } = useSelector((state: StateType) => state.data);
   const history = useHistory();
   const id = (useParams() as any).id;
 
-  useEffect(() => {
-    database.shows.get(id).then(async x => {
-      setShow(x);
-      const showtimes = await database.showtimes.getall();
-      setCards(showtimes.filter(st => st.showid === id).map(showtime => {
-        return {
-          title: x.name,
-          meta: printDate(showtime.date),
-          tags: showtimeTags(showtime),
-          height: 110,
-          action: () => history.push('/show/' + id + '/ticket/' + showtime.id)
-        };
-      }));
-    }).catch(() => {
-      setValid(false);
-    });
-  }, []);
-  
-  if (!valid)
+  const show = shows.find(x => x.id === id);
+
+  if (!show) {
     return null;
+  }
+
+  const cards = showtimes.filter(st => st.showid === id).map(st => ({
+    title: show.name,
+    meta: printDate(st.date) + ' - ' + st.location,
+    tags: showtimeTags(st),
+    height: 110,
+    action: () => history.push('/reserve/' + st.id)
+  }));
+
   return (
     <div>
       <TitleStrip title={show.name} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
@@ -62,7 +53,7 @@ function showtimeTags(showtime: Showtime) {
 
 function BackButton() {
   const history = useHistory();
-  
+
   return (
     <div className='ui container' style={{ marginBottom: 30 }}>
       <Button icon labelPosition='left' onClick={() => history.push('/')}>

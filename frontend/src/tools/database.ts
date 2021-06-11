@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Show, Showtime, Ticket } from '../datatypes';
+import { DataPacket, Show, Showtime, Ticket } from '../datatypes';
 import fixDates from './fixDates';
 
 const baseUrl = '/api';
@@ -27,6 +27,10 @@ function del(target: string): (id: string) => Promise<void> {
     return id => axios.delete(target + '/' + id);
 }
 
+function getPacket(): Promise<DataPacket> {
+    return axios.get(baseUrl + '/packet').then(x => fixDates(x.data));
+}
+
 //====| exports |====//
 
 function generate<Type>(target: string) {
@@ -40,6 +44,7 @@ function generate<Type>(target: string) {
 }
 
 export default {
+    getPacket,
     shows: generate<Show>(shows),
     showtimes: generate<Showtime>(showtimes),
     tickets: generate<Ticket>(tickets)

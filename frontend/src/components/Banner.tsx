@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Image, Placeholder, Transition } from 'semantic-ui-react';
 import curves from '../tools/curves';
 import gradient from '../tools/gradient';
 
 function Banner({ src }: { src: string; }) {
-  return <img src={src} style={banner} />;
+  const [loading, setLoading] = useState(true);
+
+  const load = () => {
+    console.log('image loaded');
+    setLoading(false);
+  };
+
+  return (
+    <div>
+      <Placeholder fluid style={{ ...banner, display: (loading ? '' : 'none') }}>
+        <Placeholder.Image style={{ minHeight: '50vw' }} />
+      </Placeholder>
+      <Image src={src} style={{ ...banner, display: (loading ? 'none' : '') }} onLoad={load} />
+    </div>
+  );
 }
 
 const grad = gradient('to bottom', '#000000ff', '#00000000', curves.combine(() => 0, curves.easeInOutSine));

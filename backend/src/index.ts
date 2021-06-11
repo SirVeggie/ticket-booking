@@ -70,6 +70,12 @@ function del(target: DataType) {
     };
 }
 
+//====| common |====//
+
+server.get('/api/packet', async (req, res) => {
+    res.json(await database.getPacket());
+});
+
 //====| shows |====//
 
 server.get('/api/shows', getall('shows'));
@@ -88,11 +94,11 @@ server.delete('/api/showtimes/:id', del('showtimes'));
 
 //===| tickets |===//
 
-server.get('/api/tickets', getall('tickets'));
-server.get('/api/tickets/:id', getone('tickets'));
-server.post('/api/tickets', add('tickets', ticketModel));
-server.put('/api/tickets/:id', replace('tickets', ticketModel));
-server.delete('/api/tickets/:id', del('tickets'));
+server.get('/api/admin/tickets', getall('tickets'));
+server.get('/api/admin/tickets/:id', getone('tickets'));
+server.post('/api/admin/tickets', add('tickets', ticketModel));
+server.put('/api/admin/tickets/:id', replace('tickets', ticketModel));
+server.delete('/api/admin/tickets/:id', del('tickets'));
 
 //====| other |====//
 

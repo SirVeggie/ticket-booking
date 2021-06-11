@@ -17,6 +17,10 @@ export class Showtime {
     prices: Prices = new Prices();
 }
 
+export class ShowtimeExtra extends Showtime {
+    reservedSeats: number = 0;
+}
+
 export class Ticket {
     id: string = '';
     showtimeid: string = '';
@@ -42,4 +46,9 @@ export class Prices {
     normal: number = 0;
     discount: number = 0;
     family: number = 0;
+}
+
+export class DataPacket {
+    shows: Show[] = [];
+    showtimes: ShowtimeExtra[] = [];
 }

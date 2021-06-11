@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Homepage from './views/Homepage';
 import Showtimes from './views/Showtimes';
@@ -6,15 +6,24 @@ import NotFound from './views/NotFound';
 import TicketForm from './views/TicketForm';
 import EmailConfirmation from './views/EmailConfirmation';
 import CondNotFound from './components/CondNotFound';
+import { setData } from './reducers/dataReducer';
+import database from './tools/database';
+import { useDispatch } from 'react-redux';
 
 function App() {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    database.getPacket().then(x => dispatch(setData(x)));
+  }, []);
+  
   return (
     <div style={{ minWidth: 500 }}>
       <Switch>
         <Route path='/emailconfirm'>
           <EmailConfirmation />
         </Route>
-        <Route path='/show/:id/ticket/:showtimeid'>
+        <Route path='/reserve/:id'>
           <CondNotFound>
             <TicketForm />
           </CondNotFound>

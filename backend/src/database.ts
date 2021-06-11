@@ -1,6 +1,6 @@
 import timer from './tools/timer';
 import errors from './tools/errors';
-import { Show, Showtime, Ticket } from './datatypes';
+import { DataPacket, Show, Showtime, ShowtimeExtra, Ticket } from './datatypes';
 import fixDates from './tools/fixDates';
 
 //====| debug data |====//
@@ -84,7 +84,7 @@ let tickets: Ticket[] = [{
 }];
 //#endregion
 
-//====| generators |====//
+//====| helpers |====//
 
 function generateShowID(): string {
     let id = '0';
@@ -112,6 +112,22 @@ function generateTicketID(): string {
 
 function error(error: any): any {
     throw error;
+}
+
+function sumSeats(ticket: Ticket): number {
+    return ticket.seats.normal + ticket.seats.discount + ticket.seats.family;
+}
+
+function mapShowtimeToExtra(showtime: Showtime): ShowtimeExtra {
+    const reserved = tickets.filter(x => x.showtimeid === showtime.id).reduce((a, b) => a + sumSeats(b), 0);
+    return { ...showtime, reservedSeats: reserved };
+}
+
+//====| common |====//
+
+async function getPacket(): Promise<DataPacket> {
+    await timer(1);
+    return { shows: shows, showtimes: showtimes.map(mapShowtimeToExtra) };
 }
 
 //====| shows |====//
@@ -150,22 +166,25 @@ async function deleteShowByID(id: string): Promise<void> {
 
 //====| showtimes |====//
 
-async function getShowtimes(): Promise<Showtime[]> {
+async function getShowtimes(): Promise<ShowtimeExtra[]> {
     await timer(1);
-    return showtimes;
+    return showtimes.map(mapShowtimeToExtra);
 }
 
-async function getShowtimeByID(id: string): Promise<Showtime> {
+async function getShowtimeByID(id: string): Promise<ShowtimeExtra> {
     await timer(1);
-    return showtimes.find(x => x.id === id) ?? error(errors.noData);
+    const showtime = showtimes.find(x => x.id === id);
+    if (!showtime)
+        throw errors.noData;
+    return mapShowtimeToExtra(showtime);
 }
 
-async function addShowtime(showtime: Showtime): Promise<Showtime> {
+async function addShowtime(showtime: Showtime): Promise<ShowtimeExtra> {
     await timer(1);
     showtime.id = generateShowtimeID();
     showtime = fixDates(showtime);
     showtimes.push(showtime);
-    return showtime;
+    return mapShowtimeToExtra(showtime);
 }
 
 async function replaceShowtimeByID(id: string, showtime: Showtime): Promise<void> {
@@ -219,6 +238,7 @@ async function deleteTicketByID(id: string): Promise<void> {
 //====| export |====//
 
 export default {
+    getPacket,
     shows: {
         getall: getShows,
         get: getShowByID,

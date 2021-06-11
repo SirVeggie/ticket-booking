@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Form, Input, Dropdown, Button, Icon, Popup, Label, Checkbox, Table, Message } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
 import { Show, Showtime, Ticket } from '../datatypes';
-import database from '../tools/database';
+import { useSelector } from 'react-redux';
+import { StateType } from '../store';
 
 function TicketForm() {
-  const [valid, setValid] = useState(true);
-  const [show, setShow] = useState(new Show());
-  const [showtime, setShowtime] = useState(new Showtime());
+  const { shows, showtimes } = useSelector((state: StateType) => state.data);
   const id = (useParams() as any).id;
 
-  useEffect(() => {
-    database.showtimes.get(id).then(async x => {
-      setShowtime(x);
-      setShow(await database.shows.get(x.showid));
-    }).catch(() => {
-      setValid(false);
-    });
-  }, []);
-
-  if (!valid)
+  const showtime = showtimes.find(x => x.id === id);
+  const show = shows.find(x => x.id === showtime?.showid);
+  
+  if (!showtime || !show)
     return null;
   return (
     <div>
