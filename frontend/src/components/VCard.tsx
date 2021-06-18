@@ -2,16 +2,28 @@ import React from 'react';
 import { Card, Image, Header, Item, Label } from 'semantic-ui-react';
 import gradient from '../tools/gradient';
 import curves from '../tools/curves';
+import Toggle from './Toggle';
+import Align from './Align';
 
 function VCard({ data, onClick }: { data: CardInfo, onClick: (card: CardInfo) => void; }) {
   const customCard = {
     ...card,
     backgroundColor: data.color,
-    height: data.height ? data.height : 200
+    height: data.height ? data.height : 200,
+    filter: data.disabled ? 'contrast(0.7) grayscale(0.7)' : undefined
+  };
+
+  const disableStyle: React.CSSProperties = {
+    fontSize: 23,
+    padding: 10,
+    color: 'white',
+    backgroundColor: '#00000040',
+    filter: 'drop-shadow(0px 0px 2px #000000)',
+    borderRadius: 5
   };
 
   return (
-    <Card link style={customCard} onClick={() => onClick(data)}>
+    <Card style={customCard} onClick={data.disabled ? undefined : () => onClick(data)}>
       <Image size='medium' src={data.imageUrl} style={image} />
       <Card.Content style={{ padding: 0 }}>
         <Item.Group>
@@ -25,6 +37,11 @@ function VCard({ data, onClick }: { data: CardInfo, onClick: (card: CardInfo) =>
           </Item>
         </Item.Group>
       </Card.Content>
+      <Toggle enabled={!!data.disabled && !!data.disabledMsg}>
+        <Align style={{ position: 'absolute' }}>
+          <div style={disableStyle}>{data.disabledMsg}</div>
+        </Align>
+      </Toggle>
     </Card>
   );
 }

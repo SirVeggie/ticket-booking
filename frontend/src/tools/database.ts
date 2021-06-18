@@ -7,24 +7,35 @@ const shows = baseUrl + '/shows';
 const showtimes = baseUrl + '/showtimes';
 const tickets = baseUrl + '/tickets';
 
+function getConfig() {
+    const token = window.localStorage.getItem('token');
+    if (!token)
+        return undefined;
+    return {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    };
+}
+
 function getall<Type>(target: string): () => Promise<Type[]> {
-    return () => axios.get(target).then(x => fixDates(x.data));
+    return () => axios.get(target, getConfig()).then(x => fixDates(x.data));
 }
 
 function get<Type>(target: string): (id: string) => Promise<Type> {
-    return id => axios.get(target + '/' + id).then(x => fixDates(x.data));
+    return id => axios.get(target + '/' + id, getConfig()).then(x => fixDates(x.data));
 }
 
 function add<Type>(target: string): (show: Type) => Promise<Type> {
-    return show => axios.post(target, show).then(x => fixDates(x.data));
+    return show => axios.post(target, show, getConfig()).then(x => fixDates(x.data));
 }
 
 function replace<Type>(target: string): (id: string, show: Type) => Promise<void> {
-    return (id, show) => axios.put(target + '/' + id, show);
+    return (id, show) => axios.put(target + '/' + id, show, getConfig());
 }
 
 function del(target: string): (id: string) => Promise<void> {
-    return id => axios.delete(target + '/' + id);
+    return id => axios.delete(target + '/' + id, getConfig());
 }
 
 function getPacket(): Promise<DataPacket> {

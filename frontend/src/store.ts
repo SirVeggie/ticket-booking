@@ -1,18 +1,26 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import 'semantic-ui-css/semantic.min.css';
-import { DataPacket } from './datatypes';
+import { DataPacket, Ticket } from './datatypes';
+import adminReducer from './reducers/adminReducer';
 import dataReducer from './reducers/dataReducer';
+import ticketReducer from './reducers/ticketReducer';
 
 const reducer = combineReducers({
-    data: dataReducer
+    data: dataReducer,
+    ticket: ticketReducer,
+    admin: adminReducer
 });
 
 const store = createStore(reducer, applyMiddleware(thunk));
-store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => {
+    console.log(store.getState());
+});
 
 export interface StateType {
-    data: DataPacket;
+    data: DataPacket,
+    ticket: Ticket | null,
+    admin: boolean
 }
 
 export default store;

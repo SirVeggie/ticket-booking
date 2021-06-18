@@ -1,27 +1,41 @@
 import timer from './tools/timer';
 import errors from './tools/errors';
-import { DataPacket, Show, Showtime, ShowtimeExtra, Ticket } from './datatypes';
+import { DataPacket, MiscData, Show, Showtime, ShowtimeExtra, Ticket } from './datatypes';
 import fixDates from './tools/fixDates';
 
 //====| debug data |====//
 
 //#region debug data
+let misc: MiscData = {
+    mainBannerUrl: 'https://i.imgur.com/ZeTqEM3.png',
+    cardOpacity: '1f',
+    homepage: 'https://www.arcticensemble.com/where-are-we',
+    explanations: {
+        normal: 'Yli 18 vuotiaat',
+        discount: 'Lapset, opiskelijat, eläkeläiset, toimintarajoitteiset ja toimintarajoitteisten hoitajat',
+        family: '2 aikuista ja 2 lasta'
+    }
+};
+
 let shows: Show[] = [{
     id: '1',
     name: 'Ajolähtö',
     description: 'Some dudes try to fix a car or something',
-    imageUrl: 'https://i.imgur.com/iT7DGrx.jpg'
+    imageUrl: 'https://i.imgur.com/iT7DGrx.jpg',
+    color: '#ffb700'
 },
 {
     id: '2',
     name: 'Klovnien valtakunta',
-    imageUrl: 'https://cdn.britannica.com/96/198296-050-65D1A810/Clowns-tour-Ringling-Bros-Barnum-Atlanta-2017.jpg'
+    imageUrl: 'https://cdn.britannica.com/96/198296-050-65D1A810/Clowns-tour-Ringling-Bros-Barnum-Atlanta-2017.jpg',
+    color: '#2395c3'
 },
 {
     id: '3',
     name: 'Herra hatunnostaja',
     description: 'Some dude lifting hats probably',
-    imageUrl: 'https://previews.123rf.com/images/angelnt/angelnt1907/angelnt190700035/128236261-fabulous-circus-man-in-a-hat-and-a-red-suit-posing-in-the-smoke-on-a-colored-dark-background-a-clown.jpg'
+    imageUrl: 'https://previews.123rf.com/images/angelnt/angelnt1907/angelnt190700035/128236261-fabulous-circus-man-in-a-hat-and-a-red-suit-posing-in-the-smoke-on-a-colored-dark-background-a-clown.jpg',
+    color: '#b991f0'
 }];
 
 let showtimes: Showtime[] = [{
@@ -79,7 +93,8 @@ let tickets: Ticket[] = [{
     confirmed: true,
     name: 'Veikka Pulsa',
     email: 'SirVeggie@hotmail.com',
-    phonenumber: { countrycode: 358, number: '405030880' },
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '405030880' },
     seats: { normal: 1, discount: 1, family: 0 }
 }];
 //#endregion
@@ -127,7 +142,18 @@ function mapShowtimeToExtra(showtime: Showtime): ShowtimeExtra {
 
 async function getPacket(): Promise<DataPacket> {
     await timer(1);
-    return { shows: shows, showtimes: showtimes.map(mapShowtimeToExtra) };
+    return { shows: shows, showtimes: showtimes.map(mapShowtimeToExtra), misc: misc };
+}
+
+async function getMisc(): Promise<MiscData> {
+    await timer(1);
+    return misc;
+}
+
+async function replaceMisc(data: MiscData): Promise<MiscData> {
+    await timer(1);
+    misc = data;
+    return data;
 }
 
 //====| shows |====//
@@ -239,6 +265,8 @@ async function deleteTicketByID(id: string): Promise<void> {
 
 export default {
     getPacket,
+    getMisc,
+    replaceMisc,
     shows: {
         getall: getShows,
         get: getShowByID,

@@ -9,6 +9,8 @@ import CondNotFound from './components/CondNotFound';
 import { setData } from './reducers/dataReducer';
 import database from './tools/database';
 import { useDispatch } from 'react-redux';
+import AdminHome from './views/admin/AdminHome';
+import TicketDetails from './views/TicketDetails';
 
 function App() {
   const dispatch = useDispatch();
@@ -20,6 +22,9 @@ function App() {
   return (
     <div style={{ minWidth: 500 }}>
       <Switch>
+        <Route exact path='/'>
+          <Homepage />
+        </Route>
         <Route path='/emailconfirm'>
           <EmailConfirmation />
         </Route>
@@ -33,8 +38,11 @@ function App() {
             <Showtimes />
           </CondNotFound>
         </Route>
-        <Route exact path='/'>
-          <Homepage />
+        <Route path='/ticket/:id'>
+          <TicketDetails />
+        </Route>
+        <Route path='/admin'>
+          <AdminHome />
         </Route>
         <Route>
           <NotFound />

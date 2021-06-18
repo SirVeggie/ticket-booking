@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import { Image, Placeholder, Transition } from 'semantic-ui-react';
+import { Image, Placeholder } from 'semantic-ui-react';
 import curves from '../tools/curves';
 import gradient from '../tools/gradient';
 
 function Banner({ src }: { src: string; }) {
   const [loading, setLoading] = useState(true);
-
-  const load = () => {
-    console.log('image loaded');
-    setLoading(false);
-  };
-
+  const load = () => setLoading(false);
+  
   return (
     <div>
       <Placeholder fluid style={{ ...banner, display: (loading ? '' : 'none') }}>

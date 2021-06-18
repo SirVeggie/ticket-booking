@@ -12,5 +12,9 @@ interface CardInfo {
     imageUrl?: string,
     color?: string,
     height?: number,
+    disabled?: boolean,
+    disabledMsg?: string,
     action?: () => void
 }
+
+type FormSubmit = (event: React.FormEvent<HTMLFormElement>) => void;

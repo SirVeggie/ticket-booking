@@ -18,6 +18,7 @@ function TitleStrip({ title, button, onClick }: { title: string, button: string,
 
 const strip: React.CSSProperties = {
   backgroundColor: '#232333',
+  // background: 'radial-gradient(circle, #333343, #131323)',
   color: '#eeeeee',
   position: 'sticky',
   top: 0,

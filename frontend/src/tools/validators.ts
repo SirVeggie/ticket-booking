@@ -6,7 +6,7 @@ function email(text: string): boolean {
 }
 
 function phone(number: string): boolean {
-    return /^\d{3, 15}$/m.test(number);
+    return /^\+\d{5, 18}$/m.test(number);
 }
 
 export default { email, phone };

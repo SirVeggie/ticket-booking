@@ -1,32 +1,33 @@
 import { DataPacket } from '../datatypes';
 
-const initialState: DataPacket = {
-    shows: [],
-    showtimes: []
-};
+const initialState: DataPacket = new DataPacket();
 
 //====| actions |====//
 
+export function resetData(): DataAction {
+    return { type: 'DATA_RESET' };
+}
+
 export function setData(data: DataPacket) {
-    return { type: 'SET', data: data };
+    return { type: 'DATA_SET', data: data };
 }
 
 //====| reducer |====//
 
-function dataReducer(state = initialState, action: dataAction) {
+function dataReducer(state = initialState, action: DataAction) {
     switch (action.type) {
-        case 'RESET':
+        case 'DATA_RESET':
             return initialState;
-        case 'SET':
+        case 'DATA_SET':
             return action.data;
         default:
             return state;
     }
 }
 
-export interface dataAction {
-    type: string,
-    data: DataPacket;
+export interface DataAction {
+    type: 'DATA_RESET' | 'DATA_SET',
+    data?: DataPacket
 }
 
 export default dataReducer;

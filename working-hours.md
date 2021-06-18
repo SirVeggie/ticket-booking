@@ -16,3 +16,8 @@
 | 10.6. | 2 | Trying to fix broken dates caused by JSON parsing among other smaller bugs |
 | 11.6. | 3 | Refactoring frontend data manipulation logic save shows and showtimes with redux |
 | 11.6. | 4 | Minor refactoring, trying to make page loading smoother with image placeholders etc. |
+| 14.6. | 7 | Ticket form page form now works correctly and has validation and error messages |
+| 17.6. | 4 | Researching and implementing admin authentication for backend |
+| 17.6. | 3 | Frontend login stuff as well as further research on gradients |
+| 17.6. | 2 | Disabling cards (no tickets available etc.) |
+| 18.8. | 9 | Admin panel base design, researching css transitions, basic ticket page |

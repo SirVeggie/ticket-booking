@@ -1,6 +1,6 @@
 import React from 'react';
 import { Placeholder, Segment } from 'semantic-ui-react';
-import VCard from '../elements/VCard';
+import VCard from './VCard';
 import ConditionalRender from './ConditionalRender';
 
 function Cards({ title, cards }: { title: string, cards: CardInfo[] | undefined; }) {

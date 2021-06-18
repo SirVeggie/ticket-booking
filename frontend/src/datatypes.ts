@@ -1,4 +1,17 @@
 
+export class MiscData {
+    mainBannerUrl: string = '';
+    cardOpacity: string = '1f';
+    homepage: string = '';
+    explanations: TicketExplanations = new TicketExplanations();
+}
+
+export class TicketExplanations {
+    normal: string = 'Peruslippu';
+    discount: string = 'Alennuslippu';
+    family: string = 'Perhelippu';
+}
+
 export class Show {
     id: string = '';
     name: string = '';
@@ -27,12 +40,13 @@ export class Ticket {
     confirmed: boolean = false;
     name: string = '';
     email: string = '';
+    reserveDate: Date = new Date();
     phonenumber: Phonenumber = new Phonenumber();
     seats: Seats = new Seats();
 }
 
 export class Phonenumber {
-    countrycode: number = 0;
+    code: string = '+00';
     number: string = '';
 }
 
@@ -49,6 +63,7 @@ export class Prices {
 }
 
 export class DataPacket {
+    misc: MiscData = new MiscData();
     shows: Show[] = [];
     showtimes: ShowtimeExtra[] = [];
 }
