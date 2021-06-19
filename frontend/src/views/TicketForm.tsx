@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Form, Button, Table, Message } from 'semantic-ui-react';
+import { Form, Button, Table, Message, Icon } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
@@ -13,6 +13,9 @@ import TextInput from '../components/TextInput';
 import Notice from '../components/Notice';
 import validators from '../tools/validators';
 import TicketSelector from '../components/TicketInput';
+import database from '../tools/database';
+import Toggle from '../components/Toggle';
+import timer from '../tools/timer';
 
 function TicketForm() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -41,6 +44,7 @@ class Errors {
   email: string = '';
   phone: string = '';
   check: string = '';
+  server: string = '';
 }
 
 function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
@@ -50,6 +54,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   const history = useHistory();
   const [data, setData] = useState(initialFormData);
   const [errors, setErrors] = useState(new Errors());
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const ticketNormal = 'Yli 18 vuotiaat';
@@ -90,6 +95,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
 
   const submit: FormSubmit = async event => {
     event.preventDefault();
+    setErrors({ ...errors, server: '' });
     const ticket = { ...data, reserveDate: new Date() };
 
     const validationErrors = validateForm(data, nameData, checked);
@@ -99,16 +105,22 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
       return;
     }
 
-    // try {
-    //   ticket = await database.tickets.add(ticket);
-    // } catch (error) {
+    setLoading(true);
 
-    //   return;
-    // }
+    try {
+      await timer(2000);
+      // throw 'bad connection';
+      // await database.tickets.add(ticket);
+    } catch (error) {
+      console.log('Server failed to handle ticket submit request');
+      setErrors({ ...errors, server: 'Häiriö palvelimen kanssa, yritä hetken kuluttua uudelleen' });
+      setLoading(false);
+      return;
+    }
 
     console.log('Form submit succeeded');
     dispatch(setTicket(ticket));
-    history.push('/emailconfirm');
+    history.push('/waiting_confirmation');
   };
 
   return (
@@ -119,7 +131,11 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
       <Form onSubmit={submit}>
         <div style={{ marginBottom: 20 }}>
           <h3>Lipputiedot</h3>
-          {errors.tickets ? <Message negative content={errors.tickets} /> : ''}
+          
+          <Toggle enabled={!!errors.tickets}>
+            <Message negative content={errors.tickets} />
+          </Toggle>
+          
           <TicketSelector name='Perusliput' price={20} hint={ticketNormal} data={data.seats.normal} setData={amount => changeTickets('normal', amount)} />
           <TicketSelector name='Alennusliput' price={10} hint={ticketDiscount} data={data.seats.discount} setData={amount => changeTickets('discount', amount)} />
           <TicketSelector name='Perheliput' price={40} hint={ticketFamily} data={data.seats.family} setData={amount => changeTickets('family', amount)} />
@@ -129,7 +145,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
           <h3>Henkilötiedot</h3>
           <TextInput label='Etunimi' data={nameData.first} setData={setFirstName} error={errors.firstname} />
           <TextInput label='Sukunimi' data={nameData.last} setData={setLastName} error={errors.lastname} />
-          <TextInput label='Sähköposti' data={data.email} setData={setEmail} error={errors.email} />
+          <TextInput label='Sähköposti' extra=' - varmennusviestiä varten' data={data.email} setData={setEmail} error={errors.email} />
           <PhoneInput data={data.phonenumber} setData={setPhone} error={errors.phone} />
         </div>
 
@@ -137,10 +153,17 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
           Tule ajoissa paikalle, noin 1 tunti ennen näytöksen alkamista.
         </Notice>
 
+        <Toggle enabled={!!errors.server}>
+          <Message negative>
+            <Icon name='warning sign' />
+            {errors.server}
+          </Message>
+        </Toggle>
+
         <div style={{ display: 'flex' }}>
           <Button onClick={() => history.push('/show/' + show.id)}>Takaisin</Button>
           <div style={{ flexGrow: 1 }} />
-          <Button color='orange' type='submit'>Vahvista</Button>
+          <Button color='orange' type='submit' loading={loading}>Vahvista</Button>
         </div>
       </Form>
     </div>

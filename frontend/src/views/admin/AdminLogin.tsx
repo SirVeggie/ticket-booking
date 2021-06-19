@@ -9,19 +9,22 @@ import { lines } from '../../tools/shapes';
 
 function AdminLogin() {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const submit = async (event: any) => {
     event.preventDefault();
+    setLoading(true);
     const password = event.target.pass.value;
     event.target.pass.value = '';
     let token: any;
-
+    
     try {
       token = await server.login(password);
     } catch (error) {
       console.log('Login error: ' + error.response.data);
       setError(error.response.data);
+      setLoading(false);
       return;
     }
 
@@ -33,7 +36,7 @@ function AdminLogin() {
   return (
     <div style={baseStyle}>
       <Align bottom={2}>
-        <div style={boxStyle} className='ui segment raised'>
+        <div style={boxStyle} className={'ui segment raised' + (loading ? ' loading' : '')}>
           <div style={{ padding: 10, margin: 10, fontSize: 20 }}>
             Admin
           </div>

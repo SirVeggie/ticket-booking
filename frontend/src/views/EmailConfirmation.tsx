@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message, Icon } from 'semantic-ui-react';
+import { Message, Icon, Segment, Header, Loader } from 'semantic-ui-react';
 import TitleStrip from '../components/TitleStrip';
 
 function EmailConfirmation() {
@@ -20,10 +20,15 @@ function EmailConfirmation() {
                 <div>Varaus perutaan jos sitä ei varmisteta tunnin sisällä</div>
               </Message.Content>
             </div>
-            <Icon size='huge' name='circle notch' loading style={{ margin: 'auto' }} />
+            <Icon size='huge' name='circle notch' loading style={{ margin: 'auto', marginRight: 10 }} />
+            {/* <Loader indeterminate inline active size='big' style={{ margin: 'auto', marginRight: 20 }} /> */}
           </div>
         </Message>
 
+        <Segment>
+          <Header content='Ticket details' />
+
+        </Segment>
       </div>
     </div>
   );

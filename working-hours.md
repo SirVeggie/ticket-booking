@@ -21,4 +21,6 @@
 | 17.6. | 3 | Frontend login stuff as well as further research on gradients |
 | 17.6. | 2 | Disabling cards (no tickets available etc.) |
 | 18.8. | 9 | Admin panel base design, researching css transitions, basic ticket page |
-| total | 80 |
+| 19.8. | 1 | Change backend behaviour for tickets |
+| 19.8. | 1 | Added some error and loading stuff |
+| total | 82 |

@@ -25,7 +25,7 @@ function App() {
         <Route exact path='/'>
           <Homepage />
         </Route>
-        <Route path='/emailconfirm'>
+        <Route path='/waiting_confirmation'>
           <EmailConfirmation />
         </Route>
         <Route path='/reserve/:id'>
