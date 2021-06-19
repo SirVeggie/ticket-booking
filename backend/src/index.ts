@@ -10,6 +10,7 @@ import extractType from './tools/extractType';
 import errors from './tools/errors';
 import { MiscData, Show, Showtime, Ticket } from './datatypes';
 import auth from './auth';
+import email from './tools/email';
 
 //====| middleware |====//
 
@@ -148,10 +149,35 @@ server.delete('/api/showtimes/:id', del('showtimes', true));
 //===| tickets |===//
 
 server.get('/api/tickets', getall('tickets', true));
-server.get('/api/tickets/:id', getone('tickets', false));
-server.post('/api/tickets', add('tickets', false, ticketModel));
+server.get('/api/tickets/:id', async (req, res) => {
+    const id = req.params.id;
+    const data = await database.tickets.get(id);
+    if (data.confirmed)
+        return res.json(data);
+    checkAdmin(req);
+    res.json(data);
+});
+server.post('/api/tickets', async (req, res) => {
+    const data = extractType(req.body, ticketModel);
+    const result = await database.tickets.add(data);
+    if (!result.confirmed)
+        email.ticketConfirmation(result.id);
+    res.status(200).end();
+});
 server.put('/api/tickets/:id', replace('tickets', false, ticketModel));
 server.delete('/api/tickets/:id', del('tickets', false));
+
+server.post('/api/confirm/:id', async (req, res) => {
+    const id = req.params.id;
+    const data = await database.tickets.get(id);
+    
+    if (data.confirmed)
+        return res.status(410).send('Confirmation link already processed');
+    
+    data.confirmed = true;
+    await database.tickets.replace(id, data);
+    res.status(200).end();
+});
 
 //====| other |====//
 
