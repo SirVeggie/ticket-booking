@@ -1,9 +1,16 @@
 import React from 'react';
+import { Input } from 'semantic-ui-react';
 
 function AdminTickets() {
   return (
     <div>
-      <h1>Tickets</h1>
+      <div>
+        <h1>Tickets</h1>
+        <div>
+          <Input />
+        </div>
+      </div>
+      
     </div>
   );
 }
