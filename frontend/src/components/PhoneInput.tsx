@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, Input, Label } from 'semantic-ui-react';
 import { Phonenumber } from '../datatypes';
 import countryData from '../resources/countries.json';
@@ -7,9 +7,9 @@ function PhoneInput({ data, setData, error }: { data: Phonenumber, setData: (dat
   const [code, setCode] = useState('+358');
   const [number, setNumber] = useState('');
   
-  const codeChange = (event: any, data: any) => {
-    setCode(data.value);
-    setData({ ...data, code: data.value });
+  const codeChange = (event: any, dropdata: any) => {
+    setCode(dropdata.value);
+    setData({ ...data, code: dropdata.value });
   };
   
   const numberChange = (event: any) => {
@@ -38,6 +38,10 @@ function PhoneInput({ data, setData, error }: { data: Phonenumber, setData: (dat
     name: x.name
   }));
 
+  useEffect(() => {
+    setData({ ...data, code: code });
+  }, []);
+  
   return (
     <div style={{ marginBottom: 10 }}>
       <div style={{ paddingBottom: 5, fontSize: 15 }}>

@@ -85,6 +85,8 @@ function del(target: DataType, admin: boolean) {
 function checkAdmin(request: any): boolean {
     const ip = getIP(request);
     const header: string = request.get('authorization');
+    if (!header)
+        throw errors.noAdmin;
     const split = header.split(' ');
     if (split[0].toLowerCase() === 'bearer') {
         const data: any = auth.checkToken(split[1]);
@@ -159,10 +161,11 @@ server.get('/api/tickets/:id', async (req, res) => {
 });
 server.post('/api/tickets', async (req, res) => {
     const data = extractType(req.body, ticketModel);
+    console.log(JSON.stringify(data));
     const result = await database.tickets.add(data);
     if (!result.confirmed)
         email.ticketConfirmation(result.id);
-    res.status(200).end();
+    res.json(result);
 });
 server.put('/api/tickets/:id', replace('tickets', false, ticketModel));
 server.delete('/api/tickets/:id', del('tickets', false));
@@ -188,7 +191,7 @@ function unknownEndpoint(req: any, res: any) {
 server.use(unknownEndpoint);
 
 function errorHandler(error: any, req: any, res: any, next: any) {
-    console.error(error.message);
+    console.error('Error: ' + error.message);
 
     if (error === errors.noData)
         return res.status(404).send('unknown endpoint');

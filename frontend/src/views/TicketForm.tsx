@@ -13,9 +13,9 @@ import TextInput from '../components/TextInput';
 import Notice from '../components/Notice';
 import validators from '../tools/validators';
 import TicketSelector from '../components/TicketInput';
-import database from '../tools/database';
 import Toggle from '../components/Toggle';
 import timer from '../tools/timer';
+import database from '../tools/database';
 
 function TicketForm() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -49,6 +49,7 @@ class Errors {
 
 function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   const initialFormData = new Ticket();
+  initialFormData.id = 'null';
   initialFormData.showtimeid = showtime.id;
 
   const history = useHistory();
@@ -96,8 +97,9 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   const submit: FormSubmit = async event => {
     event.preventDefault();
     setErrors({ ...errors, server: '' });
-    const ticket = { ...data, reserveDate: new Date() };
-
+    let ticket = { ...data, reserveDate: new Date() };
+    console.log('Submitting form:\n' + JSON.stringify(ticket));
+    
     const validationErrors = validateForm(data, nameData, checked);
     if (validationErrors.hasErrors) {
       setErrors(validationErrors);
@@ -110,7 +112,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
     try {
       await timer(2000);
       // throw 'bad connection';
-      // await database.tickets.add(ticket);
+      ticket = await database.tickets.add(ticket);
     } catch (error) {
       console.log('Server failed to handle ticket submit request');
       setErrors({ ...errors, server: 'Häiriö palvelimen kanssa, yritä hetken kuluttua uudelleen' });
@@ -131,11 +133,16 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
       <Form onSubmit={submit}>
         <div style={{ marginBottom: 20 }}>
           <h3>Lipputiedot</h3>
-          
+
           <Toggle enabled={!!errors.tickets}>
-            <Message negative content={errors.tickets} />
+            <div style={{ marginBottom: 15 }}>
+              <Message negative compact>
+                <Icon name='info circle' />
+                {errors.tickets}
+              </Message>
+            </div>
           </Toggle>
-          
+
           <TicketSelector name='Perusliput' price={20} hint={ticketNormal} data={data.seats.normal} setData={amount => changeTickets('normal', amount)} />
           <TicketSelector name='Alennusliput' price={10} hint={ticketDiscount} data={data.seats.discount} setData={amount => changeTickets('discount', amount)} />
           <TicketSelector name='Perheliput' price={40} hint={ticketFamily} data={data.seats.family} setData={amount => changeTickets('family', amount)} />
@@ -200,7 +207,7 @@ function validateForm(ticket: Ticket, nameData: { first: string, last: string; }
 
   if (!checked) {
     errors.hasErrors = true;
-    errors.check = 'Varmista lukeneesi viestin';
+    errors.check = 'Varmista lukeneesi viesti';
   }
 
   return errors;

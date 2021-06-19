@@ -23,4 +23,5 @@
 | 18.8. | 9 | Admin panel base design, researching css transitions, basic ticket page |
 | 19.8. | 1 | Change backend behaviour for tickets |
 | 19.8. | 1 | Added some error and loading stuff |
-| total | 82 |
+| 19.8. | 2 | Continue ticket confirmation page |
+| total | 84 |
