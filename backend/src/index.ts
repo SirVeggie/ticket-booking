@@ -94,7 +94,7 @@ function checkAdmin(request: any): boolean {
             return true;
         throw errors.invalidIP;
     }
-    
+
     throw errors.noAdmin;
 }
 
@@ -156,15 +156,13 @@ server.get('/api/tickets/:id', async (req, res) => {
     const data = await database.tickets.get(id);
     if (data.confirmed)
         return res.json(data);
-    checkAdmin(req);
     res.json(data);
 });
 server.post('/api/tickets', async (req, res) => {
     const data = extractType(req.body, ticketModel);
-    console.log(JSON.stringify(data));
     const result = await database.tickets.add(data);
     if (!result.confirmed)
-        email.ticketConfirmation(result.id);
+        email.ticketConfirmation(result.email, result.id);
     res.json(result);
 });
 server.put('/api/tickets/:id', replace('tickets', false, ticketModel));
@@ -173,10 +171,10 @@ server.delete('/api/tickets/:id', del('tickets', false));
 server.post('/api/confirm/:id', async (req, res) => {
     const id = req.params.id;
     const data = await database.tickets.get(id);
-    
+
     if (data.confirmed)
         return res.status(410).send('Confirmation link already processed');
-    
+
     data.confirmed = true;
     await database.tickets.replace(id, data);
     res.status(200).end();
@@ -191,17 +189,17 @@ function unknownEndpoint(req: any, res: any) {
 server.use(unknownEndpoint);
 
 function errorHandler(error: any, req: any, res: any, next: any) {
-    console.error('Error: ' + error.message);
+    console.error('Error: ' + error);
 
-    if (error === errors.noData)
+    if (error?.startsWith(errors.noData))
         return res.status(404).send('unknown endpoint');
-    if (error === errors.invalidData)
+    if (error?.startsWith(errors.invalidData))
         return res.status(400).send('Data provided was invalid');
-    if (error === errors.noAdmin)
+    if (error?.startsWith(errors.noAdmin))
         return res.status(401).send('Performed Admin action without proper admin token');
-    if (error === errors.invalidIP)
+    if (error?.startsWith(errors.invalidIP))
         return res.status(401).send('Admin token was invalid');
-    if (error === errors.tokenExpire)
+    if (error?.startsWith(errors.tokenExpire))
         return res.status(401).send('Token has already expired');
 
     next(error);

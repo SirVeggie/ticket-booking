@@ -24,4 +24,7 @@
 | 19.8. | 1 | Change backend behaviour for tickets |
 | 19.8. | 1 | Added some error and loading stuff |
 | 19.8. | 2 | Continue ticket confirmation page |
-| total | 84 |
+| 20.8. | 2 | Fix ticket reservation and add confirmation logic |
+| 21.8. | 1 | Implement sending emails for the email ticket verification |
+| 21.8. | 1 | Researching how to prevent being flagged as spam |
+| total | 88 |

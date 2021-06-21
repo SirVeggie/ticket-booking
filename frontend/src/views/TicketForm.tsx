@@ -110,8 +110,6 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
     setLoading(true);
 
     try {
-      await timer(2000);
-      // throw 'bad connection';
       ticket = await database.tickets.add(ticket);
     } catch (error) {
       console.log('Server failed to handle ticket submit request');

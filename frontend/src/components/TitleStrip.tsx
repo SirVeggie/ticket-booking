@@ -1,12 +1,15 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import { Button } from 'semantic-ui-react';
 
 function TitleStrip({ title, button, onClick }: { title: string, button: string, onClick: () => void; }) {
+  const history = useHistory();
+  
   return (
     <div style={strip}>
       <div className='ui container' style={parent}>
         <div style={titleContainer}>
-          <h1>{title}</h1>
+          <h1 style={{ cursor: 'pointer', width: 'fit-content' }} onClick={() => history.push('/')}>{title}</h1>
         </div>
         <div style={buttonContainer}>
           <Button onClick={onClick} style={buttonStyle}>{button}</Button>

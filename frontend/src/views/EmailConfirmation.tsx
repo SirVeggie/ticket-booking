@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Message, Icon, Segment, Header } from 'semantic-ui-react';
+import { Message, Icon } from 'semantic-ui-react';
+import TicketInfo from '../components/TicketInfo';
 import TitleStrip from '../components/TitleStrip';
 import Toggle from '../components/Toggle';
 import { Ticket } from '../datatypes';
 import { StateType } from '../store';
 import database from '../tools/database';
-import { printDate, printTime } from '../tools/stringTool';
 import NotFound from './NotFound';
 
 function EmailConfirmation() {
@@ -24,14 +24,6 @@ function EmailConfirmation() {
   if (!show || !showtime) {
     return <NotFound />;
   }
-
-  const tickets = (
-    <div>
-      Perusliput: {ticket.seats.normal}<br />
-      alennusliput: {ticket.seats.discount}<br />
-      perheliput: {ticket.seats.family}
-    </div>
-  );
 
   useEffect(() => {
     let interval: any = undefined;
@@ -95,29 +87,9 @@ function EmailConfirmation() {
           </Message>
         </Toggle>
 
-        <Segment>
-          <Header content='Lipputiedot' />
-          <InfoLine label='Esitys' content={show.name} />
-          <InfoLine label='Ajankohta' content={printTime(showtime.date) + ' - ' + printDate(showtime.date)} />
-          <InfoLine label='Sijainti' content={showtime.location} />
-          <InfoLine label='Liput' content={tickets} />
-          <Header content='Henkilötiedot' />
-          <InfoLine label='Nimi' content={ticket.name} />
-          <InfoLine label='Sähköposti' content={ticket.email} />
-          <InfoLine label='Puhelinnumero' content={ticket.phonenumber.code + ' ' + ticket.phonenumber.number} />
-        </Segment>
+        <TicketInfo ticket={ticket} />
       </div>
     </div>
-  );
-}
-
-function InfoLine({ label, content }: { label: string, content: any; }) {
-  return (
-    <p>
-      <b>{label}:</b>
-      <br />
-      {content}
-    </p>
   );
 }
 

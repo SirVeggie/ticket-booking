@@ -11,6 +11,7 @@ import database from './tools/database';
 import { useDispatch } from 'react-redux';
 import AdminHome from './views/admin/AdminHome';
 import TicketDetails from './views/TicketDetails';
+import TicketConfirm from './views/TicketConfirm';
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +41,9 @@ function App() {
         </Route>
         <Route path='/ticket/:id'>
           <TicketDetails />
+        </Route>
+        <Route path='/confirm/:id'>
+          <TicketConfirm />
         </Route>
         <Route path='/admin'>
           <AdminHome />

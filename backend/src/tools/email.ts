@@ -1,5 +1,32 @@
+import mailer from 'nodemailer';
 
-function ticketConfirmation(id: string) {
+const email = 'no.reply.arcticensemblebooking@gmail.com';
+const pass = process.env.EMAIL_PASS;
+const baseUrl = 'http://localhost:3000/confirm/';
+
+const transporter = mailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: email,
+        pass: pass
+    }
+});
+
+function ticketConfirmation(receiverEmail: string, id: string) {
+    const options = {
+        from: 'Arctic Ensemble ' + email,
+        to: receiverEmail,
+        subject: 'Arctic Ensemble lippuvarauksen varmennus',
+        text: 'Varmista lippuvarauksesi klikkaamalla seuraavaa linkkiä:\n' + baseUrl + id
+    };
+    
+    transporter.sendMail(options, (error, info) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + JSON.stringify(info));
+        }
+    });
     
     return;
 }
