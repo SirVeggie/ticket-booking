@@ -1,23 +1,58 @@
-import React from 'react';
-import { Divider } from 'semantic-ui-react';
-import VCard from '../../components/VCard';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Button, Divider, Input } from 'semantic-ui-react';
+import Card from '../../components/Card';
 import { MiscData, Show, Showtime } from '../../datatypes';
+import { setData } from '../../reducers/dataReducer';
+import database from '../../tools/database';
 import { showMapper } from '../Homepage';
 
-const defaultCard: CardInfo = showMapper([new Show()], [new Showtime()], new MiscData())[0];
+export default function AdminAddShow() {
+  const dispatch = useDispatch();
+  const [show, setShow] = useState(new Show());
+  const card = showMapper([show], [new Showtime()], new MiscData())[0];
 
-function AdminAddShow() {
-  const card = defaultCard;
+  const onSave = async () => {
+    try {
+      await database.shows.add(show);
+    } catch {
+      return;
+    }
+    
+    dispatch(setData(await database.getPacket()));
+    setShow(new Show());
+  };
   
   return (
-    <div>
+    <div className='ui container'>
       <h1>Add show</h1>
-      Some controls here
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <InputField label='Name' update={value => setShow({ ...show, name: value })} />
+        <InputField label='Description' update={value => setShow({ ...show, description: value })} />
+        <InputField label='Card description' update={value => setShow({ ...show, shortDescription: value })} />
+        <InputField label='Image url' update={value => setShow({ ...show, imageUrl: value })} />
+        <InputField label='Color' update={value => setShow({ ...show, color: value })} />
+      </div>
+      <Button onClick={onSave}>Save</Button>
       <Divider />
       <h2>Card preview</h2>
-      <VCard data={card} onClick={() => console.log('clicked card')} />
+      <Card data={card} />
     </div>
   );
 }
 
-export default AdminAddShow;
+function InputField({ label, update }: { label: string, update: (value: string) => void; }) {
+  const [value, setValue] = useState('');
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+    update(event.target.value);
+  };
+
+  return (
+    <div>
+      <label>{label}</label><br />
+      <Input size='small' value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
+    </div>
+  );
+}
