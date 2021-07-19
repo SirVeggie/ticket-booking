@@ -6,7 +6,7 @@ import AdminLogin from './AdminLogin';
 import AdminPanel from './AdminPanel';
 
 function AdminHome() {
-  const status = useSelector((state: StateType) => state.admin);
+  const { status } = useSelector((state: StateType) => state.admin);
 
   return (
     <div>

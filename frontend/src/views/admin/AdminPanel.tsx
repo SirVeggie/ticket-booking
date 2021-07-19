@@ -1,5 +1,5 @@
-import React, { CSSProperties, useState } from 'react';
-import { Divider, Icon } from 'semantic-ui-react';
+import React, { CSSProperties, useEffect, useState } from 'react';
+import { Icon } from 'semantic-ui-react';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
 import Align from '../../components/Align';
 import { createUseStyles } from 'react-jss';
@@ -10,12 +10,18 @@ import AdminShows from './AdminShows';
 import AdminTickets from './AdminTickets';
 import AdminAddTicket from './AdminAddTicket';
 import { useDispatch } from 'react-redux';
-import { setLoginStatus } from '../../reducers/adminReducer';
+import { setLoginStatus, setTicketList } from '../../reducers/adminReducer';
 import { lines } from '../../tools/shapes';
+import database from '../../tools/database';
 
 function AdminPanel() {
   const [page, setPage] = useState(0);
-
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    database.tickets.getall().then(tickets => dispatch(setTicketList(tickets)));
+  }, []);
+  
   return (
     <div style={{ height: '100vh' }}>
       <Titlebar />
