@@ -47,6 +47,7 @@ export function showMapper(shows: Show[], showtimes: Showtime[], misc: MiscData,
     meta: getShowDates(show, showtimes),
     imageUrl: show.imageUrl?.replace(/(?<=imgur.*?)(\.[^.]+)$/, 'm$1'),
     color: show.color?.substr(0, 7) + misc.cardOpacity,
+    height: 200,
     action: history ? () => history.push('/show/' + show.id) : undefined
   }));
 }

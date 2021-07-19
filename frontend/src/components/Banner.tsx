@@ -17,7 +17,7 @@ function Banner({ src }: { src: string; }) {
   );
 }
 
-const grad = gradient('to bottom', '#000000ff', '#00000000', curves.combine(() => 0, curves.easeInOutSine));
+const grad = gradient('to bottom', '#000f', '#0000', curves.combine(() => 0, curves.easeInOutSine));
 const banner: React.CSSProperties = {
   WebkitMaskImage: grad,
   maskImage: grad,

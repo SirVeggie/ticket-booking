@@ -9,6 +9,7 @@ import TitleStrip from '../components/TitleStrip';
 import { Showtime } from '../datatypes';
 import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
+import { History } from 'history';
 
 function Showtimes() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -21,13 +22,7 @@ function Showtimes() {
     return null;
   }
 
-  const cards = showtimes.filter(st => st.showid === id).map(st => ({
-    title: show.name,
-    meta: printDate(st.date) + ' - ' + st.location,
-    tags: showtimeTags(st),
-    height: 110,
-    action: () => history.push('/reserve/' + st.id)
-  }));
+  const cards = showtimes.filter(st => st.showid === id).map(st => mapShowtimeCard(show.name, st, history));
 
   return (
     <div>
@@ -71,6 +66,15 @@ function Description({ desc }: { desc: string; }) {
       <p>{desc}</p>
     </div>
   );
+}
+
+export function mapShowtimeCard(name: string, showtime: Showtime, history?: History): CardInfo {
+  return {
+    title: name,
+    meta: printDate(showtime.date) + ' - ' + showtime.location,
+    tags: showtimeTags(showtime),
+    action: history ? () => history.push('/reserve/' + showtime.id) : undefined
+  };
 }
 
 export default Showtimes;

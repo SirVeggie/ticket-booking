@@ -13,15 +13,6 @@ function VCard({ data, onClick }: { data: CardInfo, onClick: (card: CardInfo) =>
     filter: data.disabled ? 'contrast(0.7) grayscale(0.7)' : undefined
   };
 
-  const disableStyle: React.CSSProperties = {
-    fontSize: 23,
-    padding: 10,
-    color: 'white',
-    backgroundColor: '#00000040',
-    filter: 'drop-shadow(0px 0px 2px #000000)',
-    borderRadius: 5
-  };
-
   return (
     <Card style={customCard} onClick={data.disabled ? undefined : () => onClick(data)}>
       <Image size='medium' src={data.imageUrl} style={image} />
@@ -61,13 +52,13 @@ const grad = gradient('to left', '#000000ff', '#00000000', curves.easeInOutSine)
 const card: React.CSSProperties = {
   minWidth: '100%',
   maxWidth: '100%',
-  position: 'relative'
+  position: 'relative',
+  overflow: 'hidden'
 };
 
 const image: React.CSSProperties = {
   WebkitMaskImage: grad,
   maskImage: grad,
-  borderRadius: 3,
   position: 'absolute',
   top: 0,
   right: 0,
@@ -79,6 +70,15 @@ const content: React.CSSProperties = {
   padding: '1rem',
   position: 'absolute',
   top: 0
+};
+
+const disableStyle: React.CSSProperties = {
+  fontSize: 23,
+  padding: 10,
+  color: 'white',
+  backgroundColor: '#00000040',
+  filter: 'drop-shadow(0px 0px 2px #000000)',
+  borderRadius: 5
 };
 
 export default VCard;

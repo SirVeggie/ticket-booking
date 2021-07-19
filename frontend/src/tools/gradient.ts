@@ -27,7 +27,12 @@ function hexToColor(hex: string): Color {
     if (hex[0] !== '#')
         throw 'Expected # in front of color hex value';
     hex = hex.slice(1);
-    const values = chunkSubstr(hex, 2);
+    
+    let values: string[] = [];
+    if (hex.length === 3 || hex.length === 4)
+        values = hex.split('').map(s => s + s);
+    else
+        values = chunkSubstr(hex, 2);
     
     if (values.length < 3 || values.length > 4)
         throw 'Not a valid color hex value';

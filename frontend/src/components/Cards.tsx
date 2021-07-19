@@ -1,6 +1,6 @@
 import React from 'react';
 import { Placeholder, Segment } from 'semantic-ui-react';
-import VCard from './VCard';
+import Card from './Card';
 import ConditionalRender from './ConditionalRender';
 
 function Cards({ title, cards }: { title: string, cards: CardInfo[] | undefined; }) {
@@ -11,7 +11,7 @@ function Cards({ title, cards }: { title: string, cards: CardInfo[] | undefined;
       <h1>{title}</h1>
       <ConditionalRender index={index}>
         <LoadingCards />
-        <div>{!cards ? 'Error' : cards.map((card, index) => <VCard key={index} data={card} onClick={card.action ?? (() => console.log('Clicked ' + index))} />)}</div>
+        <div>{!cards ? 'Error' : cards.map((card, index) => <Card key={index} data={card} onClick={card.action ?? (() => console.log('Clicked ' + index))} />)}</div>
         <EmptyCards />
       </ConditionalRender>
     </div>

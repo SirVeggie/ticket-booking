@@ -12,5 +12,5 @@ const result = lines.join('\n');
 fs.writeFileSync('working-hours.md', result);
 
 function extract(string) {
-    return string.match(/(?<=\| )\d+(?= \|)/)?.toString();
+    return string.match(/(?<=\| +)\d+(?= \|)/)?.toString();
 }

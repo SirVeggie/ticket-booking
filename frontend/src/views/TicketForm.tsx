@@ -14,7 +14,6 @@ import Notice from '../components/Notice';
 import validators from '../tools/validators';
 import TicketSelector from '../components/TicketInput';
 import Toggle from '../components/Toggle';
-import timer from '../tools/timer';
 import database from '../tools/database';
 
 function TicketForm() {
