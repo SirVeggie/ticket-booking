@@ -24,8 +24,8 @@ export default function AdminAddTicket() {
       <h1>Add ticket</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <InputField label='Name' update={value => setTicket({ ...ticket, name: value })} />
-        <LabelDropdown label='Show' items={shows} mapName={x => x.name} update={updateShow} />
-        <LabelDropdown label='Showtime' items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} />
+        <LabelDropdown label='Show' items={shows} mapName={x => x.name} update={updateShow} width={177} />
+        <LabelDropdown label='Showtime' items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} width={177} />
         <InputField label='Email' update={value => setTicket({ ...ticket, email: value })} />
         <PhoneInput data={ticket.phonenumber} setData={data => setTicket({ ...ticket, phonenumber: data })} />
       </div>

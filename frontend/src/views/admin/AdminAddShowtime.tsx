@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Divider, Dropdown, Input } from 'semantic-ui-react';
 import Card from '../../components/Card';
+import LabelDropdown from '../../components/LabelDropdown';
 import { Showtime } from '../../datatypes';
 import { setData } from '../../reducers/dataReducer';
 import { StateType } from '../../store';
@@ -47,7 +48,7 @@ export default function AdminAddShowtime() {
     <div className='ui container'>
       <h1>Add showtime</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <ShowDropdown label='Show' update={value => setShowtime({ ...showtime, showid: value })} />
+        <LabelDropdown label='Show' items={shows} mapName={x => x.name} width={177} update={x => setShowtime({ ...showtime, showid: x.id })} />
         <InputField label='Location' update={value => setShowtime({ ...showtime, location: value })} />
         <InputField label='Date' error={dateError} update={value => setShowtime({ ...showtime, date: parseDate(value) })} />
         <InputField type='number' label='Max seats' update={value => setShowtime({ ...showtime, maxSeats: Number(value) })} />
@@ -75,18 +76,6 @@ function InputField({ label, update, type, error }: { label: string, update: (va
     <div>
       <label>{label}</label><br />
       <Input type={type} error={error} value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
-    </div>
-  );
-}
-
-function ShowDropdown({ label, update }: { label: string, update: (value: any) => void; }) {
-  const shows = useSelector((state: StateType) => state.data.shows);
-  const options = shows.map(x => ({ key: x.id, value: x.id, text: x.name }));
-  
-  return (
-    <div>
-      <label>{label}</label><br />
-      <Dropdown search selection compact style={{ width: 177, margin: '0 10px 10px 0' }} options={options} onChange={(event, dropdata) => update(dropdata.value)} />
     </div>
   );
 }
