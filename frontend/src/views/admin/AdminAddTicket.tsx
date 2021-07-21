@@ -1,29 +1,41 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Dropdown, Input } from 'semantic-ui-react';
+import { Divider, Input } from 'semantic-ui-react';
+import LabelDropdown from '../../components/LabelDropdown';
+import PhoneInput from '../../components/PhoneInput';
 import TicketInfo from '../../components/TicketInfo';
-import { Ticket } from '../../datatypes';
+import { Show, Showtime, Ticket } from '../../datatypes';
 import { StateType } from '../../store';
 
 export default function AdminAddTicket() {
+  const { shows, showtimes } = useSelector((state: StateType) => state.data);
   const [ticket, setTicket] = useState(new Ticket());
+  const [show, setShow] = useState(new Show());
+  
+  const updateShow = (show: Show) => {
+    setTicket({ ...ticket, showtimeid: '' });
+    setShow(show);
+  };
+  
+  const temp = showtimes.filter(x => x.showid === show.id);
   
   return (
     <div className='ui container'>
       <h1>Add ticket</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <InputField label='Name' update={value => setTicket({ ...ticket, name: value })} />
-        <InputField label='Show' update={value => { }} />
-        <InputField label='Showtime' update={value => { }} />
+        <LabelDropdown label='Show' items={shows} mapName={x => x.name} update={updateShow} />
+        <LabelDropdown label='Showtime' items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} />
         <InputField label='Email' update={value => setTicket({ ...ticket, email: value })} />
-        <InputField label='Phonenumber' update={value => { }} />
+        <PhoneInput data={ticket.phonenumber} setData={data => setTicket({ ...ticket, phonenumber: data })} />
       </div>
-      <h2>Seats</h2>
+      <h2 style={{ marginTop: 0 }}>Seats</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <InputField label='Normal' update={value => { }} />
-        <InputField label='Discount' update={value => { }} />
-        <InputField label='Family' update={value => { }} />
+        <InputField label='Normal' type='number' update={value => setTicket({ ...ticket, seats: { ...ticket.seats, normal: Number(value) } })} />
+        <InputField label='Discount' type='number' update={value => setTicket({ ...ticket, seats: { ...ticket.seats, discount: Number(value) } })} />
+        <InputField label='Family' type='number' update={value => setTicket({ ...ticket, seats: { ...ticket.seats, family: Number(value) } })} />
       </div>
+      <Divider />
       <h2>Preview</h2>
       <TicketInfo ticket={ticket} />
     </div>
@@ -41,19 +53,11 @@ function InputField({ label, update, type, error }: { label: string, update: (va
   return (
     <div>
       <label>{label}</label><br />
-      <Input type={type} error={error} size='small' value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
+      <Input type={type} error={error} value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
     </div>
   );
 }
 
-function LabeledDropdown({ label, update }: { label: string, update: (value: any) => void; }) {
-  const shows = useSelector((state: StateType) => state.data.shows);
-  const options = shows.map(x => ({ key: x.id, value: x.id, text: x.name }));
-  
-  return (
-    <div>
-      <label>{label}</label><br />
-      <Dropdown search selection compact style={{ width: 177, margin: '0 10px 10px 0' }} options={options} onChange={(event, dropdata) => update(dropdata.value)} />
-    </div>
-  );
+function getShowtimeText(st: Showtime): string {
+  return st.date.toLocaleString().slice(0, -3);
 }

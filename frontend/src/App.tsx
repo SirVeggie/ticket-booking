@@ -26,28 +26,35 @@ function App() {
         <Route exact path='/'>
           <Homepage />
         </Route>
+        
         <Route path='/waiting_confirmation'>
           <EmailConfirmation />
         </Route>
+        
         <Route path='/reserve/:id'>
           <CondNotFound>
             <TicketForm />
           </CondNotFound>
         </Route>
+        
         <Route path='/show/:id'>
           <CondNotFound>
             <Showtimes />
           </CondNotFound>
         </Route>
+        
         <Route path='/ticket/:id'>
           <TicketDetails />
         </Route>
+        
         <Route path='/confirm/:id'>
           <TicketConfirm />
         </Route>
+        
         <Route path='/admin'>
           <AdminHome />
         </Route>
+        
         <Route>
           <NotFound />
         </Route>

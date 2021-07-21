@@ -47,7 +47,7 @@ export default function AdminAddShowtime() {
     <div className='ui container'>
       <h1>Add showtime</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <LabeledDropdown label='Show' update={value => setShowtime({ ...showtime, showid: value })} />
+        <ShowDropdown label='Show' update={value => setShowtime({ ...showtime, showid: value })} />
         <InputField label='Location' update={value => setShowtime({ ...showtime, location: value })} />
         <InputField label='Date' error={dateError} update={value => setShowtime({ ...showtime, date: parseDate(value) })} />
         <InputField type='number' label='Max seats' update={value => setShowtime({ ...showtime, maxSeats: Number(value) })} />
@@ -74,12 +74,12 @@ function InputField({ label, update, type, error }: { label: string, update: (va
   return (
     <div>
       <label>{label}</label><br />
-      <Input type={type} error={error} size='small' value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
+      <Input type={type} error={error} value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
     </div>
   );
 }
 
-function LabeledDropdown({ label, update }: { label: string, update: (value: any) => void; }) {
+function ShowDropdown({ label, update }: { label: string, update: (value: any) => void; }) {
   const shows = useSelector((state: StateType) => state.data.shows);
   const options = shows.map(x => ({ key: x.id, value: x.id, text: x.name }));
   

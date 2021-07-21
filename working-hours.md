@@ -32,5 +32,6 @@
 | 18.7. |  1 | Tweaking some functionality like fixing scroll position on navigation |
 | 19.7. |  3 | Admin ticket search |
 | 19.7. |  5 | Functionality to add shows and showtimes |
-| 19.7. |  1 | Work on admin ticket add functionality |
-| total | 104 |
+| 19.7. |  1 | Work on admin ticket adding functionality |
+| 20.7. |  2 | More work on admin ticket adding functionality and auto logout on session expire |
+| total | 106 |

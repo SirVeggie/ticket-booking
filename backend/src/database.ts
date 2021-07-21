@@ -95,7 +95,30 @@ let tickets: Ticket[] = [{
     email: 'SirVeggie@hotmail.com',
     reserveDate: new Date(),
     phonenumber: { code: '+358', number: '405030880' },
-    seats: { normal: 1, discount: 1, family: 0 }
+    seats: { normal: 1, discount: 1, family: 0 },
+    arrived: false
+},
+{
+    id: '2',
+    showtimeid: '4',
+    confirmed: true,
+    name: 'Orfeo Llewellyn',
+    email: 'some@email.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000001' },
+    seats: { normal: 2, discount: 0, family: 0 },
+    arrived: false
+},
+{
+    id: '3',
+    showtimeid: '2',
+    confirmed: true,
+    name: 'Minna Pulsa',
+    email: 'k.i.rppu@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000002' },
+    seats: { normal: 0, discount: 0, family: 1 },
+    arrived: false
 }];
 //#endregion
 

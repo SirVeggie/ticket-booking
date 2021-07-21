@@ -52,7 +52,7 @@ function InputField({ label, update }: { label: string, update: (value: string) 
   return (
     <div>
       <label>{label}</label><br />
-      <Input size='small' value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
+      <Input value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
     </div>
   );
 }

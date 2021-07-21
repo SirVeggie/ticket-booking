@@ -116,6 +116,11 @@ server.post('/api/login', async (req, res) => {
     res.status(200).send(auth.getToken(getIP(req)));
 });
 
+server.get('/api/check_token', async (req, res) => {
+    checkAdmin(req);
+    res.status(200).end();
+});
+
 //====| common |====//
 
 server.get('/api/packet', async (req, res) => {

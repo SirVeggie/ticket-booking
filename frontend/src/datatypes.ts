@@ -43,6 +43,7 @@ export class Ticket {
     reserveDate: Date = new Date();
     phonenumber: Phonenumber = new Phonenumber();
     seats: Seats = new Seats();
+    arrived: boolean = false;
 }
 
 export class Phonenumber {
