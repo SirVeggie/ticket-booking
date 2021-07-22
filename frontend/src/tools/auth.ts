@@ -23,4 +23,16 @@ async function check() {
     }
 }
 
-export default { getConfig, check };
+async function refresh() {
+    const token = window.localStorage.getItem('token');
+    if (!token)
+        return;
+    try {
+        const newToken = await (await axios.post('/api/refresh_token', getConfig())).data;
+        window.localStorage.setItem('token', newToken);
+    } catch {
+        //
+    }
+}
+
+export default { getConfig, check, refresh };

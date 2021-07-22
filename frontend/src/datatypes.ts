@@ -44,6 +44,7 @@ export class Ticket {
     phonenumber: Phonenumber = new Phonenumber();
     seats: Seats = new Seats();
     arrived: boolean = false;
+    comment?: string = '';
 }
 
 export class Phonenumber {

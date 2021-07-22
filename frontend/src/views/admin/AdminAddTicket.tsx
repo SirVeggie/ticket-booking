@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Divider, Input } from 'semantic-ui-react';
+import { Button, Divider, Input } from 'semantic-ui-react';
 import LabelDropdown from '../../components/LabelDropdown';
 import PhoneInput from '../../components/PhoneInput';
 import TicketInfo from '../../components/TicketInfo';
 import { Show, Showtime, Ticket } from '../../datatypes';
 import { StateType } from '../../store';
+import database from '../../tools/database';
 
 export default function AdminAddTicket() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -17,15 +18,19 @@ export default function AdminAddTicket() {
     setShow(show);
   };
   
+  const onSave = () => {
+    database.tickets.add(ticket);
+  };
+  
   const temp = showtimes.filter(x => x.showid === show.id);
   
   return (
     <div className='ui container'>
       <h1>Add ticket</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <InputField label='Name' update={value => setTicket({ ...ticket, name: value })} />
         <LabelDropdown label='Show' items={shows} mapName={x => x.name} update={updateShow} width={177} />
         <LabelDropdown label='Showtime' items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} width={177} />
+        <InputField label='Name' update={value => setTicket({ ...ticket, name: value })} />
         <InputField label='Email' update={value => setTicket({ ...ticket, email: value })} />
         <PhoneInput data={ticket.phonenumber} setData={data => setTicket({ ...ticket, phonenumber: data })} />
       </div>
@@ -35,6 +40,7 @@ export default function AdminAddTicket() {
         <InputField label='Discount' type='number' update={value => setTicket({ ...ticket, seats: { ...ticket.seats, discount: Number(value) } })} />
         <InputField label='Family' type='number' update={value => setTicket({ ...ticket, seats: { ...ticket.seats, family: Number(value) } })} />
       </div>
+      <Button onClick={onSave} >Save</Button>
       <Divider />
       <h2>Preview</h2>
       <TicketInfo ticket={ticket} />

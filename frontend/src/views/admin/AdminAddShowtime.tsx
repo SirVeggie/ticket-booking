@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Divider, Dropdown, Input } from 'semantic-ui-react';
+import { Button, Divider, Input } from 'semantic-ui-react';
 import Card from '../../components/Card';
 import LabelDropdown from '../../components/LabelDropdown';
 import { Showtime } from '../../datatypes';
@@ -59,7 +59,7 @@ export default function AdminAddShowtime() {
       <Button onClick={onSave}>Save</Button>
       <Divider />
       <h2>Card preview</h2>
-      <Card data={mapShowtimeCard(show?.name ?? '(no show)', showtime)} />
+      <Card data={mapShowtimeCard(show?.name ?? '(no show)', showtime, { '': 0 })} />
     </div>
   );
 }

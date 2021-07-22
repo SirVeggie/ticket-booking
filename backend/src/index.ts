@@ -121,6 +121,11 @@ server.get('/api/check_token', async (req, res) => {
     res.status(200).end();
 });
 
+server.post('/api/refresh_token', async (req, res) => {
+    checkAdmin(req);
+    res.status(200).send(auth.getToken(getIP(req)));
+});
+
 //====| common |====//
 
 server.get('/api/packet', async (req, res) => {
@@ -135,6 +140,11 @@ server.put('/api/misc', async (req, res) => {
     checkAdmin(req);
     const data = extractType(req.body, new MiscData());
     res.json(await database.replaceMisc(data));
+});
+
+server.get('/api/ticket_amounts', async (req, res) => {
+    const data = await database.getTicketAmounts();
+    res.json(data);
 });
 
 //====| shows |====//

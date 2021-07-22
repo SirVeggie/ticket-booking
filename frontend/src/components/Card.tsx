@@ -5,9 +5,9 @@ import gradient from '../tools/gradient';
 import { Label } from 'semantic-ui-react';
 import Toggle from './Toggle';
 
-function Card({ data, onClick }: { data: CardInfo, onClick?: (card: CardInfo) => void; }) {
+function Card({ data, onClick, children }: { data: CardInfo, onClick?: (card: CardInfo) => void, children?: any; }) {
   const styles = useStyles();
-
+  
   const inline: React.CSSProperties = {
     background: data.color,
     height: data.height ? data.height : undefined
@@ -20,6 +20,8 @@ function Card({ data, onClick }: { data: CardInfo, onClick?: (card: CardInfo) =>
       <div className='content' style={{ ...hideEmpty(data.description), whiteSpace: 'pre-wrap' }}>{data.description}</div>
       <img src={data.imageUrl} style={hideEmpty(data.imageUrl)} />
       <Tags data={data.tags} />
+
+      {children}
 
       <Toggle enabled={!!data.disabled && !!data.disabledMsg}>
         <div className={styles.disabled}>{data.disabledMsg}</div>

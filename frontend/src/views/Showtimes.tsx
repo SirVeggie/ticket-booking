@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
@@ -10,11 +10,13 @@ import { Showtime } from '../datatypes';
 import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
 import { History } from 'history';
+import database from '../tools/database';
 
-function Showtimes() {
+export default function Showtimes() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
   const history = useHistory();
   const id = (useParams() as any).id;
+  const [ticAmounts, setTicAmounts] = useState<Record<string, number>>({});
 
   const show = shows.find(x => x.id === id);
 
@@ -22,7 +24,14 @@ function Showtimes() {
     return null;
   }
 
-  const cards = showtimes.filter(st => st.showid === id).map(st => mapShowtimeCard(show.name, st, history));
+  const cards = showtimes
+    .filter(st => st.showid === id)
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .map(st => mapShowtimeCard(show.name, st, ticAmounts, history));
+  
+  useEffect(() => {
+    database.getTicketAmounts().then(setTicAmounts);
+  }, []);
 
   return (
     <div>
@@ -68,13 +77,18 @@ function Description({ desc }: { desc: string; }) {
   );
 }
 
-export function mapShowtimeCard(name: string, showtime: Showtime, history?: History): CardInfo {
+export function mapShowtimeCard(name: string, showtime: Showtime, amounts: Record<string, number>, history?: History): CardInfo {
+  const date = printDate(showtime.date);
+  const location = (showtime.location ? ' - ' + showtime.location : '');
+  const seats = showtime.maxSeats - amounts[showtime.id];
+  const seatText = ' - vain ' + seats + (seats === 1 ? ' paikka jäljellä!' : ' paikkaa jäljellä!');
+  
   return {
     title: name,
-    meta: printDate(showtime.date) + ' - ' + showtime.location,
+    meta: date + location + (seats && seats <= 10 ? seatText : ''),
     tags: showtimeTags(showtime),
-    action: history ? () => history.push('/reserve/' + showtime.id) : undefined
+    action: history ? () => history.push('/reserve/' + showtime.id) : undefined,
+    disabled: !seats,
+    disabledMsg: 'Ei paikkoja jäljellä'
   };
 }
-
-export default Showtimes;

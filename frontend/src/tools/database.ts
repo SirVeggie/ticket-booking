@@ -32,6 +32,10 @@ function getPacket(): Promise<DataPacket> {
     return axios.get(baseUrl + '/packet').then(x => fixDates(x.data));
 }
 
+function getTicketAmounts(): Promise<Record<string, number>> {
+    return axios.get(baseUrl + '/ticket_amounts').then(x => x.data);
+}
+
 //====| exports |====//
 
 function generate<Type>(target: string) {
@@ -46,6 +50,7 @@ function generate<Type>(target: string) {
 
 export default {
     getPacket,
+    getTicketAmounts,
     shows: generate<Show>(shows),
     showtimes: generate<Showtime>(showtimes),
     tickets: generate<Ticket>(tickets)

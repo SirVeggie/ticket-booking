@@ -43,6 +43,9 @@ function TicketInfo({ ticket, buttons }: { ticket: Ticket, buttons?: boolean }) 
           <InfoLine label='Ajankohta' content={printTime(showtime.date) + ' - ' + printDate(showtime.date)} />
           <InfoLine label='Sijainti' content={showtime.location} />
           <InfoLine label='Liput' content={tickets} />
+          <Toggle enabled={!!ticket.comment}>
+            <InfoLine label='Lisätiedot' content={ticket.comment} />
+          </Toggle>
 
           <Header content='Henkilötiedot' />
           <InfoLine label='Nimi' content={ticket.name} />
@@ -56,11 +59,11 @@ function TicketInfo({ ticket, buttons }: { ticket: Ticket, buttons?: boolean }) 
 
 function InfoLine({ label, content }: { label: string, content: any; }) {
   return (
-    <p>
+    <div style={{ marginBottom: 10 }}>
       <b>{label}:</b>
       <br />
       {content}
-    </p>
+    </div>
   );
 }
 

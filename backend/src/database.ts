@@ -41,7 +41,7 @@ let shows: Show[] = [{
 let showtimes: Showtime[] = [{
     id: '1',
     showid: '1',
-    date: new Date(2021, 6, 12, 14, 0),
+    date: new Date(2021, 11, 12, 14, 0),
     location: 'Siilinjärvi, keskusta',
     maxSeats: 100,
     prices: {
@@ -53,7 +53,7 @@ let showtimes: Showtime[] = [{
 {
     id: '2',
     showid: '1',
-    date: new Date(2021, 6, 13, 16, 30),
+    date: new Date(2021, 11, 13, 16, 30),
     location: 'Siilinjärvi, keskusta',
     maxSeats: 100,
     prices: {
@@ -65,7 +65,7 @@ let showtimes: Showtime[] = [{
 {
     id: '3',
     showid: '2',
-    date: new Date(2021, 6, 20, 12, 30),
+    date: new Date(2022, 6, 20, 12, 30),
     location: 'Kuopio, kuopion tori',
     maxSeats: 200,
     prices: {
@@ -77,7 +77,79 @@ let showtimes: Showtime[] = [{
 {
     id: '4',
     showid: '3',
-    date: new Date(2021, 7, 5, 14, 15),
+    date: new Date(2022, 7, 5, 14, 15),
+    location: 'Helsinki, kauppatori',
+    maxSeats: 1500,
+    prices: {
+        normal: 30,
+        discount: 15,
+        family: 60
+    }
+},
+{
+    id: '5',
+    showid: '3',
+    date: new Date(new Date().getTime() - 86400000),
+    location: 'Helsinki, kauppatori',
+    maxSeats: 1500,
+    prices: {
+        normal: 30,
+        discount: 15,
+        family: 60
+    }
+},
+{
+    id: '6',
+    showid: '3',
+    date: new Date(new Date().getTime() + 3600000 * 2),
+    location: 'Helsinki, kauppatori',
+    maxSeats: 1500,
+    prices: {
+        normal: 30,
+        discount: 15,
+        family: 60
+    }
+},
+{
+    id: '7',
+    showid: '2',
+    date: new Date(new Date().getTime() - 86400000 * 2),
+    location: 'Helsinki, kauppatori',
+    maxSeats: 1500,
+    prices: {
+        normal: 30,
+        discount: 15,
+        family: 60
+    }
+},
+{
+    id: '8',
+    showid: '2',
+    date: new Date(new Date().getTime() + 3600000 * 3),
+    location: 'Helsinki, kauppatori',
+    maxSeats: 1500,
+    prices: {
+        normal: 30,
+        discount: 15,
+        family: 60
+    }
+},
+{
+    id: '9',
+    showid: '2',
+    date: new Date(new Date().getTime() - 86400000 * 3),
+    location: 'Helsinki, kauppatori',
+    maxSeats: 1500,
+    prices: {
+        normal: 30,
+        discount: 15,
+        family: 60
+    }
+},
+{
+    id: '10',
+    showid: '2',
+    date: new Date(new Date().getTime() + 3600000 * 4),
     location: 'Helsinki, kauppatori',
     maxSeats: 1500,
     prices: {
@@ -96,22 +168,122 @@ let tickets: Ticket[] = [{
     reserveDate: new Date(),
     phonenumber: { code: '+358', number: '405030880' },
     seats: { normal: 1, discount: 1, family: 0 },
-    arrived: false
+    arrived: false,
+    comment: 'Veikka is epic coder'
 },
 {
     id: '2',
-    showtimeid: '4',
+    showtimeid: '2',
     confirmed: true,
     name: 'Orfeo Llewellyn',
     email: 'some@email.com',
     reserveDate: new Date(),
     phonenumber: { code: '+358', number: '000000001' },
     seats: { normal: 2, discount: 0, family: 0 },
-    arrived: false
+    arrived: true
 },
 {
     id: '3',
-    showtimeid: '2',
+    showtimeid: '3',
+    confirmed: true,
+    name: 'Minna Pulsa',
+    email: 'k.i.rppu@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000002' },
+    seats: { normal: 0, discount: 0, family: 1 },
+    arrived: false
+},
+{
+    id: '4',
+    showtimeid: '4',
+    confirmed: true,
+    name: 'Veikka Pulsa',
+    email: 'SirVeggie@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '405030880' },
+    seats: { normal: 1, discount: 1, family: 0 },
+    arrived: false
+},
+{
+    id: '5',
+    showtimeid: '5',
+    confirmed: true,
+    name: 'Orfeo Llewellyn',
+    email: 'some@email.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000001' },
+    seats: { normal: 2, discount: 0, family: 0 },
+    arrived: true
+},
+{
+    id: '6',
+    showtimeid: '6',
+    confirmed: true,
+    name: 'Minna Pulsa',
+    email: 'k.i.rppu@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000002' },
+    seats: { normal: 0, discount: 0, family: 1 },
+    arrived: false
+},
+{
+    id: '7',
+    showtimeid: '7',
+    confirmed: true,
+    name: 'Veikka Pulsa',
+    email: 'SirVeggie@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '405030880' },
+    seats: { normal: 1, discount: 1, family: 0 },
+    arrived: false
+},
+{
+    id: '8',
+    showtimeid: '8',
+    confirmed: true,
+    name: 'Orfeo Llewellyn',
+    email: 'some@email.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000001' },
+    seats: { normal: 2, discount: 0, family: 0 },
+    arrived: true
+},
+{
+    id: '9',
+    showtimeid: '9',
+    confirmed: true,
+    name: 'Minna Pulsa',
+    email: 'k.i.rppu@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000002' },
+    seats: { normal: 0, discount: 0, family: 1 },
+    arrived: false
+},
+{
+    id: '10',
+    showtimeid: '10',
+    confirmed: true,
+    name: 'Veikka Pulsa',
+    email: 'SirVeggie@hotmail.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '405030880' },
+    seats: { normal: 1, discount: 1, family: 0 },
+    arrived: false
+},
+{
+    id: '11',
+    showtimeid: '5',
+    confirmed: true,
+    name: 'Orfeo Llewellyn',
+    email: 'some@email.com',
+    reserveDate: new Date(),
+    phonenumber: { code: '+358', number: '000000001' },
+    seats: { normal: 2, discount: 0, family: 0 },
+    arrived: true
+},
+{
+    id: '12',
+    showtimeid: '6',
     confirmed: true,
     name: 'Minna Pulsa',
     email: 'k.i.rppu@hotmail.com',
@@ -177,6 +349,12 @@ async function replaceMisc(data: MiscData): Promise<MiscData> {
     await timer(1);
     misc = data;
     return data;
+}
+
+async function getTicketAmounts(): Promise<Record<string, number>> {
+    await timer(1);
+    const calcAmount = (st: Showtime) => tickets.filter(x => x.showtimeid === st.id).reduce((sum, t) => sum + t.seats.normal + t.seats.discount + t.seats.family, 0);
+    return showtimes.reduce((a, x) => ({ ...a, [x.id]: calcAmount(x) }), {});
 }
 
 //====| shows |====//
@@ -290,6 +468,7 @@ export default {
     getPacket,
     getMisc,
     replaceMisc,
+    getTicketAmounts,
     shows: {
         getall: getShows,
         get: getShowByID,
