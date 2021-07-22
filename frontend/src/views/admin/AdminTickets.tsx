@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Input, Checkbox, Button } from 'semantic-ui-react';
 import Card from '../../components/Card';
 import { Show, Showtime, Ticket } from '../../datatypes';
@@ -8,6 +8,9 @@ import { History } from 'history';
 import { useHistory } from 'react-router-dom';
 import Toggle from '../../components/Toggle';
 import LabelDropdown from '../../components/LabelDropdown';
+import CardCheckbox from '../../components/CardCheckbox';
+import { setTicketList } from '../../reducers/adminReducer';
+import database from '../../tools/database';
 
 export default function AdminTickets() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -21,12 +24,12 @@ export default function AdminTickets() {
     setShowtime(new Showtime());
     setShow(x);
   };
-  
+
   const defShow = { ...new Show(), name: 'All' };
   const defShowtime = new Showtime();
-  const showChoices = [defShow , ...shows];
+  const showChoices = [defShow, ...shows];
   const stChoices = [defShowtime, ...showtimes.filter(x => x.showid === show.id)];
-  
+
   return (
     <div className='ui container'>
       <h1>Tickets</h1>
@@ -49,23 +52,24 @@ export default function AdminTickets() {
 }
 
 function Results(props: { search: string, today: boolean, old: boolean, show: Show, showtime: Showtime; }) {
+  const dispatch = useDispatch();
   const tickets = useSelector((state: StateType) => state.admin.tickets);
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
   const [limit, setLimit] = useState(10);
   const history = useHistory();
-  
+
   const filter = (t: Ticket) => {
     const now = new Date();
     const st = showtimes.find(x => x.id === t.showtimeid);
     const hasSelection = props.show.id || props.showtime.id;
-    
+
     if (!st)
       return false;
     if (props.showtime.id !== '' && props.showtime.id !== st.id)
       return false;
     if (props.show.id !== '' && props.show.id !== st.showid)
       return false;
-    if (!props.old && st.date.getTime() < now.getTime())
+    if (!props.old && st.date.getTime() + 3600000 * 2 < now.getTime())
       return false;
     if (props.today && (st.date.getDate() !== now.getDate() || st.date.getMonth() !== now.getMonth() || st.date.getFullYear() !== now.getFullYear()))
       return false;
@@ -73,21 +77,46 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
   };
 
   const sort = (a: Ticket, b: Ticket) => {
-    return (showtimes.find(x => x.id === a.showtimeid)?.date.getTime() ?? 0) - (showtimes.find(x => x.id === b.showtimeid)?.date.getTime() ?? 0);
+    const dateDif = (showtimes.find(x => x.id === a.showtimeid)?.date.getTime() ?? 0) - (showtimes.find(x => x.id === b.showtimeid)?.date.getTime() ?? 0);
+    if (dateDif)
+      return dateDif;
+    return a.name.localeCompare(b.name);
   };
 
   const items = tickets.filter(filter).sort(sort);
   const cards = items.slice(0, limit).map(t => {
     const data = mapCard(t, shows, showtimes, history);
-    return <Card key={t.id} data={data} onClick={data.action} />;
+
+    const update = async (value: boolean) => {
+      try {
+        await database.tickets.replace(t.id, { ...t, arrived: value });
+        dispatch(setTicketList(tickets.map(x => x.id !== t.id ? x : { ...x, arrived: value })));
+      } catch {
+        //
+      }
+    };
+
+    return (
+      <Card key={t.id} data={data} onClick={data.action}>
+        <CardCheckbox checked={t.arrived} update={update} />
+      </Card>
+    );
   });
-  
+
   const amount = items.reduce((sum, t) => sum + t.seats.normal + t.seats.discount + t.seats.family, 0);
+  const price = items.reduce((sum, t) => {
+    const st = showtimes.find(x => x.id === t.showtimeid);
+    if (!st)
+      return sum;
+    return sum + (t.seats.normal * st.prices.normal) + (t.seats.discount * st.prices.discount) + (t.seats.family * st.prices.family);
+  }, 0);
 
   return (
     <div style={{ margin: '30px 0' }}>
       <Toggle enabled={!!cards.length}>
-      <p>Seats selected: {amount}</p>
+        <span>Seats selected: {amount}</span>
+        <span style={{ marginLeft: 30 }}>Total price: {price}€</span>
+        <div style={{ marginBottom: 10 }} />
       </Toggle>
       <div style={layout}>
         {!cards.length ? 'No matches...' : cards}
@@ -131,7 +160,7 @@ function match(search: string, ...params: string[]): boolean {
 const layout: React.CSSProperties = {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
-  gap: '0 10px'
+  gap: '10px'
 };
 
 function getShowtimeText(st: Showtime): string {
