@@ -35,4 +35,5 @@
 | 19.7. |  1 | Work on admin ticket adding functionality |
 | 20.7. |  2 | More work on admin ticket adding functionality and auto logout on session expire |
 | 21.7. |  3 | Improving ticket search page |
-| total | 106 |
+| 22.7. |  8 | Mark as arrived and card accessibility functionality and admin navigation update |
+| total | 117 |

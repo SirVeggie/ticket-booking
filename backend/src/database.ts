@@ -137,7 +137,7 @@ let showtimes: Showtime[] = [{
 {
     id: '9',
     showid: '2',
-    date: new Date(new Date().getTime() - 86400000 * 3),
+    date: new Date(new Date().getTime() - 3600000),
     location: 'Helsinki, kauppatori',
     maxSeats: 1500,
     prices: {
