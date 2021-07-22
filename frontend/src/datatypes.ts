@@ -17,8 +17,8 @@ export class Show {
     name: string = '';
     description?: string = '';
     shortDescription?: string = '';
-    color?: string = '';
-    imageUrl?: string = '';
+    color?: string = undefined;
+    imageUrl?: string = undefined;
 }
 
 export class Showtime {
@@ -44,7 +44,7 @@ export class Ticket {
     phonenumber: Phonenumber = new Phonenumber();
     seats: Seats = new Seats();
     arrived: boolean = false;
-    comment?: string = '';
+    comment?: string = undefined;
 }
 
 export class Phonenumber {

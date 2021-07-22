@@ -1,10 +1,9 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
 import Align from '../../components/Align';
 import { createUseStyles } from 'react-jss';
 import AdminAddShow from './AdminAddShow';
-import ConditionalRender from '../../components/ConditionalRender';
 import AdminAddShowtime from './AdminAddShowtime';
 import AdminShows from './AdminShows';
 import AdminTickets from './AdminTickets';
@@ -13,21 +12,22 @@ import { useDispatch } from 'react-redux';
 import { setLoginStatus, setTicketList } from '../../reducers/adminReducer';
 import { lines } from '../../tools/shapes';
 import database from '../../tools/database';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import NotFound from '../NotFound';
 
 function AdminPanel() {
-  const [page, setPage] = useState(0);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     database.tickets.getall().then(tickets => dispatch(setTicketList(tickets)));
   }, []);
-  
+
   return (
     <div style={{ height: '100vh' }}>
       <Titlebar />
       <div style={bodyStyle}>
-        <Sidebar setPage={setPage} />
-        <Content page={page} />
+        <Sidebar />
+        <Content />
       </div>
     </div>
   );
@@ -56,15 +56,53 @@ function Titlebar() {
   );
 }
 
-function Sidebar({ setPage }: { setPage: (page: number) => void; }) {
+function Content() {
+  return (
+    <div style={contentStyle}>
+      <Switch>
+        <Route exact path='/admin'>
+          <Redirect to='/admin/shows' />
+        </Route>
+
+        <Route path='/admin/shows'>
+          <AdminShows />
+        </Route>
+
+        <Route path='/admin/tickets'>
+          <AdminTickets />
+        </Route>
+
+        <Route path='/admin/add_show'>
+          <AdminAddShow />
+        </Route>
+
+        <Route path='/admin/add_showtime'>
+          <AdminAddShowtime />
+        </Route>
+
+        <Route path='/admin/add_ticket'>
+          <AdminAddTicket />
+        </Route>
+        
+        <Route>
+          <NotFound noStrip noButton />
+        </Route>
+      </Switch>
+    </div>
+  );
+}
+
+function Sidebar() {
+  const history = useHistory();
+  
   return (
     <div id='AdminSidebar' style={sidebar}>
       <div style={sidebarButtons}>
-        <SidebarButton text='Shows' icon='calendar' action={() => setPage(0)} />
-        <SidebarButton text='Tickets' icon='ticket' action={() => setPage(1)} />
-        <SidebarButton text='Add show' icon='plus circle' action={() => setPage(2)} />
-        <SidebarButton text='Add showtime' icon='plus circle' action={() => setPage(3)} />
-        <SidebarButton text='Add ticket' icon='plus circle' action={() => setPage(4)} />
+        <SidebarButton text='Shows' icon='calendar' action={() => history.push('/admin/shows')} />
+        <SidebarButton text='Tickets' icon='ticket' action={() => history.push('/admin/tickets')} />
+        <SidebarButton text='Add show' icon='plus circle' action={() => history.push('/admin/add_show')} />
+        <SidebarButton text='Add showtime' icon='plus circle' action={() => history.push('/admin/add_showtime')} />
+        <SidebarButton text='Add ticket' icon='plus circle' action={() => history.push('/admin/add_ticket')} />
       </div>
     </div>
   );
@@ -79,20 +117,6 @@ function SidebarButton({ text, icon, action }: { text: string, icon: SemanticICO
         <Icon name={icon} style={{ marginRight: 10 }} />
         <span style={{ fontSize: 16 }}>{text}</span>
       </Align>
-    </div>
-  );
-}
-
-function Content({ page }: { page: number; }) {
-  return (
-    <div style={contentStyle}>
-      <ConditionalRender index={page}>
-        <AdminShows />
-        <AdminTickets />
-        <AdminAddShow />
-        <AdminAddShowtime />
-        <AdminAddTicket />
-      </ConditionalRender>
     </div>
   );
 }
