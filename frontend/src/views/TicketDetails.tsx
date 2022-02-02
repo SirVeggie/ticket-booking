@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import TicketInfo from '../components/TicketInfo';
+import TicketInfoEdit from '../components/TicketInfoEdit';
 import TitleStrip from '../components/TitleStrip';
 import { Ticket } from '../datatypes';
 import database from '../tools/database';
@@ -18,7 +20,14 @@ function TicketDetails() {
     <div>
       <TitleStrip title='Arctic Ensemble Lipunvaraus' button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
       <Container style={{ marginTop: 30 }}>
-        <TicketInfo ticket={ticket} buttons />
+        <Switch>
+          <Route path='/ticket/:id/edit'>
+            <TicketInfoEdit ticket={ticket} update={setTicket} />
+          </Route>
+          <Route>
+            <TicketInfo ticket={ticket} buttons />
+          </Route>
+        </Switch>
       </Container>
     </div>
   );

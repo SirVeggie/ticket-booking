@@ -8,7 +8,7 @@ import 'express-async-errors';
 import database from './database';
 import extractType from './tools/extractType';
 import errors from './tools/errors';
-import { MiscData, Show, Showtime, Ticket } from './datatypes';
+import { MiscData, Seats, Show, Showtime, Ticket } from './datatypes';
 import auth from './auth';
 import email from './tools/email';
 
@@ -82,7 +82,7 @@ function del(target: DataType, admin: boolean) {
     };
 }
 
-function checkAdmin(request: any): boolean {
+function checkAdmin(request: any): void {
     const ip = getIP(request);
     const header: string = request.get('authorization');
     if (!header)
@@ -91,11 +91,23 @@ function checkAdmin(request: any): boolean {
     if (split[0].toLowerCase() === 'bearer') {
         const data: any = auth.checkToken(split[1]);
         if (ip === data.ip)
-            return true;
+            return;
         throw errors.invalidIP;
     }
 
     throw errors.noAdmin;
+}
+
+function isAdmin(request: any): boolean {
+    try {
+        checkAdmin(request);
+        return true;
+    } catch (error) {
+        if (error === errors.noAdmin)
+            return false;
+        else
+            throw error;
+    }
 }
 
 function getIP(request: any): string {
@@ -142,11 +154,6 @@ server.put('/api/misc', async (req, res) => {
     res.json(await database.replaceMisc(data));
 });
 
-server.get('/api/ticket_amounts', async (req, res) => {
-    const data = await database.getTicketAmounts();
-    res.json(data);
-});
-
 //====| shows |====//
 
 server.get('/api/shows', getall('shows', false));
@@ -162,6 +169,12 @@ server.get('/api/showtimes/:id', getone('showtimes', false));
 server.post('/api/showtimes', add('showtimes', true, showtimeModel));
 server.put('/api/showtimes/:id', replace('showtimes', true, showtimeModel));
 server.delete('/api/showtimes/:id', del('showtimes', true));
+
+server.get('/api/available_seats/:id', async (req, res) => {
+    const id = req.params.id;
+    const data = await database.showtimes.getAvailableSeats(id);
+    res.json(data);
+});
 
 //===| tickets |===//
 
@@ -195,6 +208,18 @@ server.post('/api/confirm/:id', async (req, res) => {
     res.status(200).end();
 });
 
+server.get('/api/ticket_amounts', async (req, res) => {
+    const data = await database.tickets.getAmounts();
+    res.json(data);
+});
+
+server.post('/api/update_seats/:id', async (req, res) => {
+    const id = req.params.id;
+    const data = extractType(req.body, new Seats());
+    await database.tickets.updateSeats(id, data, isAdmin(req));
+    res.status(200).end();
+});
+
 //====| other |====//
 
 function unknownEndpoint(req: any, res: any) {
@@ -205,11 +230,18 @@ server.use(unknownEndpoint);
 
 function errorHandler(error: any, req: any, res: any, next: any) {
     console.error('Error: ' + error);
-
+    
+    if (!error?.startsWith) {
+        next(error);
+        return;
+    }
+    
     if (error?.startsWith(errors.noData))
         return res.status(404).send('unknown endpoint');
     if (error?.startsWith(errors.invalidData))
         return res.status(400).send('Data provided was invalid');
+    if (error?.startsWith(errors.illegalData))
+        return res.status(400).send(errors.illegalData);
     if (error?.startsWith(errors.noAdmin))
         return res.status(401).send('Performed Admin action without proper admin token');
     if (error?.startsWith(errors.invalidIP))

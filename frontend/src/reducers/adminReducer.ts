@@ -15,6 +15,10 @@ export function setTicketList(state: Ticket[]): AdminAction {
     return { type: 'ADMIN_SET_TICKETS', data: state };
 }
 
+export function addTicketData(ticket: Ticket): AdminAction {
+    return { type: 'ADMIN_ADD_TICKET', data: ticket };
+}
+
 //====| reducer |====//
 
 function adminReducer(state = initialState, action: AdminAction) {
@@ -25,19 +29,21 @@ function adminReducer(state = initialState, action: AdminAction) {
             return { ...state, status: action.data };
         case 'ADMIN_SET_TICKETS':
             return { ...state, tickets: action.data };
+        case 'ADMIN_ADD_TICKET':
+            return { ...state, tickets: [...state.tickets, action.data] };
         default:
             return state;
     }
 }
 
 export interface AdminAction {
-    type: 'ADMIN_SET' | 'ADMIN_SET_TICKETS'
-    data: boolean | Ticket[]
+    type: 'ADMIN_SET' | 'ADMIN_SET_TICKETS' | 'ADMIN_ADD_TICKET';
+    data: boolean | Ticket[] | Ticket;
 }
 
 export interface AdminData {
     status: boolean,
-    tickets: Ticket[]
+    tickets: Ticket[];
 }
 
 export default adminReducer;

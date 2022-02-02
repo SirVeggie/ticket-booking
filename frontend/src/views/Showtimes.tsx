@@ -30,7 +30,7 @@ export default function Showtimes() {
     .map(st => mapShowtimeCard(show.name, st, ticAmounts, history));
   
   useEffect(() => {
-    database.getTicketAmounts().then(setTicAmounts);
+    database.tickets.getAmounts().then(setTicAmounts);
   }, []);
 
   return (
@@ -39,7 +39,7 @@ export default function Showtimes() {
       {show.imageUrl ? <Banner src={show.imageUrl!} /> : ''}
       <BackButton />
       {show.description ? <Description desc={show.description!} /> : ''}
-      <Cards title='Näytökset' cards={cards} />
+      <Cards title='Näytökset' cards={cards} emptyText='Ei tulevia näytöksiä' />
       <BackButton />
       <Footer />
     </div>

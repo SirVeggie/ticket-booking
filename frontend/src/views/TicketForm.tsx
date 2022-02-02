@@ -128,7 +128,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
       <ActInfo name={show.name} date={showtime.date} location={showtime.location} />
 
       <Form onSubmit={submit}>
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 30 }}>
           <h3>Lipputiedot</h3>
 
           <Toggle enabled={!!errors.tickets}>
@@ -140,9 +140,13 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
             </div>
           </Toggle>
 
-          <TicketSelector name='Perusliput' price={20} hint={ticketNormal} data={data.seats.normal} setData={amount => changeTickets('normal', amount)} />
-          <TicketSelector name='Alennusliput' price={10} hint={ticketDiscount} data={data.seats.discount} setData={amount => changeTickets('discount', amount)} />
-          <TicketSelector name='Perheliput' price={40} hint={ticketFamily} data={data.seats.family} setData={amount => changeTickets('family', amount)} />
+          <TicketSelector name='Perusliput' price={showtime.prices.normal} hint={ticketNormal} data={data.seats.normal} setData={amount => changeTickets('normal', amount)} />
+          <TicketSelector name='Alennusliput' price={showtime.prices.discount} hint={ticketDiscount} data={data.seats.discount} setData={amount => changeTickets('discount', amount)} />
+          <TicketSelector name='Perheliput' price={showtime.prices.family} hint={ticketFamily} data={data.seats.family} setData={amount => changeTickets('family', amount)} />
+          
+          <div style={{ marginTop: 10, fontSize: 15 }}>
+            Kokonaishinta: {data.seats.normal * showtime.prices.normal + data.seats.discount * showtime.prices.discount + data.seats.family * showtime.prices.family}€
+          </div>
         </div>
 
         <div style={{ marginBottom: 30 }}>

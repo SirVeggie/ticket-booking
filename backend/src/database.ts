@@ -1,6 +1,6 @@
 import timer from './tools/timer';
 import errors from './tools/errors';
-import { DataPacket, MiscData, Show, Showtime, ShowtimeExtra, Ticket } from './datatypes';
+import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, Ticket } from './datatypes';
 import fixDates from './tools/fixDates';
 
 //====| debug data |====//
@@ -320,16 +320,16 @@ function generateTicketID(): string {
     return id;
 }
 
-function error(error: any): any {
+function error(error: any): never {
     throw error;
 }
 
-function sumSeats(ticket: Ticket): number {
-    return ticket.seats.normal + ticket.seats.discount + ticket.seats.family;
+function sumSeats(seats: Seats): number {
+    return seats.normal + seats.discount + seats.family;
 }
 
 function mapShowtimeToExtra(showtime: Showtime): ShowtimeExtra {
-    const reserved = tickets.filter(x => x.showtimeid === showtime.id).reduce((a, b) => a + sumSeats(b), 0);
+    const reserved = tickets.filter(x => x.showtimeid === showtime.id).reduce((a, b) => a + sumSeats(b.seats), 0);
     return { ...showtime, reservedSeats: reserved };
 }
 
@@ -428,6 +428,14 @@ async function deleteShowtimeByID(id: string): Promise<void> {
     showtimes = showtimes.filter(x => x.id === id ? false : true);
 }
 
+async function getAvailableSeats(id: string): Promise<number> {
+    await timer(1);
+    const st = showtimes.find(x => x.id === id);
+    if (!st)
+        error(errors.noData);
+    return st.maxSeats - tickets.filter(x => x.showtimeid === st.id).reduce((sum, x) => sum + sumSeats(x.seats), 0);
+}
+
 //====| tickets |====//
 
 async function getTickets(): Promise<Ticket[]> {
@@ -462,13 +470,24 @@ async function deleteTicketByID(id: string): Promise<void> {
     tickets = tickets.filter(x => x.id === id ? false : true);
 }
 
+async function updateTicketSeats(id: string, seats: Seats, admin: boolean): Promise<void> {
+    await timer(1);
+    if (seats.discount < 0 || seats.normal < 0 || seats.family < 0)
+        error(errors.invalidData);
+    const ticket = await getTicketByID(id);
+    if (!ticket)
+        error(errors.noData);
+    if (!(admin || sumSeats(seats) <= sumSeats(ticket.seats) + await getAvailableSeats(ticket.showtimeid)))
+        error(errors.illegalData);
+    tickets = tickets.map(x => x.id === id ? { ...x, seats: seats } : x);
+}
+
 //====| export |====//
 
 export default {
     getPacket,
     getMisc,
     replaceMisc,
-    getTicketAmounts,
     shows: {
         getall: getShows,
         get: getShowByID,
@@ -481,13 +500,16 @@ export default {
         get: getShowtimeByID,
         add: addShowtime,
         delete: deleteShowtimeByID,
-        replace: replaceShowtimeByID
+        replace: replaceShowtimeByID,
+        getAvailableSeats: getAvailableSeats
     },
     tickets: {
         getall: getTickets,
         get: getTicketByID,
         add: addTicket,
         delete: deleteTicketByID,
-        replace: replaceTicketByID
+        replace: replaceTicketByID,
+        getAmounts: getTicketAmounts,
+        updateSeats: updateTicketSeats
     }
 };

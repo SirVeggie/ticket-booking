@@ -12,12 +12,16 @@ import { useDispatch } from 'react-redux';
 import AdminHome from './views/admin/AdminHome';
 import TicketDetails from './views/TicketDetails';
 import TicketConfirm from './views/TicketConfirm';
+import auth from './tools/auth';
+import { setLoginStatus } from './reducers/adminReducer';
 
 function App() {
   const dispatch = useDispatch();
   
   useEffect(() => {
     database.getPacket().then(x => dispatch(setData(x)));
+    if (window.localStorage.getItem('token'))
+      auth.check().then(x => dispatch(setLoginStatus(x)));
   }, []);
   
   return (

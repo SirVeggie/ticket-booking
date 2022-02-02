@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DataPacket, Show, Showtime, Ticket } from '../datatypes';
+import { DataPacket, Seats, Show, Showtime, Ticket } from '../datatypes';
 import auth from './auth';
 import fixDates from './fixDates';
 
@@ -36,6 +36,14 @@ function getTicketAmounts(): Promise<Record<string, number>> {
     return axios.get(baseUrl + '/ticket_amounts').then(x => x.data);
 }
 
+function getAvailableSeats(id: string): Promise<number> {
+    return axios.get(baseUrl + '/available_seats/' + id).then(x => x.data);
+}
+
+function updateTicketSeats(id: string, seats: Seats): Promise<void> {
+    return axios.post(baseUrl + '/update_seats/' + id, seats, auth.getConfig());
+}
+
 //====| exports |====//
 
 function generate<Type>(target: string) {
@@ -50,8 +58,14 @@ function generate<Type>(target: string) {
 
 export default {
     getPacket,
-    getTicketAmounts,
     shows: generate<Show>(shows),
-    showtimes: generate<Showtime>(showtimes),
-    tickets: generate<Ticket>(tickets)
+    showtimes: {
+        ...generate<Showtime>(showtimes),
+        getAvailableSeats
+    },
+    tickets: {
+        ...generate<Ticket>(tickets),
+        getAmounts: getTicketAmounts,
+        updateSeats: updateTicketSeats
+    }
 };

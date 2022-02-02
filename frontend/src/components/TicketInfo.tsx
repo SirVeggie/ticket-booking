@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Button, Header, Icon, Message, Segment } from 'semantic-ui-react';
 import { Ticket } from '../datatypes';
 import { StateType } from '../store';
@@ -7,6 +8,7 @@ import { printDate, printTime } from '../tools/stringTool';
 import Toggle from './Toggle';
 
 function TicketInfo({ ticket, buttons }: { ticket: Ticket, buttons?: boolean }) {
+  const history = useHistory();
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
 
   const tickets = (
@@ -26,7 +28,7 @@ function TicketInfo({ ticket, buttons }: { ticket: Ticket, buttons?: boolean }) 
     <Segment>
       <div style={{ position: 'relative' }}>
         <Toggle enabled={!!buttons}>
-          <Button basic style={{ position: 'absolute', right: 0, marginRight: 0 }}>
+          <Button basic onClick={() => history.push(`/ticket/${ticket.id}/edit`)} style={{ position: 'absolute', right: 0, marginRight: 0 }}>
             <Icon name='edit' />
             Muokkaa
           </Button>

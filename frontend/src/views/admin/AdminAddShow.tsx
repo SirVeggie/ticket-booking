@@ -27,11 +27,11 @@ export default function AdminAddShow() {
     <div className='ui container'>
       <h1>Add show</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <InputField label='Name' update={value => setShow({ ...show, name: value })} />
-        <InputField label='Description' update={value => setShow({ ...show, description: value })} />
-        <InputField label='Card description' update={value => setShow({ ...show, shortDescription: value })} />
-        <InputField label='Image url' update={value => setShow({ ...show, imageUrl: value })} />
-        <InputField label='Color' update={value => setShow({ ...show, color: value })} />
+        <InputField label='Name' value={show.name} update={value => setShow({ ...show, name: value })} />
+        <InputField label='Description' value={show.description} update={value => setShow({ ...show, description: value })} />
+        <InputField label='Card description' value={show.shortDescription} update={value => setShow({ ...show, shortDescription: value })} />
+        <InputField label='Image url' value={show.imageUrl} update={value => setShow({ ...show, imageUrl: value })} />
+        <InputField label='Color' value={show.color} update={value => setShow({ ...show, color: value })} />
       </div>
       <Button onClick={onSave}>Save</Button>
       <Divider />
@@ -41,18 +41,15 @@ export default function AdminAddShow() {
   );
 }
 
-function InputField({ label, update }: { label: string, update: (value: string) => void; }) {
-  const [value, setValue] = useState('');
-
+function InputField({ label, value, update }: { label: string, value: string | undefined, update: (value: string) => void; }) {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
     update(event.target.value);
   };
 
   return (
     <div>
       <label>{label}</label><br />
-      <Input value={value} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
+      <Input value={value ?? ''} onChange={onChange} style={{ margin: '0 10px 10px 0' }} />
     </div>
   );
 }
