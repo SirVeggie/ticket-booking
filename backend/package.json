@@ -4,9 +4,9 @@
   "description": "Server for the ticket booking system",
   "main": "build/src/index.js",
   "scripts": {
-    "start": "node build/src/index.js",
+    "start": "node build/index.js",
     "build": "tsc",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon index.ts",
     "lint": "eslint 'src/**/*.ts'"
   },
   "author": "Veikka Pulsa",
