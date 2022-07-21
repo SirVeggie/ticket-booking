@@ -6,8 +6,8 @@
   "scripts": {
     "start": "cd backend && npm start",
     "install": "cd shared && npm i && cd ../backend && npm i && cd ../frontend && npm i",
-    "buildAll": "cd shared && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
-    "prod": "npm i && npm run buildAll && npm start",
+    "build": "cd shared && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
+    "prod": "npm i && npm run build && npm start",
     "lint": "cd backend && npm run lint && cd ../frontend && npm run lint && cd ../shared && npm run lint"
   },
   "repository": {
