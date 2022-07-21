@@ -18,6 +18,10 @@ export default function Showtimes() {
   const id = (useParams() as any).id;
   const [ticAmounts, setTicAmounts] = useState<Record<string, number>>({});
 
+  useEffect(() => {
+    database.tickets.getAmounts().then(setTicAmounts);
+  }, []);
+
   const show = shows.find(x => x.id === id);
 
   if (!show) {
@@ -28,10 +32,6 @@ export default function Showtimes() {
     .filter(st => st.showid === id)
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .map(st => mapShowtimeCard(show.name, st, ticAmounts, history));
-  
-  useEffect(() => {
-    database.tickets.getAmounts().then(setTicAmounts);
-  }, []);
 
   return (
     <div>
@@ -62,8 +62,8 @@ function BackButton() {
     <div className='ui container' style={{ marginBottom: 30 }}>
       <Button icon labelPosition='left' onClick={() => history.push('/')}>
         <Icon name='chevron left' />
-          Takaisin esityksiin
-        </Button>
+        Takaisin esityksiin
+      </Button>
     </div>
   );
 }
@@ -82,7 +82,7 @@ export function mapShowtimeCard(name: string, showtime: Showtime, amounts: Recor
   const location = (showtime.location ? ' - ' + showtime.location : '');
   const seats = showtime.maxSeats - amounts[showtime.id];
   const seatText = ' - vain ' + seats + (seats === 1 ? ' paikka jäljellä!' : ' paikkaa jäljellä!');
-  
+
   return {
     title: name,
     meta: date + location + (seats && seats <= 10 ? seatText : ''),
