@@ -1,0 +1,21 @@
+{
+  "name": "ticket-booking",
+  "version": "1.0.0",
+  "description": "A ticket booking website created for the circus group Arctic Ensemble. Made with React.",
+  "main": "backend/build/src/index.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "build": "cd shared && npm i && npm run build && cd ../backend && npm i && npm run build && cd ../frontend && npm i && npm run build",
+    "prod": "npm run build && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirVeggie/Ticket-Booking.git"
+  },
+  "author": "Veikka Pulsa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SirVeggie/Ticket-Booking/issues"
+  },
+  "homepage": "https://github.com/SirVeggie/Ticket-Booking#readme"
+}

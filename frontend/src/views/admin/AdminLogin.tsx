@@ -21,7 +21,7 @@ function AdminLogin() {
     
     try {
       token = await server.login(password);
-    } catch (error) {
+    } catch (error: any) {
       console.log('Login error: ' + error.response.data);
       setError(error.response.data);
       setLoading(false);

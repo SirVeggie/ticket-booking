@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Divider, Input } from 'semantic-ui-react';
 import Card from '../../components/Card';
 import LabelDropdown from '../../components/LabelDropdown';
-import { Showtime } from '../../datatypes';
+import { Showtime } from 'shared';
 import { setData } from '../../reducers/dataReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';

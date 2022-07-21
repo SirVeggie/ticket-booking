@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Checkbox, Button } from 'semantic-ui-react';
 import Card from '../../components/Card';
-import { Show, Showtime, Ticket } from '../../datatypes';
+import { Show, Showtime, Ticket } from 'shared';
 import { StateType } from '../../store';
 import { History } from 'history';
 import { useHistory } from 'react-router-dom';

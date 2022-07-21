@@ -4,7 +4,7 @@ import { Form, Button, Table, Message, Icon } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
-import { Phonenumber, Show, Showtime, Ticket } from '../datatypes';
+import { Phonenumber, Show, Showtime, Ticket } from 'shared';
 import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from '../store';
 import { setTicket } from '../reducers/ticketReducer';

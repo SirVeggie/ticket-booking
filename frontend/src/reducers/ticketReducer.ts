@@ -1,4 +1,4 @@
-import { Ticket } from '../datatypes';
+import { Ticket } from 'shared';
 
 const initialState: Ticket | null = null;
 

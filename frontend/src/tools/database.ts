@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DataPacket, Seats, Show, Showtime, Ticket } from '../datatypes';
+import { DataPacket, Seats, Show, Showtime, Ticket } from 'shared';
 import auth from './auth';
 import fixDates from './fixDates';
 

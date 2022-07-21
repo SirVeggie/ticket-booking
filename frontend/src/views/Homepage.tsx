@@ -5,7 +5,7 @@ import Cards from '../components/Cards';
 import Footer from '../components/Footer';
 import { useHistory } from 'react-router-dom';
 import { printDate } from '../tools/stringTool';
-import { MiscData, Show, Showtime } from '../datatypes';
+import { MiscData, Show, Showtime } from 'shared';
 import { useSelector } from 'react-redux';
 import { StateType } from '../store';
 

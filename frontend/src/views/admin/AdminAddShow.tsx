@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Divider, Input } from 'semantic-ui-react';
 import Card from '../../components/Card';
-import { MiscData, Show, Showtime } from '../../datatypes';
+import { MiscData, Show, Showtime } from 'shared';
 import { setData } from '../../reducers/dataReducer';
 import database from '../../tools/database';
 import { showMapper } from '../Homepage';

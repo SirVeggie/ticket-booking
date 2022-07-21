@@ -1,4 +1,4 @@
-import { DataPacket } from '../datatypes';
+import { DataPacket } from 'shared';
 
 const initialState: DataPacket = new DataPacket();
 
