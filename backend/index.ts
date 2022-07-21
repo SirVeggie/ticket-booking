@@ -5,12 +5,12 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import 'express-async-errors';
-import database from './database';
-import extractType from './tools/extractType';
-import errors from './tools/errors';
+import database from './src/database';
+import extractType from './src/tools/extractType';
+import errors from './src/tools/errors';
 import { MiscData, Seats, Show, Showtime, Ticket } from 'shared';
-import auth from './auth';
-import email from './tools/email';
+import auth from './src/auth';
+import email from './src/tools/email';
 
 //====| middleware |====//
 
@@ -18,9 +18,9 @@ morgan.token('body', (req: any) => JSON.stringify(req.body));
 
 const server = express();
 server.use(express.json());
+server.use(express.static('build'));
 server.use(cors());
 server.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
-server.use(express.static('build'));
 
 //===| models |===//
 
@@ -222,6 +222,17 @@ server.post('/api/update_seats/:id', async (req, res) => {
     const data = extractType(req.body, new Seats());
     await database.tickets.updateSeats(id, data, isAdmin(req));
     res.status(200).end();
+});
+
+//====| serve static files |====//
+
+server.get('*', (req, res, next) => {
+    const path = (req as any).params['0'];
+    if (!path.includes('/api/')) {
+        res.sendFile(`${__dirname}/index.html`);
+    } else {
+        next();
+    }
 });
 
 //====| other |====//

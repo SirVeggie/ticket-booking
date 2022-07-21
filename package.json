@@ -2,7 +2,7 @@
   "name": "ticket-booking",
   "version": "1.0.0",
   "description": "A ticket booking website created for the circus group Arctic Ensemble. Made with React.",
-  "main": "backend/build/src/index.js",
+  "main": "backend/build/index.js",
   "scripts": {
     "start": "cd backend && npm start",
     "install": "cd shared && npm i && cd ../backend && npm i && cd ../frontend && npm i",
