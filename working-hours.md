@@ -43,4 +43,4 @@
 | 2022  |
 | 21.7  | 1 | Getting familiar with the code base again |
 | 21.7  | 3 | Setting up project better (proper typescript, CI, etc...) |
-| total | 125 |
+| total | 129 |
