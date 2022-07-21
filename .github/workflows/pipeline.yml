@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches: [master]
-    types: [opened, synchronize]
+  # pull_request:
+    # branches: [master]
+    # types: [opened, synchronize]
 
 
 jobs:
@@ -19,6 +19,8 @@ jobs:
           node-version: '16'
       - name: build
         run: npm run build
+      - name: lint
+        run: npm run lint
       - name: heroku
         if: ${{ github.event_name == 'push' }}
         uses: akhileshns/heroku-deploy@v3.12.12
