@@ -4,10 +4,11 @@
   "description": "Server for the ticket booking system",
   "main": "build/src/index.js",
   "scripts": {
-    "start": "node build/src/index.ts",
+    "start": "node build/src/index.js",
     "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "eslint 'src/**/*.ts'",
+    "heroku-postbuild": "npm run build"
   },
   "author": "Veikka Pulsa",
   "license": "MIT",
