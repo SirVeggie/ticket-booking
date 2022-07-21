@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Header, Icon, Message, Segment } from 'semantic-ui-react';
-import { Ticket } from '../datatypes';
+import { Ticket } from 'shared';
 import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
 import Toggle from './Toggle';

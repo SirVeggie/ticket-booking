@@ -4,7 +4,7 @@ import { Button, Divider, Input } from 'semantic-ui-react';
 import LabelDropdown from '../../components/LabelDropdown';
 import PhoneInput from '../../components/PhoneInput';
 import TicketInfo from '../../components/TicketInfo';
-import { Show, Showtime, Ticket } from '../../datatypes';
+import { Show, Showtime, Ticket } from 'shared';
 import { setTicketList } from '../../reducers/adminReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';

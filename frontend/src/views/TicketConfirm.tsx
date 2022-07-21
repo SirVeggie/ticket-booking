@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { Container, Icon, Message } from 'semantic-ui-react';
 import TitleStrip from '../components/TitleStrip';
 import Toggle from '../components/Toggle';
-import { Ticket } from '../datatypes';
+import { Ticket } from 'shared';
 import database from '../tools/database';
 
 function TicketConfirm() {

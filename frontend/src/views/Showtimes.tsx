@@ -6,7 +6,7 @@ import Banner from '../components/Banner';
 import Cards from '../components/Cards';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
-import { Showtime } from '../datatypes';
+import { Showtime } from 'shared';
 import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
 import { History } from 'history';

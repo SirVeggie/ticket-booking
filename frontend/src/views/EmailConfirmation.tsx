@@ -4,7 +4,7 @@ import { Message, Icon } from 'semantic-ui-react';
 import TicketInfo from '../components/TicketInfo';
 import TitleStrip from '../components/TitleStrip';
 import Toggle from '../components/Toggle';
-import { Ticket } from '../datatypes';
+import { Ticket } from 'shared';
 import { StateType } from '../store';
 import database from '../tools/database';
 import NotFound from './NotFound';

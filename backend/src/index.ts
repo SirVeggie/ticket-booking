@@ -8,7 +8,7 @@ import 'express-async-errors';
 import database from './database';
 import extractType from './tools/extractType';
 import errors from './tools/errors';
-import { MiscData, Seats, Show, Showtime, Ticket } from './datatypes';
+import { MiscData, Seats, Show, Showtime, Ticket } from 'shared';
 import auth from './auth';
 import email from './tools/email';
 
@@ -17,10 +17,10 @@ import email from './tools/email';
 morgan.token('body', (req: any) => JSON.stringify(req.body));
 
 const server = express();
-// server.use(express.static('build'));
 server.use(express.json());
 server.use(cors());
 server.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+server.use(express.static('build'));
 
 //===| models |===//
 
@@ -139,6 +139,10 @@ server.post('/api/refresh_token', async (req, res) => {
 });
 
 //====| common |====//
+
+server.get('/api/health', (req, res) => {
+    res.send('ok');
+});
 
 server.get('/api/packet', async (req, res) => {
     res.json(await database.getPacket());

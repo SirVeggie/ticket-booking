@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Message } from 'semantic-ui-react';
-import { Seats, Ticket } from '../datatypes';
+import { Seats, Ticket } from 'shared';
 import { StateType } from '../store';
 import database from '../tools/database';
 import LabelDropdown from './LabelDropdown';

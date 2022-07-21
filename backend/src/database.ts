@@ -1,11 +1,10 @@
 import timer from './tools/timer';
 import errors from './tools/errors';
-import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, Ticket } from './datatypes';
+import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, Ticket } from 'shared';
 import fixDates from './tools/fixDates';
 
-//====| debug data |====//
+//#region //====| debug data |====//
 
-//#region debug data
 let misc: MiscData = {
     mainBannerUrl: 'https://i.imgur.com/ZeTqEM3.png',
     cardOpacity: '1f',
@@ -294,7 +293,7 @@ let tickets: Ticket[] = [{
 }];
 //#endregion
 
-//====| helpers |====//
+//#region //====| helpers |====//
 
 function generateShowID(): string {
     let id = '0';
@@ -333,7 +332,9 @@ function mapShowtimeToExtra(showtime: Showtime): ShowtimeExtra {
     return { ...showtime, reservedSeats: reserved };
 }
 
-//====| common |====//
+//#endregion
+
+//#region //====| common |====//
 
 async function getPacket(): Promise<DataPacket> {
     await timer(1);
@@ -357,7 +358,9 @@ async function getTicketAmounts(): Promise<Record<string, number>> {
     return showtimes.reduce((a, x) => ({ ...a, [x.id]: calcAmount(x) }), {});
 }
 
-//====| shows |====//
+//#endregion
+
+//#region //====| shows |====//
 
 async function getShows(): Promise<Show[]> {
     await timer(1);
@@ -391,7 +394,9 @@ async function deleteShowByID(id: string): Promise<void> {
     shows = shows.filter(x => x.id === id ? false : true);
 }
 
-//====| showtimes |====//
+//#endregion
+
+//#region //====| showtimes |====//
 
 async function getShowtimes(): Promise<ShowtimeExtra[]> {
     await timer(1);
@@ -436,7 +441,9 @@ async function getAvailableSeats(id: string): Promise<number> {
     return st.maxSeats - tickets.filter(x => x.showtimeid === st.id).reduce((sum, x) => sum + sumSeats(x.seats), 0);
 }
 
-//====| tickets |====//
+//#endregion
+
+//#region //====| tickets |====//
 
 async function getTickets(): Promise<Ticket[]> {
     await timer(1);
@@ -481,6 +488,8 @@ async function updateTicketSeats(id: string, seats: Seats, admin: boolean): Prom
         error(errors.illegalData);
     tickets = tickets.map(x => x.id === id ? { ...x, seats: seats } : x);
 }
+
+//#endregion
 
 //====| export |====//
 

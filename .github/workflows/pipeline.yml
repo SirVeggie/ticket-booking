@@ -1,0 +1,44 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # - uses: actions/setup-node@v2
+        # with:
+          # node-version: '16'
+      # - name: build
+        # run: npm run build
+      - name: heroku
+        if: ${{ github.event_name == 'push' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_SECRET }}
+          heroku_app_name: 'arctic-ensemble-booking'
+          heroku_email: 'sirveggie@hotmail.com'
+          healthcheck: 'https://arctic-ensemble-booking.herokuapp.com/api/health'
+          checkstring: 'ok'
+          delay: 5
+          rollbackonhealthcheckfailed: true
+
+  tag_release:
+    if: ${{ github.event_name == 'push' }}
+    needs: [pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: 'patch'

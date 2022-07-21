@@ -5,7 +5,7 @@ import { Container } from 'semantic-ui-react';
 import TicketInfo from '../components/TicketInfo';
 import TicketInfoEdit from '../components/TicketInfoEdit';
 import TitleStrip from '../components/TitleStrip';
-import { Ticket } from '../datatypes';
+import { Ticket } from 'shared';
 import database from '../tools/database';
 
 function TicketDetails() {
