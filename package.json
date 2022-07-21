@@ -6,10 +6,10 @@
   "scripts": {
     "start": "cd backend && npm start",
     "install": "cd shared && npm i && cd ../backend && npm i && cd ../frontend && npm i",
-    "postinstall": "npm run buildAll",
     "buildAll": "cd shared && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
-    "prod": "npm run install && npm run build && npm start",
-    "lint": "cd backend && npm run lint && cd ../frontend && npm run lint && cd ../shared && npm run lint"
+    "prod": "npm i && npm run buildAll && npm start",
+    "lint": "cd backend && npm run lint && cd ../frontend && npm run lint && cd ../shared && npm run lint",
+    "heroku-postbuild": "npm run buildAll"
   },
   "repository": {
     "type": "git",
