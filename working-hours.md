@@ -42,5 +42,5 @@
 | 9.8.  |  3 | (I forgot what this was) commit: 011b27b75897f26e2374e41b5f23909df28192bb |
 | 2022  |
 | 21.7  | 1 | Getting familiar with the code base again |
-| 21.7  | 3 | Setting up project better (proper typescript, CI, etc...) |
+| 21.7  | 4 | Setting up project better (proper typescript, CI, etc...) |
 | total | 129 |
