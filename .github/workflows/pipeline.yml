@@ -17,8 +17,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+      - name: install
+        run: npm run install
       - name: build
-        run: npm run build
+        run: npm run buildAll
       - name: lint
         run: npm run lint
       - name: heroku
