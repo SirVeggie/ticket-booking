@@ -1,5 +1,6 @@
 | date | hours | tasks |
 |:----:|----:|:----|
+| 2021 |
 | 10.5. |  2 | Initial client meeting pitching and discussing the idea |
 | 24.5. |  1 | Setting up project stuff, like github and trello |
 | 3.6.  |  1 | More setup stuff, accidentally made a new github rep |
@@ -38,5 +39,8 @@
 | 22.7. |  6 | Mark as arrived and card accessibility functionality and admin navigation update |
 | 23.7. |  2 | Designing card buttons and researching focus-visible and @supports usage |
 | 8.8.  |  5 | Editing tickets functionality, and various small fixes |
-| 9.8.  |  3 | asd |
+| 9.8.  |  3 | (I forgot what this was) commit: 011b27b75897f26e2374e41b5f23909df28192bb |
+| 2022  |
+| 21.7  | 1 | Getting familiar with the code base again |
+| 21.7  | 3 | Setting up project better (proper typescript, CI, etc...) |
 | total | 125 |
