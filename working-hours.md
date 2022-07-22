@@ -43,4 +43,5 @@
 | 2022  |
 | 21.7  |  1 | Getting familiar with the code base again |
 | 21.7  |  6 | Setting up project better (proper typescript, CI, etc...) |
-| total | 132 |
+| 22.7  |  2 | Publishing React app on a VPS server |
+| total | 132 | 7.5 op |
