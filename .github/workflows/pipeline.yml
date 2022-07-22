@@ -23,26 +23,48 @@ jobs:
         run: npm run build
       - name: lint
         run: npm run lint
-      - name: heroku
-        if: ${{ github.event_name == 'push' }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_SECRET }}
-          heroku_app_name: 'arctic-ensemble-booking'
-          heroku_email: 'sirveggie@hotmail.com'
-          healthcheck: 'https://arctic-ensemble-booking.herokuapp.com/api/health'
-          checkstring: 'ok'
-          delay: 5
-          rollbackonhealthcheckfailed: true
+      
+  heroku:
+    if: ${{ github.event_name == 'push' }}
+    needs: [pipeline]  
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_SECRET }}
+        heroku_app_name: 'arctic-ensemble-booking'
+        heroku_email: 'sirveggie@hotmail.com'
+        healthcheck: 'https://arctic-ensemble-booking.herokuapp.com/api/health'
+        checkstring: 'ok'
+        delay: 5
+        rollbackonhealthcheckfailed: true
+  
+  contabo:
+    if: ${{ github.event_name == 'push' }}
+    needs: [heroku]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: 22
+        script: |
+          cd ~/projects/ticket-booking
+          git pull origin master
+          git status
+          npm run prod
 
   tag_release:
     if: ${{ github.event_name == 'push' }}
-    needs: [pipeline]
-    runs-on: ubuntu-20.04
+    needs: [heroku]
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.36.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: 'patch'
+    - uses: actions/checkout@v3
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@1.36.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEFAULT_BUMP: 'patch'
