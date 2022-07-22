@@ -23,7 +23,6 @@ jobs:
         run: npm run build
       - name: lint
         run: npm run lint
-      - name: heroku
       
   heroku:
     if: ${{ github.event_name == 'push' }}
