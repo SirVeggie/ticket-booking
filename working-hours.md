@@ -44,4 +44,5 @@
 | 21.7  |  1 | Getting familiar with the code base again |
 | 21.7  |  6 | Setting up project better (proper typescript, CI, etc...) |
 | 22.7  |  2 | Publishing React app on a VPS server |
-| total | 132 | 7.5 op |
+| 22.7  |  2 | CD to contabo server |
+| total | 136 | 7.8 op |
