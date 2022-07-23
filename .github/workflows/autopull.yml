@@ -29,12 +29,17 @@ jobs:
           pr_title: "auto-pull from commit '${{ github.event.head_commit.message }}'"
           pr_label: "automerge"
     
-  automerge:
-    needs: [autopull]
-    runs-on: ubuntu-latest
-    steps:
-      - id: automerge
-        name: automerge
-        uses: pascalgn/automerge-action@v0.15.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # automerge:
+    # needs: [autopull]
+    # runs-on: ubuntu-latest
+    # steps:
+      # - name: automerge
+        # use: peter-evans/enable-pull-request-automerge@v2
+        # with:
+          # token: ${{ secrets.PAT }}
+          
+      # - id: automerge
+        # name: automerge
+        # uses: pascalgn/automerge-action@v0.15.3
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
