@@ -41,11 +41,12 @@
 | 8.8.  |  5 | Editing tickets functionality, and various small fixes |
 | 9.8.  |  3 | (I forgot what this was) commit: 011b27b75897f26e2374e41b5f23909df28192bb |
 | 2022  |
-| 21.7  |  1 | Getting familiar with the code base again |
-| 21.7  |  6 | Setting up project better (proper typescript, CI, etc...) |
-| 22.7  |  2 | Publishing React app on a VPS server |
-| 22.7  |  2 | CD to contabo server |
-| 22.7  |  2 | auto pull requests (doesn't deploy yet???) |
-| 22.7  |  1 | auto pull -> merge -> deploy now works with personal tokens (plus some extra) |
-| 22.7  |  1 | buying and setting up domain and nginx and https |
-| total | 140 | 8 op |
+| 21.7. |  1 | Getting familiar with the code base again |
+| 21.7. |  6 | Setting up project better (proper typescript, CI, etc...) |
+| 22.7. |  2 | Publishing React app on a VPS server |
+| 22.7. |  2 | CD to contabo server |
+| 22.7. |  2 | Auto pull requests (doesn't deploy yet???) |
+| 22.7. |  1 | Auto pull -> merge -> deploy now works with personal tokens (plus some extra) |
+| 22.7. |  1 | Buying and setting up domain and nginx and https |
+| 23.7. |  2 | Refactoring routes and other stuff |
+| total | 142 | 8.1 op |

@@ -2,7 +2,7 @@ import mailer from 'nodemailer';
 
 const email = 'no.reply.arcticensemblebooking@gmail.com';
 const pass = process.env.EMAIL_PASS;
-const baseUrl = 'http://localhost:3000/confirm/';
+const baseUrl = 'http://localhost:3000/api/tickets/confirm/';
 
 const transporter = mailer.createTransport({
     service: 'gmail',

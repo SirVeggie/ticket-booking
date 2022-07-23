@@ -1,19 +1,14 @@
 import axios from 'axios';
-import { DataPacket, Seats, Show, Showtime, Ticket } from 'shared';
+import { apiPath, DataPacket, Seats, Show, showPath, Showtime, showtimePath, Ticket, ticketPath } from 'shared';
 import auth from './auth';
 import fixDates from './fixDates';
-
-const baseUrl = '/api';
-const shows = baseUrl + '/shows';
-const showtimes = baseUrl + '/showtimes';
-const tickets = baseUrl + '/tickets';
 
 function getall<Type>(target: string): () => Promise<Type[]> {
     return () => axios.get(target, auth.getConfig()).then(x => fixDates(x.data));
 }
 
 function get<Type>(target: string): (id: string) => Promise<Type> {
-    return id => axios.get(target + '/' + id, auth.getConfig()).then(x => fixDates(x.data));
+    return id => axios.get(`${target}/${id}`, auth.getConfig()).then(x => fixDates(x.data));
 }
 
 function add<Type>(target: string): (show: Type) => Promise<Type> {
@@ -21,27 +16,27 @@ function add<Type>(target: string): (show: Type) => Promise<Type> {
 }
 
 function replace<Type>(target: string): (id: string, show: Type) => Promise<void> {
-    return (id, show) => axios.put(target + '/' + id, show, auth.getConfig());
+    return (id, show) => axios.put(`${target}/${id}`, show, auth.getConfig());
 }
 
 function del(target: string): (id: string) => Promise<void> {
-    return id => axios.delete(target + '/' + id, auth.getConfig());
+    return id => axios.delete(`${target}/${id}`, auth.getConfig());
 }
 
 function getPacket(): Promise<DataPacket> {
-    return axios.get(baseUrl + '/packet').then(x => fixDates(x.data));
+    return axios.get(`${apiPath}/packet`).then(x => fixDates(x.data));
 }
 
 function getTicketAmounts(): Promise<Record<string, number>> {
-    return axios.get(baseUrl + '/ticket_amounts').then(x => x.data);
+    return axios.get(`${ticketPath}/ticket_amounts`).then(x => x.data);
 }
 
 function getAvailableSeats(id: string): Promise<number> {
-    return axios.get(baseUrl + '/available_seats/' + id).then(x => x.data);
+    return axios.get(`${showtimePath}/${id}/available_seats`).then(x => x.data);
 }
 
 function updateTicketSeats(id: string, seats: Seats): Promise<void> {
-    return axios.post(baseUrl + '/update_seats/' + id, seats, auth.getConfig());
+    return axios.post(`${ticketPath}/${id}/update_seats`, seats, auth.getConfig());
 }
 
 //====| exports |====//
@@ -58,13 +53,13 @@ function generate<Type>(target: string) {
 
 export default {
     getPacket,
-    shows: generate<Show>(shows),
+    shows: generate<Show>(showPath),
     showtimes: {
-        ...generate<Showtime>(showtimes),
+        ...generate<Showtime>(showtimePath),
         getAvailableSeats
     },
     tickets: {
-        ...generate<Ticket>(tickets),
+        ...generate<Ticket>(ticketPath),
         getAmounts: getTicketAmounts,
         updateSeats: updateTicketSeats
     }

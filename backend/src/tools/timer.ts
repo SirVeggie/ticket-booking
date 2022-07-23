@@ -1,6 +1,4 @@
 
-function timer(ms: number) {
+export function timer(ms: number) {
     return new Promise(res => setTimeout(res, ms));
 }
-
-export default timer;

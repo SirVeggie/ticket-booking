@@ -74,3 +74,10 @@ export class TicketInfo {
     max: number = 0;
     reserved: number = 0;
 }
+
+//==| routes |==//
+
+export const apiPath = '/api' as const;
+export const showPath = `${apiPath}/shows` as const;
+export const showtimePath = `${apiPath}/showtimes` as const;
+export const ticketPath = `${apiPath}/tickets` as const;
