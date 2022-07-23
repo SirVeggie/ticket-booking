@@ -1,7 +1,7 @@
-import timer from './tools/timer';
+import { timer } from './tools/timer';
 import errors from './tools/errors';
 import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, Ticket } from 'shared';
-import fixDates from './tools/fixDates';
+import { fixDates } from './tools/fixDates';
 
 //#region //====| debug data |====//
 

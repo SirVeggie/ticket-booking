@@ -1,6 +1,6 @@
 import errors from './errors';
 
-function extract(object: Record<string, unknown>, model: any): any {
+export function extractType(object: Record<string, unknown>, model: any): any {
     const result: any = {};
     Object.keys(model).forEach(key => {
         if (model[key] !== undefined && object[key] === undefined)
@@ -9,5 +9,3 @@ function extract(object: Record<string, unknown>, model: any): any {
     });
     return result;
 }
-
-export default extract;
