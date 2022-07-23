@@ -52,6 +52,11 @@ jobs:
           git pull origin master
           git status
           npm run prod
+    - name: Notification
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: '${{ secrets.NOTIFY_URL }}App%20deployed'
+        method: 'GET'
 
   tag_release:
     if: ${{ github.event_name == 'push' }}
