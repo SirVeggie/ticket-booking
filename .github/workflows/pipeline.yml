@@ -2,27 +2,22 @@ name: Deployment
 
 on:
   push:
-    branches:
-      - master
-  # pull_request:
-    # branches: [master]
-    # types: [opened, synchronize]
-
+    branches: [master]
 
 jobs:
   pipeline:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: install
-        run: npm i
-      - name: build
-        run: npm run build
-      - name: lint
-        run: npm run lint
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - name: install
+      run: npm i
+    - name: build
+      run: npm run build
+    - name: lint
+      run: npm run lint
       
   heroku:
     if: ${{ github.event_name == 'push' }}

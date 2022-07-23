@@ -1,0 +1,20 @@
+name: backup
+
+on:
+  repository_dispatch:
+    types: [backup]
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Rollback using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASS }}
+        port: 22
+        script: |
+          cd ~/projects/ticket-booking
+          npm run backup
