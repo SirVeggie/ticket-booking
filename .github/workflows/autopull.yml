@@ -22,6 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create pull request
+        id: pr
         uses: repo-sync/pull-request@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,10 +40,11 @@ jobs:
         # use: peter-evans/enable-pull-request-automerge@v2
         # with:
           # token: ${{ secrets.PAT }}
-          # pull-request-number: ${{ github.event.pull_request.number }}
+          # pull-request-number: ${{ steps.open-pr.outputs.pr_number }}
           
       - id: automerge
         name: automerge
         uses: pascalgn/automerge-action@v0.15.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST: ${{ steps.pr.outputs.pr_number }}
