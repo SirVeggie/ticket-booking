@@ -29,18 +29,6 @@ jobs:
           destination_branch: ${{ github.event.repository.default_branch }}
           pr_title: "auto-pull from commit '${{ github.event.head_commit.message }}'"
           pr_label: "automerge"
-    
-  automerge:
-    needs: [autopull]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      # - name: automerge
-        # use: peter-evans/enable-pull-request-automerge@v2
-        # with:
-          # token: ${{ secrets.PAT }}
-          # pull-request-number: ${{ steps.open-pr.outputs.pr_number }}
           
       - id: automerge
         name: automerge
@@ -48,3 +36,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL_REQUEST: ${{ steps.pr.outputs.pr_number }}
+    
+  # automerge:
+    # needs: [autopull]
+    # runs-on: ubuntu-latest
+    # steps:
+      # - name: Checkout
+        # uses: actions/checkout@v3
+      # - name: automerge
+        # use: peter-evans/enable-pull-request-automerge@v2
+        # with:
+          # token: ${{ secrets.PAT }}
+          # pull-request-number: ${{ steps.open-pr.outputs.pr_number }}
+          
