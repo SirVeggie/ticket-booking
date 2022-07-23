@@ -10,8 +10,8 @@
     "install": "cd shared && npm i && cd ../backend && npm i && cd ../frontend && npm i",
     "build": "cd shared && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
     "prod": "npm i --omit=dev && npm run build && npm start",
-    "backup": "rsync -a --delete backend/build backup",
-    "rollback": "rsync -a --delete backup backend/build && npm start",
+    "backup": "rsync -a --delete backend/build/ backup",
+    "rollback": "rsync -a --delete backup backend/build/ && npm start",
     "lint": "cd backend && npm run lint && cd ../frontend && npm run lint && cd ../shared && npm run lint"
   },
   "repository": {

@@ -32,6 +32,7 @@ function ticketConfirmation(receiverEmail: string, id: string) {
 }
 
 function ticketConfirmAccept(id: string) {
+    
     return;
 }
 
