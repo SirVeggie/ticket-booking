@@ -46,4 +46,6 @@
 | 22.7  |  2 | Publishing React app on a VPS server |
 | 22.7  |  2 | CD to contabo server |
 | 22.7  |  2 | auto pull requests (doesn't deploy yet???) |
-| total | 136 | 7.8 op |
+| 22.7  |  1 | auto pull -> merge -> deploy now works with personal tokens (plus some extra) |
+| 22.7  |  1 | buying and setting up domain and nginx and https |
+| total | 140 | 8 op |
