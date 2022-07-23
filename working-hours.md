@@ -49,4 +49,5 @@
 | 22.7. |  1 | Auto pull -> merge -> deploy now works with personal tokens (plus some extra) |
 | 22.7. |  1 | Buying and setting up domain and nginx and https |
 | 23.7. |  2 | Refactoring routes and other stuff |
-| total | 142 | 8.1 op |
+| 23.7. |  2 | Simple backup/rollback + deployment notification |
+| total | 144 | 8.2 op |
