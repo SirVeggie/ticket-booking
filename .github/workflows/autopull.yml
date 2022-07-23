@@ -30,7 +30,7 @@ jobs:
           pr_label: "automerge"
     
   automerge:
-    if: ${{ github.event_name != 'push' }}
+    needs: [autopull]
     runs-on: ubuntu-latest
     steps:
       - id: automerge
