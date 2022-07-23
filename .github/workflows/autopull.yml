@@ -16,12 +16,13 @@ on:
 
 jobs:
   autopull:
-    if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ' '), '#pull') }}
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '#pull') }}
     runs-on: ubuntu-latest
     steps:
       - uses: devops-infra/action-pull-request@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: dev
           title: "auto-pull from commit '${{ github.event.head_commit.message }}'"
           label: automerge
     
