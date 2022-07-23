@@ -31,6 +31,8 @@ jobs:
           pr_label: "automerge"
       - name: Echo pr number
         run: echo ${{ steps.open-pr.outputs.pr_number }}
+      - name: Echo everything
+        run: echo ${{ toJson(steps) }}
       - name: automerge
         id: automerge
         uses: pascalgn/automerge-action@v0.15.3
