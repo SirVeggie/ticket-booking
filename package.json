@@ -5,10 +5,11 @@
   "main": "backend/build/index.js",
   "scripts": {
     "start": "cd backend && npm start",
-    "stop": "cd backend && npm stop",
+    "start:prod": "cd backend && npm run start:prod",
+    "stop:prod": "cd backend && npm run stop:prod",
     "install": "cd shared && npm i && cd ../backend && npm i && cd ../frontend && npm i",
     "build": "cd shared && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
-    "prod": "npm i --omit=dev && npm run build && npm start",
+    "prod": "npm i --omit=dev && npm run build && npm run start:prod",
     "lint": "cd backend && npm run lint && cd ../frontend && npm run lint && cd ../shared && npm run lint"
   },
   "repository": {
