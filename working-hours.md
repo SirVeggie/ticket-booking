@@ -45,4 +45,5 @@
 | 21.7  |  6 | Setting up project better (proper typescript, CI, etc...) |
 | 22.7  |  2 | Publishing React app on a VPS server |
 | 22.7  |  2 | CD to contabo server |
+| 22.7  |  1 | auto pull requests |
 | total | 136 | 7.8 op |
