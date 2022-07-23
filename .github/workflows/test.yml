@@ -1,0 +1,18 @@
+name: test
+
+on:
+  push:
+    branches:
+      - dev
+
+
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: gihub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - run: echo "auto-pull from commit '${{ github.event.head_commit.message }}'"
