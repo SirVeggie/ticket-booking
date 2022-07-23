@@ -6,7 +6,6 @@ import morgan from 'morgan';
 import cors from 'cors';
 import 'express-async-errors';
 import database from './src/database';
-import errors from './src/tools/errors';
 import { apiPath, MiscData, showPath, showtimePath, ticketPath } from 'shared';
 import { checkAdmin } from './src/routes/routerHelpers';
 import { authRouter } from './src/routes/authRouter';
