@@ -17,7 +17,7 @@ function Homepage() {
 
   return (
     <div style={{ position: 'relative' }}>
-      <TitleStrip title='Arctic Ensemble Lipunvaraus' button='Kotisivu' onClick={() => window.location.href = misc.homepage} />
+      <TitleStrip title='Bad Title' button='Kotisivu' onClick={() => window.location.href = misc.homepage} />
       <Banner src={misc.mainBannerUrl} />
       <Cards title='Esitykset' cards={cards} emptyText='Ei tulevia esityksiä' />
       <Footer />
