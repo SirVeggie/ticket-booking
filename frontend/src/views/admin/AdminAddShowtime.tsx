@@ -8,10 +8,12 @@ import { setData } from '../../reducers/dataReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
 import { mapShowtimeCard } from '../Showtimes';
+import { useNotification } from '../../hooks/useNotification';
 
 const defaultDate = new Date(2000, 0, 1, 0, 0);
 
 export default function AdminAddShowtime() {
+  const notify = useNotification();
   const dispatch = useDispatch();
   const shows = useSelector((state: StateType) => state.data.shows);
   const [showtime, setShowtime] = useState({ ...new Showtime(), date: defaultDate });
@@ -37,7 +39,10 @@ export default function AdminAddShowtime() {
   const onSave = async () => {
     try {
       await database.showtimes.add(showtime);
-    } catch {
+      notify.create('success', 'Showtime added successfully');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : error;
+      notify.create('error', `Failed to add showtime: ${message}`);
       return;
     }
     

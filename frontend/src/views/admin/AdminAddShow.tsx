@@ -18,7 +18,9 @@ export default function AdminAddShow() {
     try {
       await database.shows.add(show);
       notify.create('success', 'Show added successfully');
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : error;
+      notify.create('error', `Failed to add show: ${message}`);
       return;
     }
 
