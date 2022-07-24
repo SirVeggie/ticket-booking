@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Checkbox, Button } from 'semantic-ui-react';
 import Card from '../../components/Card';
-import { Show, Showtime, sumTickets, Ticket } from 'shared';
+import { Show, Showtime, sumSeats, Ticket } from 'shared';
 import { StateType } from '../../store';
 import { History } from 'history';
 import { useHistory } from 'react-router-dom';
@@ -11,6 +11,7 @@ import LabelDropdown from '../../components/LabelDropdown';
 import CardCheckbox from '../../components/CardCheckbox';
 import { setTicketList } from '../../reducers/adminReducer';
 import database from '../../tools/database';
+import { createUseStyles } from 'react-jss';
 
 export default function AdminTickets() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -52,6 +53,7 @@ export default function AdminTickets() {
 }
 
 function Results(props: { search: string, today: boolean, old: boolean, show: Show, showtime: Showtime; }) {
+  const s = useStyles();
   const dispatch = useDispatch();
   const tickets = useSelector((state: StateType) => state.admin.tickets);
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -103,7 +105,9 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
     );
   });
 
-  const ticketAmount = items.reduce((sum, t) => sum + sumTickets(t.seats), 0);
+  const ticketAmount = items.length;
+  const seatAmount = items.reduce((sum, t) => sum + sumSeats(t.seats), 0);
+  const arrivedAmount = items.reduce((sum, t) => sum + (t.arrived ? 1 : 0), 0);
   const price = items.reduce((sum, t) => {
     const st = showtimes.find(x => x.id === t.showtimeid);
     if (!st)
@@ -114,9 +118,12 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
   return (
     <div style={{ margin: '30px 0' }}>
       <Toggle enabled={!!cards.length}>
-        <span>Tickets selected: {ticketAmount}</span>
-        <span style={{ marginLeft: 30 }}>Total price: {price}€</span>
-        <div style={{ marginBottom: 10 }} />
+        <div className={s.stats}>
+          <span>Tickets: {ticketAmount}</span>
+          <span>Arrived: {arrivedAmount}</span>
+          <span>Seats: {seatAmount}</span>
+          <span>Total price: {price}€</span>
+        </div>
       </Toggle>
       <div style={layout}>
         {!cards.length ? 'No matches...' : cards}
@@ -168,3 +175,13 @@ function getShowtimeText(st: Showtime): string {
     return 'All';
   return st.date.toLocaleString().slice(0, -3);
 }
+
+const useStyles = createUseStyles({
+  stats: {
+    marginBottom: 10,
+    
+    '& > span': {
+      marginRight: 30
+    }
+  }
+});
