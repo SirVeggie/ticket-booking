@@ -50,4 +50,5 @@
 | 22.7. |  1 | Buying and setting up domain and nginx and https |
 | 23.7. |  2 | Refactoring routes and other stuff |
 | 23.7. |  2 | Simple backup/rollback + deployment notification |
+| 23.7. |  2 | Notification popup |
 | total | 144 | 8.2 op |

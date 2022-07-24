@@ -21,7 +21,7 @@ export function addTicketData(ticket: Ticket): AdminAction {
 
 //====| reducer |====//
 
-function adminReducer(state = initialState, action: AdminAction) {
+export function adminReducer(state = initialState, action: AdminAction) {
     switch (action.type) {
         case 'ADMIN_SET':
             if (!action.data)
@@ -45,5 +45,3 @@ export interface AdminData {
     status: boolean,
     tickets: Ticket[];
 }
-
-export default adminReducer;

@@ -8,17 +8,24 @@ import { printDate } from '../tools/stringTool';
 import { MiscData, Show, Showtime } from 'shared';
 import { useSelector } from 'react-redux';
 import { StateType } from '../store';
+import { useNotification } from '../hooks/useNotification';
 
 function Homepage() {
   const { shows, showtimes, misc } = useSelector((state: StateType) => state.data);
   const history = useHistory();
+  const notify = useNotification();
 
   const cards: CardInfo[] = showMapper(shows, showtimes, misc, history);
+  
+  const click = () => {
+    notify.create('info', 'Random test message');
+  };
 
   return (
     <div style={{ position: 'relative' }}>
       <TitleStrip title='Arctic Ensemble Lipunvaraus' button='Kotisivu' onClick={() => window.location.href = misc.homepage} />
       <Banner src={misc.mainBannerUrl} />
+      <button onClick={click}>Notification test</button>
       <Cards title='Esitykset' cards={cards} emptyText='Ei tulevia esityksiä' />
       <Footer />
     </div>

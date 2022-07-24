@@ -20,7 +20,9 @@
     "@types/react-dom": "^17.0.6",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
+    "@types/uuid": "^8.3.4",
     "axios": "^0.21.1",
+    "classnames": "^2.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-jss": "^10.6.0",
@@ -31,14 +33,15 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",
-    "typescript": "^4.3.2",
-    "shared": "file:../shared"
+    "shared": "file:../shared",
+    "typescript": "^4.3.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "eslint": "^7.27.0",
-    "eslint-plugin-react": "^7.24.0"
+    "eslint-plugin-react": "^7.24.0",
+    "react-error-overlay": "^6.0.9"
   },
   "proxy": "http://localhost:3001",
   "eslintConfig": {
@@ -46,6 +49,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   },
   "browserslist": {
     "production": [

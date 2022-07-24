@@ -14,7 +14,7 @@ export function setData(data: DataPacket) {
 
 //====| reducer |====//
 
-function dataReducer(state = initialState, action: DataAction) {
+export function dataReducer(state = initialState, action: DataAction) {
     switch (action.type) {
         case 'DATA_RESET':
             return initialState;
@@ -29,5 +29,3 @@ export interface DataAction {
     type: 'DATA_RESET' | 'DATA_SET',
     data?: DataPacket
 }
-
-export default dataReducer;
