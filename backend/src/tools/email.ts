@@ -12,7 +12,7 @@ const transporter = mailer.createTransport({
     }
 });
 
-function ticketConfirmation(receiverEmail: string, id: string) {
+export function ticketConfirmation(receiverEmail: string, id: string) {
     const options = {
         from: 'Arctic Ensemble ' + email,
         to: receiverEmail,
@@ -31,8 +31,6 @@ function ticketConfirmation(receiverEmail: string, id: string) {
     return;
 }
 
-function ticketConfirmAccept(id: string) {
+export function ticketConfirmAccept(id: string) {
     return;
 }
-
-export default { ticketConfirmation, ticketConfirmAccept };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Message } from 'semantic-ui-react';
-import { Seats, Ticket } from 'shared';
+import { Seats, sumSeats, sumTickets, Ticket } from 'shared';
 import { StateType } from '../store';
 import database from '../tools/database';
 import LabelDropdown from './LabelDropdown';
@@ -40,7 +40,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
   };
   
   const confirm = async () => {
-    if (sumSeats(seats) === 0) {
+    if (sumTickets(seats) === 0) {
       setError('Valitse ainakin yksi lippu');
       return;
     }
@@ -80,8 +80,4 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
       <Button basic onClick={() => history.push(`/ticket/${ticket.id}`)}>Back</Button>
     </div>
   );
-}
-
-function sumSeats(seats: Seats): number {
-  return seats.normal + seats.discount + seats.family;
 }
