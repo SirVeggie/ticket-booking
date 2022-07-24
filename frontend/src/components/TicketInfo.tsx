@@ -7,7 +7,7 @@ import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
 import Toggle from './Toggle';
 
-function TicketInfo({ ticket, buttons }: { ticket: Ticket, buttons?: boolean }) {
+function TicketInfo({ ticket, buttons, style }: { ticket: Ticket, buttons?: boolean, style?: React.CSSProperties }) {
   const history = useHistory();
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
 
@@ -26,7 +26,7 @@ function TicketInfo({ ticket, buttons }: { ticket: Ticket, buttons?: boolean }) 
     return <Message negative header='Lipputietojen lataus epäonnistui' />;
   return (
     <Segment>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', ...style }}>
         <Toggle enabled={!!buttons}>
           <Button basic onClick={() => history.push(`/ticket/${ticket.id}/edit`)} style={{ position: 'absolute', right: 0, marginRight: 0 }}>
             <Icon name='edit' />

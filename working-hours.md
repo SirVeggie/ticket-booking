@@ -52,4 +52,6 @@
 | 23.7. |  2 | Simple backup/rollback + deployment notification |
 | 23.7. |  2 | Notification popup |
 | 23.7. |  1 | Minor features/fixes |
-| total | 147 | 8.4 op |
+| 24.7. |  5 | Admin tool notifications, data validation, error messages |
+| 24.7. |  3 | Confirmation popup |
+| total | 155 | 8.9 op |
