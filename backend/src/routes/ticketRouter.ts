@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Seats, ticketPath } from 'shared';
 import database from '../database';
-import email from '../tools/email';
+import { ticketConfirmation } from '../tools/email';
 import { extractType } from '../tools/extractType';
 import { del, getall, isAdmin, replace, ticketModel } from './routerHelpers';
 
@@ -21,7 +21,7 @@ ticketRouter.post('/', async (req, res) => {
     const data = extractType(req.body, ticketModel);
     const result = await database.tickets.add(data);
     if (!result.confirmed)
-        email.ticketConfirmation(result.email, result.id);
+        ticketConfirmation(result.email, result.id);
     res.json(result);
 });
 ticketRouter.put('/:id', replace('tickets', false, ticketModel));

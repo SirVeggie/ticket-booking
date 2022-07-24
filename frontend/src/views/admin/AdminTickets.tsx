@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Checkbox, Button } from 'semantic-ui-react';
 import Card from '../../components/Card';
-import { Show, Showtime, Ticket } from 'shared';
+import { Show, Showtime, sumTickets, Ticket } from 'shared';
 import { StateType } from '../../store';
 import { History } from 'history';
 import { useHistory } from 'react-router-dom';
@@ -103,7 +103,7 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
     );
   });
 
-  const amount = items.reduce((sum, t) => sum + t.seats.normal + t.seats.discount + t.seats.family, 0);
+  const ticketAmount = items.reduce((sum, t) => sum + sumTickets(t.seats), 0);
   const price = items.reduce((sum, t) => {
     const st = showtimes.find(x => x.id === t.showtimeid);
     if (!st)
@@ -114,7 +114,7 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
   return (
     <div style={{ margin: '30px 0' }}>
       <Toggle enabled={!!cards.length}>
-        <span>Seats selected: {amount}</span>
+        <span>Tickets selected: {ticketAmount}</span>
         <span style={{ marginLeft: 30 }}>Total price: {price}€</span>
         <div style={{ marginBottom: 10 }} />
       </Toggle>

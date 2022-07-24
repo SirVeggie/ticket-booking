@@ -1,6 +1,6 @@
 import { timer } from './tools/timer';
 import errors from './tools/errors';
-import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, Ticket } from 'shared';
+import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, sumSeats, Ticket } from 'shared';
 import { fixDates } from './tools/fixDates';
 
 //#region //====| debug data |====//
@@ -323,10 +323,6 @@ function error(error: any): never {
     throw error;
 }
 
-function sumSeats(seats: Seats): number {
-    return seats.normal + seats.discount + seats.family;
-}
-
 function mapShowtimeToExtra(showtime: Showtime): ShowtimeExtra {
     const reserved = tickets.filter(x => x.showtimeid === showtime.id).reduce((a, b) => a + sumSeats(b.seats), 0);
     return { ...showtime, reservedSeats: reserved };
@@ -354,7 +350,7 @@ async function replaceMisc(data: MiscData): Promise<MiscData> {
 
 async function getTicketAmounts(): Promise<Record<string, number>> {
     await timer(1);
-    const calcAmount = (st: Showtime) => tickets.filter(x => x.showtimeid === st.id).reduce((sum, t) => sum + t.seats.normal + t.seats.discount + t.seats.family, 0);
+    const calcAmount = (st: Showtime) => tickets.filter(x => x.showtimeid === st.id).reduce((sum, t) => sum + sumSeats(t.seats), 0);
     return showtimes.reduce((a, x) => ({ ...a, [x.id]: calcAmount(x) }), {});
 }
 

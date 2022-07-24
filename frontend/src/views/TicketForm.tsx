@@ -4,7 +4,7 @@ import { Form, Button, Table, Message, Icon } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
-import { Phonenumber, Show, Showtime, Ticket } from 'shared';
+import { Phonenumber, Show, Showtime, sumTickets, Ticket } from 'shared';
 import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from '../store';
 import { setTicket } from '../reducers/ticketReducer';
@@ -181,7 +181,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
 function validateForm(ticket: Ticket, nameData: { first: string, last: string; }, checked: boolean): Errors {
   const errors = new Errors();
 
-  if (ticket.seats.normal + ticket.seats.discount + ticket.seats.family === 0) {
+  if (sumTickets(ticket.seats) === 0) {
     errors.hasErrors = true;
     errors.tickets = 'Lisää ainakin yksi lippu';
   }

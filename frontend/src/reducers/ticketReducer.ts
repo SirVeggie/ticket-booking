@@ -14,7 +14,7 @@ export function setTicket(data: Ticket | undefined) {
 
 //====| reducer |====//
 
-function ticketReducer(state = initialState, action: ticketAction) {
+export function ticketReducer(state = initialState, action: ticketAction) {
     switch (action.type) {
         case 'TICKET_RESET':
             return initialState;
@@ -29,5 +29,3 @@ export interface ticketAction {
     type: 'TICKET_RESET' | 'TICKET_SET',
     data?: Ticket | undefined
 }
-
-export default ticketReducer;

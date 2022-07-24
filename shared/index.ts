@@ -81,3 +81,13 @@ export const apiPath = '/api' as const;
 export const showPath = `${apiPath}/shows` as const;
 export const showtimePath = `${apiPath}/showtimes` as const;
 export const ticketPath = `${apiPath}/tickets` as const;
+
+//==| functions |==//
+
+export function sumSeats(seats: Seats): number {
+    return seats.normal + seats.discount + (seats.family * 4);
+}
+
+export function sumTickets(seats: Seats): number {
+    return seats.normal + seats.discount + seats.family;
+}

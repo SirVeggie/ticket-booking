@@ -11,6 +11,7 @@ import { StateType } from '../store';
 import { printDate, printTime } from '../tools/stringTool';
 import { History } from 'history';
 import database from '../tools/database';
+import Toggle from '../components/Toggle';
 
 export default function Showtimes() {
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
@@ -37,7 +38,9 @@ export default function Showtimes() {
     <div>
       <TitleStrip title={show.name} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
       {show.imageUrl ? <Banner src={show.imageUrl!} /> : ''}
-      <BackButton />
+      <Toggle enabled={!!show.imageUrl}>
+        <BackButton />
+      </Toggle>
       {show.description ? <Description desc={show.description!} /> : ''}
       <Cards title='Näytökset' cards={cards} emptyText='Ei tulevia näytöksiä' />
       <BackButton />

@@ -9,7 +9,7 @@ function Card({ data, onClick, children, style }: { data: CardInfo, onClick?: (c
   const styles = useStyles();
 
   const inline: React.CSSProperties = {
-    background: data.color,
+    background: (data.color?.length ?? 0) >= 4 ? data.color : undefined,
     height: data.height ? data.height : undefined
   };
   
