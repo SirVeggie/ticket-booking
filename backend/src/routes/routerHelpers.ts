@@ -1,16 +1,10 @@
 import database from '../database';
-import { extractType } from '../tools/extractType';
-import { Show, Showtime, Ticket } from 'shared';
-import errors from '../tools/errors';
 import auth from '../auth';
+import { errors } from 'shared';
 
 //===| models |===//
 
 type DataType = 'shows' | 'showtimes' | 'tickets';
-
-export const showModel: Show = new Show();
-export const showtimeModel: Showtime = new Showtime();
-export const ticketModel: Ticket = new Ticket();
 
 //===| routes |===//
 
@@ -33,23 +27,21 @@ export function getone(target: DataType, admin: boolean) {
     };
 }
 
-export function add(target: DataType, admin: boolean, model: any) {
+export function add(target: DataType, admin: boolean) {
     return async (req: any, res: any) => {
         if (admin)
             checkAdmin(req);
-        const data = extractType(req.body, model);
-        const result = await database[target].add(data);
+        const result = await database[target].add(req.body);
         res.json(result);
     };
 }
 
-export function replace(target: DataType, admin: boolean, model: any) {
+export function replace(target: DataType, admin: boolean) {
     return async (req: any, res: any) => {
         if (admin)
             checkAdmin(req);
-        const data = extractType(req.body, model);
-        data.id = req.params.id;
-        const result = await database[target].replace(data.id, data);
+        const id = req.params.id;
+        const result = await database[target].replace(id, req.body);
         res.json(result);
     };
 }

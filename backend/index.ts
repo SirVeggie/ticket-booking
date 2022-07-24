@@ -6,10 +6,9 @@ import morgan from 'morgan';
 import cors from 'cors';
 import 'express-async-errors';
 import database from './src/database';
-import { apiPath, MiscData, showPath, showtimePath, ticketPath } from 'shared';
+import { apiPath, extractType, MiscData, showPath, showtimePath, ticketPath } from 'shared';
 import { checkAdmin } from './src/routes/routerHelpers';
 import { authRouter } from './src/routes/authRouter';
-import { extractType } from './src/tools/extractType';
 import { ticketRouter } from './src/routes/ticketRouter';
 import { showRouter } from './src/routes/showRouter';
 import { showtimeRouter } from './src/routes/showtimeRouter';
@@ -29,6 +28,10 @@ server.use(morgan(':method :url :status :res[content-length] - :response-time ms
 
 server.get('/api/health', (req, res) => {
     res.send('ok');
+});
+
+server.get('/api/error', (req, res) => {
+    res.status(400).send({ error: 'This is an error message' });
 });
 
 server.get('/api/packet', async (req, res) => {

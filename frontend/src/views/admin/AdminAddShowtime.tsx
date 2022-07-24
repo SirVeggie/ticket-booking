@@ -8,24 +8,26 @@ import { setData } from '../../reducers/dataReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
 import { mapShowtimeCard } from '../Showtimes';
+import { useNotification } from '../../hooks/useNotification';
 
 const defaultDate = new Date(2000, 0, 1, 0, 0);
 
 export default function AdminAddShowtime() {
+  const notify = useNotification();
   const dispatch = useDispatch();
   const shows = useSelector((state: StateType) => state.data.shows);
   const [showtime, setShowtime] = useState({ ...new Showtime(), date: defaultDate });
   const [dateError, setDateError] = useState(false);
   const [dateString, setDateString] = useState('');
   const show = shows.find(x => x.id === showtime.showid);
-  
+
   const parseDate = (value: string) => {
-    let data = value.split(' ');
-    if (data.length !== 2) {
+    let data = value.replace(/ +/, ' ').trim().split(' ');
+    if (data.length !== 2 || !data.some(x => x.match(/\d+:\d+/)) || !data.some(x => x.match(/(\d{1,2}[./-]){2}\d{4}/))) {
       setDateError(true);
       return defaultDate;
     }
-    
+
     setDateError(false);
     if (data[1].includes(':'))
       data = data.reverse();
@@ -33,19 +35,30 @@ export default function AdminAddShowtime() {
     const date = data[1].split(/[./-]/).map(x => Number(x));
     return new Date(date[2], date[1] - 1, date[0], time[0], time[1]);
   };
-  
+
   const onSave = async () => {
-    try {
-      await database.showtimes.add(showtime);
-    } catch {
+    if (dateString.length === 0) {
+      notify.create('error', 'Date is required');
+      return;
+    } else if (dateError) {
+      notify.create('error', 'Date is invalid');
       return;
     }
-    
+
+    try {
+      await database.showtimes.add(showtime);
+      notify.create('success', 'Showtime added successfully');
+    } catch (error: any) {
+      const message = error.error ?? error;
+      notify.create('error', message.toString());
+      return;
+    }
+
     dispatch(setData(await database.getPacket()));
     setShowtime({ ...new Showtime(), date: defaultDate });
     setDateString('');
   };
-  
+
   return (
     <div className='ui container'>
       <h1>Add showtime</h1>
@@ -66,11 +79,11 @@ export default function AdminAddShowtime() {
   );
 }
 
-function InputField({ label, value, update, type, error }: { label: string, value: string | undefined, update: (value: string) => void, type?: string, error?: boolean }) {
+function InputField({ label, value, update, type, error }: { label: string, value: string | undefined, update: (value: string) => void, type?: string, error?: boolean; }) {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     update(event.target.value);
   };
-  
+
   return (
     <div>
       <label>{label}</label><br />

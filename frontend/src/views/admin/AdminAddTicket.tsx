@@ -8,10 +8,12 @@ import { Show, Showtime, Ticket } from 'shared';
 import { setTicketList } from '../../reducers/adminReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
+import { useNotification } from '../../hooks/useNotification';
 
 const numbers = Array(201).fill(0).map((_, i) => i);
 
 export default function AdminAddTicket() {
+  const notify = useNotification();
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
   const [ticket, setTicket] = useState(new Ticket());
   const [show, setShow] = useState(new Show());
@@ -26,11 +28,14 @@ export default function AdminAddTicket() {
     try {
       const data = { ...ticket, confirmed: true };
       await database.tickets.add(data);
+      notify.create('success', 'Ticket added successfully');
       setTicket(new Ticket());
       setShow(new Show());
       dispatch(setTicketList(await database.tickets.getall()));
-    } catch {
+    } catch (error: any) {
       console.log('Ticket add failed');
+      const message = error.error ?? error;
+      notify.create('error', message.toString());
     }
   };
 
