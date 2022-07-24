@@ -51,4 +51,5 @@
 | 23.7. |  2 | Refactoring routes and other stuff |
 | 23.7. |  2 | Simple backup/rollback + deployment notification |
 | 23.7. |  2 | Notification popup |
-| total | 146 | 8.3 op |
+| 23.7. |  1 | Minor features/fixes |
+| total | 147 | 8.4 op |

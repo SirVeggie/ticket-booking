@@ -6,8 +6,10 @@ import { MiscData, Show, Showtime } from 'shared';
 import { setData } from '../../reducers/dataReducer';
 import database from '../../tools/database';
 import { showMapper } from '../Homepage';
+import { useNotification } from '../../hooks/useNotification';
 
 export default function AdminAddShow() {
+  const notify = useNotification();
   const dispatch = useDispatch();
   const [show, setShow] = useState(new Show());
   const card = showMapper([show], [new Showtime()], new MiscData())[0];
@@ -15,14 +17,15 @@ export default function AdminAddShow() {
   const onSave = async () => {
     try {
       await database.shows.add(show);
+      notify.create('success', 'Show added successfully');
     } catch {
       return;
     }
-    
+
     dispatch(setData(await database.getPacket()));
     setShow(new Show());
   };
-  
+
   return (
     <div className='ui container'>
       <h1>Add show</h1>
