@@ -1,7 +1,6 @@
 import { timer } from './tools/timer';
-import errors from './tools/errors';
-import { DataPacket, MiscData, Seats, Show, Showtime, ShowtimeExtra, sumSeats, Ticket } from 'shared';
-import { fixDates } from './tools/fixDates';
+import { DataPacket, errors, MiscData, Seats, Show, Showtime, ShowtimeExtra, sumSeats, Ticket } from 'shared';
+import { validateShow, validateShowtime, validateTicket } from './tools/dataValidation';
 
 //#region //====| debug data |====//
 
@@ -371,7 +370,7 @@ async function getShowByID(id: string): Promise<Show> {
 async function addShow(show: Show): Promise<Show> {
     await timer(1);
     show.id = generateShowID();
-    show = fixDates(show);
+    show = validateShow(show);
     shows.push(show);
     return show;
 }
@@ -379,9 +378,9 @@ async function addShow(show: Show): Promise<Show> {
 async function replaceShowByID(id: string, show: Show): Promise<void> {
     await timer(1);
     if (!shows.find(x => x.id === id))
-        error(errors.noData);
+        throw errors.noData;
     show.id = id;
-    show = fixDates(show);
+    show = validateShow(show);
     shows = shows.map(x => x.id === id ? show : x);
 }
 
@@ -410,7 +409,7 @@ async function getShowtimeByID(id: string): Promise<ShowtimeExtra> {
 async function addShowtime(showtime: Showtime): Promise<ShowtimeExtra> {
     await timer(1);
     showtime.id = generateShowtimeID();
-    showtime = fixDates(showtime);
+    showtime = await validateShowtime(showtime);
     showtimes.push(showtime);
     return mapShowtimeToExtra(showtime);
 }
@@ -418,9 +417,9 @@ async function addShowtime(showtime: Showtime): Promise<ShowtimeExtra> {
 async function replaceShowtimeByID(id: string, showtime: Showtime): Promise<void> {
     await timer(1);
     if (!showtimes.find(x => x.id === id))
-        error(errors.noData);
+        throw errors.noData;
     showtime.id = id;
-    showtime = fixDates(showtime);
+    showtime = await validateShowtime(showtime);
     showtimes = showtimes.map(x => x.id === id ? showtime : x);
 }
 
@@ -454,7 +453,7 @@ async function getTicketByID(id: string): Promise<Ticket> {
 async function addTicket(ticket: Ticket): Promise<Ticket> {
     await timer(1);
     ticket.id = generateTicketID();
-    ticket = fixDates(ticket);
+    ticket = await validateTicket(ticket);
     tickets.push(ticket);
     return ticket;
 }
@@ -462,9 +461,9 @@ async function addTicket(ticket: Ticket): Promise<Ticket> {
 async function replaceTicketByID(id: string, ticket: Ticket): Promise<void> {
     await timer(1);
     if (!tickets.find(x => x.id === id))
-        error(errors.noData);
+        throw errors.noData;
     ticket.id = id;
-    ticket = fixDates(ticket);
+    ticket = await validateTicket(ticket);
     tickets = tickets.map(x => x.id === id ? ticket : x);
 }
 
@@ -476,12 +475,12 @@ async function deleteTicketByID(id: string): Promise<void> {
 async function updateTicketSeats(id: string, seats: Seats, admin: boolean): Promise<void> {
     await timer(1);
     if (seats.discount < 0 || seats.normal < 0 || seats.family < 0)
-        error(errors.invalidData);
+        throw errors.invalidData;
     const ticket = await getTicketByID(id);
     if (!ticket)
-        error(errors.noData);
+        throw errors.noData;
     if (!(admin || sumSeats(seats) <= sumSeats(ticket.seats) + await getAvailableSeats(ticket.showtimeid)))
-        error(errors.illegalData);
+        throw errors.illegalData;
     tickets = tickets.map(x => x.id === id ? { ...x, seats: seats } : x);
 }
 

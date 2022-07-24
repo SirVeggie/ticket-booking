@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { Seats, ticketPath } from 'shared';
+import { extractType, Seats, ticketModel, ticketPath } from 'shared';
 import database from '../database';
 import { ticketConfirmation } from '../tools/email';
-import { extractType } from '../tools/extractType';
-import { del, getall, isAdmin, replace, ticketModel } from './routerHelpers';
+import { del, getall, isAdmin, replace } from './routerHelpers';
 
 export const ticketRouter = Router();
 
@@ -24,7 +23,7 @@ ticketRouter.post('/', async (req, res) => {
         ticketConfirmation(result.email, result.id);
     res.json(result);
 });
-ticketRouter.put('/:id', replace('tickets', false, ticketModel));
+ticketRouter.put('/:id', replace('tickets', false));
 ticketRouter.delete('/:id', del('tickets', false));
 
 ticketRouter.post('/:id/update_seats', async (req, res) => {

@@ -1,4 +1,13 @@
 
+export const errors = {
+    noData: new Error('Data not found'),
+    invalidData: new Error('Object contains invalid data'),
+    illegalData: new Error('Data was recognized, but was discarded'),
+    noAdmin: new Error('Invalid admin token'),
+    invalidIP: new Error('Token ip did not match'),
+    tokenExpire: new Error('Token has expired')
+};
+
 export class MiscData {
     mainBannerUrl: string = '';
     cardOpacity: string = '1f';
@@ -75,6 +84,12 @@ export class TicketInfo {
     reserved: number = 0;
 }
 
+//==| models |==//
+
+export const showModel: Show = new Show();
+export const showtimeModel: Showtime = new Showtime();
+export const ticketModel: Ticket = new Ticket();
+
 //==| routes |==//
 
 export const apiPath = '/api' as const;
@@ -90,4 +105,22 @@ export function sumSeats(seats: Seats): number {
 
 export function sumTickets(seats: Seats): number {
     return seats.normal + seats.discount + seats.family;
+}
+
+export function extractType<T>(data: unknown, model: T): T {
+    if (typeof data !== 'object' || data === null)
+        throw errors.invalidData;
+    if (typeof model !== 'object')
+        throw new Error('Model must be an object');
+    const obj = data as Record<string, unknown>;
+    const result: any = {};
+    Object.keys(model).forEach(key => {
+        if ((model as any)[key] !== undefined && obj[key] === undefined) {
+            const e = errors.invalidData;
+            e.message += `, missing key '${key}'`;
+            throw e;
+        }
+        result[key] = obj[key];
+    });
+    return result;
 }

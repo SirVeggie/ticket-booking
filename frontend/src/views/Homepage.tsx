@@ -36,7 +36,7 @@ function getShowDates(show: Show, showtimes: Showtime[]): string {
     const maxdate = dates.reduce((a, b) => a.getTime() <= b.getTime() ? b : a);
     meta = 'Ajankohta: ' + printDate(mindate) + ' - ' + printDate(maxdate);
   }
-  
+
   return meta;
 }
 

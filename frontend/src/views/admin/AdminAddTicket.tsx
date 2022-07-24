@@ -32,10 +32,10 @@ export default function AdminAddTicket() {
       setTicket(new Ticket());
       setShow(new Show());
       dispatch(setTicketList(await database.tickets.getall()));
-    } catch (error) {
+    } catch (error: any) {
       console.log('Ticket add failed');
-      const message = error instanceof Error ? error.message : error;
-      notify.create('error', `Failed to add ticket: ${message}`);
+      const message = error.error ?? error;
+      notify.create('error', message.toString());
     }
   };
 
