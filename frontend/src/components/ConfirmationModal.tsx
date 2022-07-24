@@ -11,6 +11,7 @@ export type ConfirmationModalProps = {
   warning?: boolean;
   children?: React.ReactNode;
   noButtons?: boolean;
+  yesNo?: boolean;
 };
 
 export function ConfirmationModal(p: ConfirmationModalProps) {
@@ -39,8 +40,8 @@ export function ConfirmationModal(p: ConfirmationModalProps) {
 
           <Toggle enabled={!p.noButtons}>
             <div className={s.buttons}>
-              <button className={s.button} onClick={() => p.onInput(true)}>Ok</button>
-              <button className={cx(s.button, 'cancel')} onClick={() => p.onInput(false)}>Cancel</button>
+              <button className={s.button} onClick={() => p.onInput(true)}>{p.yesNo ? 'Yes' : 'Ok'}</button>
+              <button className={cx(s.button, 'cancel')} onClick={() => p.onInput(false)}>{p.yesNo ? 'No' : 'Cancel'}</button>
             </div>
           </Toggle>
 
