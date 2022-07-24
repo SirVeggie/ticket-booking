@@ -7,14 +7,23 @@ import { setData } from '../../reducers/dataReducer';
 import database from '../../tools/database';
 import { showMapper } from '../Homepage';
 import { useNotification } from '../../hooks/useNotification';
+import { ConfirmationModal } from '../../components/ConfirmationModal';
 
 export default function AdminAddShow() {
   const notify = useNotification();
   const dispatch = useDispatch();
   const [show, setShow] = useState(new Show());
   const card = showMapper([show], [new Showtime()], new MiscData())[0];
+  const [modal, setModal] = useState(false);
 
   const onSave = async () => {
+    setModal(true);
+  };
+
+  const onConfirm = async (confirm: boolean) => {
+    setModal(false);
+    if (!confirm) return;
+
     try {
       await database.shows.add(show);
       notify.create('success', 'Show added successfully');
@@ -29,19 +38,25 @@ export default function AdminAddShow() {
   };
 
   return (
-    <div className='ui container'>
-      <h1>Add show</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <InputField label='Name' value={show.name} update={value => setShow({ ...show, name: value })} />
-        <InputField label='Description' value={show.description} update={value => setShow({ ...show, description: value })} />
-        <InputField label='Card description' value={show.shortDescription} update={value => setShow({ ...show, shortDescription: value })} />
-        <InputField label='Image url' value={show.imageUrl} update={value => setShow({ ...show, imageUrl: value })} />
-        <InputField label='Color' value={show.color} update={value => setShow({ ...show, color: value })} />
+    <div>
+      <ConfirmationModal open={modal} onInput={onConfirm} title={'Add a new show?'}>
+        <Card data={card} style={{ minWidth: 500 }} />
+      </ConfirmationModal>
+
+      <div className='ui container'>
+        <h1>Add show</h1>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <InputField label='Name' value={show.name} update={value => setShow({ ...show, name: value })} />
+          <InputField label='Description' value={show.description} update={value => setShow({ ...show, description: value })} />
+          <InputField label='Card description' value={show.shortDescription} update={value => setShow({ ...show, shortDescription: value })} />
+          <InputField label='Image url' value={show.imageUrl} update={value => setShow({ ...show, imageUrl: value })} />
+          <InputField label='Color' value={show.color} update={value => setShow({ ...show, color: value })} />
+        </div>
+        <Button onClick={onSave}>Save</Button>
+        <Divider />
+        <h2>Card preview</h2>
+        <Card data={card} />
       </div>
-      <Button onClick={onSave}>Save</Button>
-      <Divider />
-      <h2>Card preview</h2>
-      <Card data={card} />
     </div>
   );
 }

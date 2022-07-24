@@ -9,6 +9,7 @@ import { setTicketList } from '../../reducers/adminReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
 import { useNotification } from '../../hooks/useNotification';
+import { ConfirmationModal } from '../../components/ConfirmationModal';
 
 const numbers = Array(201).fill(0).map((_, i) => i);
 
@@ -18,13 +19,21 @@ export default function AdminAddTicket() {
   const [ticket, setTicket] = useState(new Ticket());
   const [show, setShow] = useState(new Show());
   const dispatch = useDispatch();
+  const [modal, setModal] = useState(false);
 
   const updateShow = (show: Show) => {
     setTicket({ ...ticket, showtimeid: '' });
     setShow(show);
   };
 
-  const onSave = async () => {
+  const onSave = () => {
+    setModal(true);
+  };
+
+  const onConfirm = async (confirm: boolean) => {
+    setModal(false);
+    if (!confirm) return;
+
     try {
       const data = { ...ticket, confirmed: true };
       await database.tickets.add(data);
@@ -42,25 +51,31 @@ export default function AdminAddTicket() {
   const temp = showtimes.filter(x => x.showid === show.id);
 
   return (
-    <div className='ui container'>
-      <h1>Add ticket</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <LabelDropdown label='Show' value={x => x.id === show.id} items={shows} mapName={x => x.name} update={updateShow} width={177} />
-        <LabelDropdown label='Showtime' value={x => x.id === ticket.showtimeid} items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} width={177} />
-        <InputField label='Name' value={ticket.name} update={value => setTicket({ ...ticket, name: value })} />
-        <InputField label='Email' value={ticket.email} update={value => setTicket({ ...ticket, email: value })} />
-        <PhoneInput data={ticket.phonenumber} setData={data => setTicket({ ...ticket, phonenumber: data })} />
+    <div>
+      <ConfirmationModal open={modal} onInput={onConfirm} title={'Add a new ticket?'}>
+        <TicketInfo ticket={ticket} style={{ minWidth: 400 }} />
+      </ConfirmationModal>
+
+      <div className='ui container'>
+        <h1>Add ticket</h1>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <LabelDropdown label='Show' value={x => x.id === show.id} items={shows} mapName={x => x.name} update={updateShow} width={177} />
+          <LabelDropdown label='Showtime' value={x => x.id === ticket.showtimeid} items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} width={177} />
+          <InputField label='Name' value={ticket.name} update={value => setTicket({ ...ticket, name: value })} />
+          <InputField label='Email' value={ticket.email} update={value => setTicket({ ...ticket, email: value })} />
+          <PhoneInput data={ticket.phonenumber} setData={data => setTicket({ ...ticket, phonenumber: data })} />
+        </div>
+        <h2 style={{ marginTop: 0 }}>Seats</h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <LabelDropdown label='Normal' value={x => x === ticket.seats.normal} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, normal: Number(x) } })} />
+          <LabelDropdown label='Discount' value={x => x === ticket.seats.discount} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, discount: Number(x) } })} />
+          <LabelDropdown label='Family' value={x => x === ticket.seats.family} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, family: Number(x) } })} />
+        </div>
+        <Button onClick={onSave} >Save</Button>
+        <Divider />
+        <h2>Preview</h2>
+        <TicketInfo ticket={ticket} />
       </div>
-      <h2 style={{ marginTop: 0 }}>Seats</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <LabelDropdown label='Normal' value={x => x === ticket.seats.normal} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, normal: Number(x) } })} />
-        <LabelDropdown label='Discount' value={x => x === ticket.seats.discount} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, discount: Number(x) } })} />
-        <LabelDropdown label='Family' value={x => x === ticket.seats.family} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, family: Number(x) } })} />
-      </div>
-      <Button onClick={onSave} >Save</Button>
-      <Divider />
-      <h2>Preview</h2>
-      <TicketInfo ticket={ticket} />
     </div>
   );
 }

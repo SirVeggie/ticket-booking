@@ -77,7 +77,7 @@ const useStyles = createUseStyles({
     backgroundColor: '#fff',
     padding: '20px',
     borderRadius: '5px',
-    width: '400px',
+    minWidth: '400px',
     maxWidth: '80%',
     maxHeight: '80%',
     overflow: 'auto',
@@ -94,7 +94,7 @@ const useStyles = createUseStyles({
   },
 
   custom: {
-    width: '100%',
+    // width: '100%',
   },
 
   buttons: {
