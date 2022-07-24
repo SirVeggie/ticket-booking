@@ -41,7 +41,7 @@ const useStyles = createUseStyles({
 
   notification: {
     fontSize: '1.5rem',
-    backgroundColor: '#f0f0f0b0',
+    backgroundColor: '#f0f0f0e0',
     borderRadius: '0.5rem',
     borderWidth: 1,
     borderStyle: 'solid',
@@ -82,6 +82,10 @@ const useStyles = createUseStyles({
     border: '1px solid #a0a0a040',
     borderRadius: '0.2rem',
     padding: '0rem 0.7rem',
+    
+    '.hidden &': {
+      pointerEvents: 'none',
+    },
     
     '&:hover': {
       backgroundColor: '#f0f0f0d0',
