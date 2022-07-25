@@ -55,4 +55,5 @@
 | 24.7. |  5 | Admin tool notifications, data validation, error messages |
 | 24.7. |  3 | Confirmation popup |
 | 25.7. |  6 | Fixing and improving email and ticket reservation |
-| total | 161 | 9.2 op |
+| 25.7. |  4 | MongoDB integration |
+| total | 165 | 9.4 op |
