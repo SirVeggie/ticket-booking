@@ -24,8 +24,8 @@ function TicketInfo({ ticket, buttons, style }: { ticket: Ticket, buttons?: bool
     </div>
   );
 
-  const showtime = showtimes.find(x => x.id === ticket.showtimeid);
-  const show = shows.find(x => x.id === showtime?.showid);
+  const showtime = showtimes.find(x => x.id === ticket.showtimeid?.toString());
+  const show = shows.find(x => x.id === showtime?.showid?.toString());
   
   const cancelTicket = () => {
     setModal(true);

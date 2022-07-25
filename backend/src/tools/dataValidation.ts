@@ -12,7 +12,7 @@ export function valError(message: string): ValidationError {
     return new ValidationError(message);
 }
 
-export function validateShow(data: unknown): Show {
+export function validateShow(data: unknown): Omit<Show, 'id'> {
     let show = extractType(data, showModel);
     show = fixDates(show);
     
@@ -24,13 +24,13 @@ export function validateShow(data: unknown): Show {
     return show;
 }
 
-export async function validateShowtime(data: unknown): Promise<Showtime> {
+export async function validateShowtime(data: unknown): Promise<Omit<Showtime, 'id'>> {
     let showtime = extractType(data, showtimeModel);
     showtime = fixDates(showtime);
     
     showtime.location = validateString(showtime.location, 'location');
     
-    if (await database.shows.get(showtime.showid).then(() => false).catch(() => true))
+    if (await database.shows.get(showtime.showid.toString()).then(() => false).catch(() => true))
         throw valError('Show ID provided was invalid');
     if (showtime.date instanceof Date === false)
         throw valError('Date provided was invalid');
@@ -48,7 +48,7 @@ export async function validateShowtime(data: unknown): Promise<Showtime> {
     return showtime;
 }
 
-export async function validateTicket(data: unknown): Promise<Ticket> {
+export async function validateTicket(data: unknown): Promise<Omit<Ticket, 'id'>> {
     let ticket = extractType(data, ticketModel);
     ticket = fixDates(ticket);
     
@@ -60,7 +60,7 @@ export async function validateTicket(data: unknown): Promise<Ticket> {
         ticket.comment = undefined;
     }
     
-    if (await database.showtimes.get(ticket.showtimeid).then(() => false).catch(() => true))
+    if (await database.showtimes.get(ticket.showtimeid.toString()).then(() => false).catch(() => true))
         throw valError('Showtime ID provided was invalid');
     if (!isBoolean(ticket.confirmed))
         throw valError('Confirmed must be a boolean');

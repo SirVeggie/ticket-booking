@@ -20,6 +20,8 @@ export function errorHandler(error: any, req: any, res: any, _next: any) {
         return res.status(401).send({ error: 'Admin token was invalid' });
     if (error?.message.startsWith(errors.tokenExpire.message))
         return res.status(401).send({ error: 'Token has already expired' });
+    if (error?.message ?? error === 'jwt expired')
+        return res.status(401).send({ error: 'Token has already expired' });
 
     if (error instanceof ValidationError)
         return res.status(400).send({ error: error.message });

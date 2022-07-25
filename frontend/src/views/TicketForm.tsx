@@ -4,7 +4,7 @@ import { Form, Button, Table, Message, Icon } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
-import { Phonenumber, Show, Showtime, sumTickets, Ticket } from 'shared';
+import { makeId, Phonenumber, Show, Showtime, sumTickets, Ticket } from 'shared';
 import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from '../store';
 import { setTicket } from '../reducers/ticketReducer';
@@ -21,7 +21,7 @@ function TicketForm() {
   const id = (useParams() as any).id;
 
   const showtime = showtimes.find(x => x.id === id);
-  const show = shows.find(x => x.id === showtime?.showid);
+  const show = shows.find(x => x.id === showtime?.showid?.toString());
 
   if (!showtime || !show)
     return null;
@@ -49,7 +49,7 @@ class Errors {
 function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   const initialFormData = new Ticket();
   initialFormData.id = 'null';
-  initialFormData.showtimeid = showtime.id;
+  initialFormData.showtimeid = makeId(showtime.id);
 
   const history = useHistory();
   const [data, setData] = useState(initialFormData);

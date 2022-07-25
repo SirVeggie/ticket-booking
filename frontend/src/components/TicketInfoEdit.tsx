@@ -24,7 +24,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
     if (!ticket.showtimeid)
       return;
     setSeats(ticket.seats);
-    const p = RePromise(database.showtimes.getAvailableSeats(ticket.showtimeid));
+    const p = RePromise(database.showtimes.getAvailableSeats(ticket.showtimeid?.toString()));
     p.then(x => {
       setAvailable(x);
       setNumbers(Array(Math.max(sumSeats(ticket.seats), admin ? 200 : 50) + 1).fill(0).map((x, i) => i));

@@ -29,7 +29,7 @@ export default function AdminTickets() {
   const defShow = { ...new Show(), name: 'All' };
   const defShowtime = new Showtime();
   const showChoices = [defShow, ...shows];
-  const stChoices = [defShowtime, ...showtimes.filter(x => x.showid === show.id)];
+  const stChoices = [defShowtime, ...showtimes.filter(x => x.showid?.toString() === show.id)];
 
   return (
     <div className='ui container'>
@@ -62,14 +62,14 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
 
   const filter = (t: Ticket) => {
     const now = new Date();
-    const st = showtimes.find(x => x.id === t.showtimeid);
+    const st = showtimes.find(x => x.id === t.showtimeid?.toString());
     const hasSelection = props.show.id || props.showtime.id;
 
     if (!st)
       return false;
     if (props.showtime.id !== '' && props.showtime.id !== st.id)
       return false;
-    if (props.show.id !== '' && props.show.id !== st.showid)
+    if (props.show.id !== '' && props.show.id !== st.showid?.toString())
       return false;
     if (!props.old && st.date.getTime() + 3600000 * 2 < now.getTime())
       return false;
@@ -79,7 +79,7 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
   };
 
   const sort = (a: Ticket, b: Ticket) => {
-    const dateDif = (showtimes.find(x => x.id === a.showtimeid)?.date.getTime() ?? 0) - (showtimes.find(x => x.id === b.showtimeid)?.date.getTime() ?? 0);
+    const dateDif = (showtimes.find(x => x.id === a.showtimeid?.toString())?.date.getTime() ?? 0) - (showtimes.find(x => x.id === b.showtimeid?.toString())?.date.getTime() ?? 0);
     if (dateDif)
       return dateDif;
     return a.name.localeCompare(b.name);
@@ -109,7 +109,7 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
   const seatAmount = items.reduce((sum, t) => sum + sumSeats(t.seats), 0);
   const arrivedAmount = items.reduce((sum, t) => sum + (t.arrived ? 1 : 0), 0);
   const price = items.reduce((sum, t) => {
-    const st = showtimes.find(x => x.id === t.showtimeid);
+    const st = showtimes.find(x => x.id === t.showtimeid?.toString());
     if (!st)
       return sum;
     return sum + (t.seats.normal * st.prices.normal) + (t.seats.discount * st.prices.discount) + (t.seats.family * st.prices.family);
@@ -136,8 +136,8 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
 }
 
 function mapCard(ticket: Ticket, shows: Show[], showtimes: Showtime[], history: History): CardInfo {
-  const showtime = showtimes.find(x => x.id === ticket.showtimeid);
-  const show = shows.find(x => x.id === showtime?.showid);
+  const showtime = showtimes.find(x => x.id === ticket.showtimeid?.toString());
+  const show = shows.find(x => x.id === showtime?.showid?.toString());
 
   return {
     title: ticket.name + ' - ' + show?.name,

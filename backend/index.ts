@@ -13,6 +13,28 @@ import { ticketRouter } from './src/routes/ticketRouter';
 import { showRouter } from './src/routes/showRouter';
 import { showtimeRouter } from './src/routes/showtimeRouter';
 import { errorHandler, unknownEndpoint } from './src/middleware';
+import mongoose from 'mongoose';
+
+//====| check env |====//
+
+if (!process.env.PORT)
+    throw new Error('PORT is not defined');
+if (!process.env.SECRET)
+    throw new Error('SECRET is not defined');
+if (!process.env.EMAIL_PASS)
+    throw new Error('EMAIL_PASS is not defined');
+if (!process.env.DOMAIN)
+    throw new Error('DOMAIN is not defined');
+if (!process.env.MONGODB_URI)
+    throw new Error('MONGODB_URI is not set');
+    
+//====| database |====//
+
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+    console.log('Connected to MongoDB');
+}).catch(err => {
+    console.error(`Error connecting to database: ${err}`);
+});
 
 //====| middleware |====//
 
@@ -34,18 +56,23 @@ server.get('/api/error', (req, res) => {
     res.status(400).send({ error: 'This is an error message' });
 });
 
+server.post('/api/reset', async (req, res) => {
+    await database.reset();
+    res.status(200).end();
+});
+
 server.get('/api/packet', async (req, res) => {
     res.json(await database.getPacket());
 });
 
 server.get('/api/misc', async (req, res) => {
-    res.json(await database.getMisc());
+    res.json(database.getMisc());
 });
 
 server.put('/api/misc', async (req, res) => {
     checkAdmin(req);
     const data = extractType(req.body, new MiscData());
-    res.json(await database.replaceMisc(data));
+    res.json(database.replaceMisc(data));
 });
 
 //====| routers |====//

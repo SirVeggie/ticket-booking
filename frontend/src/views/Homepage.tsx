@@ -14,7 +14,7 @@ function Homepage() {
   const history = useHistory();
 
   const cards: CardInfo[] = showMapper(shows, showtimes, misc, history);
-
+  
   return (
     <div style={{ position: 'relative' }}>
       <TitleStrip title='Arctic Ensemble Lipunvaraus' button='Kotisivu' onClick={() => window.location.href = misc.homepage} />
@@ -26,7 +26,7 @@ function Homepage() {
 }
 
 function getShowDates(show: Show, showtimes: Showtime[]): string {
-  const dates = showtimes.filter(x => x.showid === show.id).map(x => x.date);
+  const dates = showtimes.filter(x => x.showid?.toString() === show.id).map(x => x.date);
   let meta = '';
 
   if (dates.length <= 1) {

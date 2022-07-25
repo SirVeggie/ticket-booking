@@ -1,5 +1,7 @@
 
 function fixDates(data: any) {
+    if (!data)
+        return data;
     for (const [key, value] of Object.entries(data)) {
         if (typeof value === 'string' && isDate(value)) {
             data[key] = new Date(value);
