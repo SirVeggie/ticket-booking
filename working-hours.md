@@ -54,4 +54,5 @@
 | 23.7. |  1 | Minor features/fixes |
 | 24.7. |  5 | Admin tool notifications, data validation, error messages |
 | 24.7. |  3 | Confirmation popup |
-| total | 155 | 8.9 op |
+| 25.7. |  6 | Fixing and improving email and ticket reservation |
+| total | 161 | 9.2 op |
