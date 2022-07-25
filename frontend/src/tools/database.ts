@@ -6,7 +6,7 @@ import fixDates from './fixDates';
 function handleError(reason: any): any {
     if (reason.response?.status?.toString().startsWith('4'))
         if (reason.response.data)
-            throw reason.response.data;
+            throw { ...reason.response.data, status: reason.response.status };
     throw reason;
 }
 
@@ -58,6 +58,10 @@ function updateTicketSeats(id: string, seats: Seats): Promise<void> {
     return axios.post(`${ticketPath}/${id}/update_seats`, seats, auth.getConfig()).catch(handleError);
 }
 
+function confirmTicket(id: string): Promise<void> {
+    return axios.post(`${ticketPath}/confirm/${id}`).catch(handleError);
+}
+
 //====| exports |====//
 
 function generate<Type>(target: string) {
@@ -80,6 +84,7 @@ export default {
     tickets: {
         ...generate<Ticket>(ticketPath),
         getAmounts: getTicketAmounts,
-        updateSeats: updateTicketSeats
+        updateSeats: updateTicketSeats,
+        confirm: confirmTicket
     }
 };

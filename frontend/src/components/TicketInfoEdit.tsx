@@ -5,6 +5,7 @@ import { Button, Message } from 'semantic-ui-react';
 import { Seats, sumSeats, sumTickets, Ticket } from 'shared';
 import { StateType } from '../store';
 import database from '../tools/database';
+import { ConfirmationModal } from './ConfirmationModal';
 import LabelDropdown from './LabelDropdown';
 import Toggle from './Toggle';
 
@@ -16,7 +17,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [numbers, setNumbers] = useState([0]);
-  
+  const [modal, setModal] = useState(false);
   
   useEffect(() => {
     if (!ticket.showtimeid)
@@ -39,9 +40,14 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
     }
   };
   
-  const confirm = async () => {
+  const onSave = () => {
     if (sumTickets(seats) === 0) {
       setError('Valitse ainakin yksi lippu');
+      return;
+    }
+    
+    if (ticket.seats.normal === seats.normal && ticket.seats.discount === seats.discount && ticket.seats.family === seats.family) {
+      setError('Varausta ei ole muutettu');
       return;
     }
     
@@ -51,6 +57,17 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
     }
     
     setLoading(true);
+    setModal(true);
+  };
+  
+  const onConfirm = async (confirm: boolean) => {
+    await onConfirmAction(confirm);
+    setLoading(false);
+  };
+  
+  const onConfirmAction = async (confirm: boolean) => {
+    setModal(false);
+    if (!confirm) return;
     
     try {
       await database.tickets.updateSeats(ticket.id, seats);
@@ -58,12 +75,22 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
       history.push('/ticket/' + ticket.id);
     } catch {
       setError('Lipun päivitys epäonnistui');
-      setLoading(false);
     }
   };
   
   return (
     <div>
+      <ConfirmationModal
+        open={modal}
+        onInput={onConfirm}
+        title='Vahvista varauksen päivitys'
+        message='Varmista lippujen oikea määrä'
+      >
+        Perusliput: {ticket.seats.normal} {'->'} {seats.normal}<br />
+        Alennusliput: {ticket.seats.discount} {'->'} {seats.discount}<br />
+        Perheliput: {ticket.seats.family} {'->'} {seats.family}<br />
+      </ConfirmationModal>
+      
       <h2>Vaihda varattujen lippujen määrää</h2>
       
       <Toggle enabled={!!error}>
@@ -76,7 +103,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
         <LabelDropdown label='Perheliput' value={x => x === seats.family} items={numbers} mapName={item => String(item)} update={x => updateSeats({ ...seats, family: x })} />
       </div>
       
-      <Button basic loading={loading} onClick={confirm}>Confirm</Button>
+      <Button basic loading={loading} onClick={onSave}>Confirm</Button>
       <Button basic onClick={() => history.push(`/ticket/${ticket.id}`)}>Back</Button>
     </div>
   );
