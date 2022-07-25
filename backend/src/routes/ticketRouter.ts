@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { extractType, Seats, ticketModel, ticketPath } from 'shared';
 import database from '../database';
-import { ticketConfirmation } from '../tools/email';
+import { ticketConfirmAccept, ticketConfirmation } from '../tools/email';
 import { del, getall, isAdmin, replace } from './routerHelpers';
 
 export const ticketRouter = Router();
@@ -29,7 +29,13 @@ ticketRouter.delete('/:id', del('tickets', false));
 ticketRouter.post('/:id/update_seats', async (req, res) => {
     const id = req.params.id;
     const data = extractType(req.body, new Seats());
-    await database.tickets.updateSeats(id, data, isAdmin(req));
+    let admin = false;
+    try {
+        admin = isAdmin(req);
+    // eslint-disable-next-line no-empty
+    } catch { }
+
+    await database.tickets.updateSeats(id, data, admin);
     res.status(200).end();
 });
 
@@ -48,5 +54,6 @@ ticketRouter.post('/confirm/:id', async (req, res) => {
 
     data.confirmed = true;
     await database.tickets.replace(id, data);
+    ticketConfirmAccept(data.email, data.id);
     res.redirect(`${ticketPath}/${id}`);
 });
