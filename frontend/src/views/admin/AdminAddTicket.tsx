@@ -4,7 +4,7 @@ import { Button, Divider, Input } from 'semantic-ui-react';
 import LabelDropdown from '../../components/LabelDropdown';
 import PhoneInput from '../../components/PhoneInput';
 import TicketInfo from '../../components/TicketInfo';
-import { Show, Showtime, Ticket } from 'shared';
+import { makeId, Show, Showtime, Ticket } from 'shared';
 import { setTicketList } from '../../reducers/adminReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
@@ -22,7 +22,7 @@ export default function AdminAddTicket() {
   const [modal, setModal] = useState(false);
 
   const updateShow = (show: Show) => {
-    setTicket({ ...ticket, showtimeid: '' });
+    setTicket({ ...ticket, showtimeid: makeId('') });
     setShow(show);
   };
 
@@ -48,7 +48,7 @@ export default function AdminAddTicket() {
     }
   };
 
-  const temp = showtimes.filter(x => x.showid === show.id);
+  const temp = showtimes.filter(x => x.showid?.toString() === show.id);
 
   return (
     <div>
@@ -60,7 +60,7 @@ export default function AdminAddTicket() {
         <h1>Add ticket</h1>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           <LabelDropdown label='Show' value={x => x.id === show.id} items={shows} mapName={x => x.name} update={updateShow} width={177} />
-          <LabelDropdown label='Showtime' value={x => x.id === ticket.showtimeid} items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: st.id })} width={177} />
+          <LabelDropdown label='Showtime' value={x => x.id === ticket.showtimeid?.toString()} items={temp} mapName={x => getShowtimeText(x)} update={st => setTicket({ ...ticket, showtimeid: makeId(st.id) })} width={177} />
           <InputField label='Name' value={ticket.name} update={value => setTicket({ ...ticket, name: value })} />
           <InputField label='Email' value={ticket.email} update={value => setTicket({ ...ticket, email: value })} />
           <PhoneInput data={ticket.phonenumber} setData={data => setTicket({ ...ticket, phonenumber: data })} />

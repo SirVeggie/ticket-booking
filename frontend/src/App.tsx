@@ -21,8 +21,13 @@ function App() {
 
   useEffect(() => {
     database.getPacket().then(x => dispatch(setData(x)));
-    if (window.localStorage.getItem('token'))
-      auth.check().then(x => dispatch(setLoginStatus(x)));
+    if (localStorage.getItem('token')) {
+      auth.check().then(x => {
+        if (!x)
+          localStorage.removeItem('token');
+        dispatch(setLoginStatus(x));
+      });
+    }
   }, []);
 
   return (

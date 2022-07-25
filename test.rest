@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/error
+POST http://localhost:3001/api/reset

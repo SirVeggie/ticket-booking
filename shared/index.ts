@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { v1 } from 'uuid';
 
 export const errors = {
@@ -33,7 +34,7 @@ export class Show {
 
 export class Showtime {
     id: string = '';
-    showid: string = '';
+    showid: mongoose.Schema.Types.ObjectId = '' as any;
     date: Date = new Date();
     location: string = '';
     maxSeats: number = 0;
@@ -52,7 +53,7 @@ export class DataPacket {
 
 export class Ticket {
     id: string = '';
-    showtimeid: string = '';
+    showtimeid: mongoose.Schema.Types.ObjectId = '' as any;
     confirmed: boolean = false;
     name: string = '';
     email: string = '';
@@ -87,9 +88,12 @@ export class TicketInfo {
 
 //==| models |==//
 
-export const showModel: Show = new Show();
-export const showtimeModel: Showtime = new Showtime();
-export const ticketModel: Ticket = new Ticket();
+export const showModel: Omit<Show, 'id'> = new Show();
+delete (showModel as any).id;
+export const showtimeModel: Omit<Showtime, 'id'> = new Showtime();
+delete (showtimeModel as any).id;
+export const ticketModel: Omit<Ticket, 'id'> = new Ticket();
+delete (ticketModel as any).id;
 
 //==| routes |==//
 
@@ -128,4 +132,8 @@ export function extractType<T>(data: unknown, model: T): T {
 
 export function uuid(): string {
     return v1();
+}
+
+export function makeId(id: string): mongoose.Schema.Types.ObjectId {
+    return (mongoose as any).Types.ObjectId(id);
 }

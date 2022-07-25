@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Divider, Input } from 'semantic-ui-react';
 import Card from '../../components/Card';
 import LabelDropdown from '../../components/LabelDropdown';
-import { Showtime } from 'shared';
+import { makeId, Showtime } from 'shared';
 import { setData } from '../../reducers/dataReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
@@ -20,7 +20,7 @@ export default function AdminAddShowtime() {
   const [showtime, setShowtime] = useState({ ...new Showtime(), date: defaultDate });
   const [dateError, setDateError] = useState(false);
   const [dateString, setDateString] = useState('');
-  const show = shows.find(x => x.id === showtime.showid);
+  const show = shows.find(x => x.id === showtime.showid?.toString());
   const [modal, setModal] = useState(false);
 
   const parseDate = (value: string) => {
@@ -77,7 +77,7 @@ export default function AdminAddShowtime() {
       <div className='ui container'>
         <h1>Add showtime</h1>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          <LabelDropdown label='Show' value={x => x.id === show?.id} items={shows} mapName={x => x.name} width={177} update={x => setShowtime({ ...showtime, showid: x.id })} />
+          <LabelDropdown label='Show' value={x => x.id === show?.id} items={shows} mapName={x => x.name} width={177} update={x => setShowtime({ ...showtime, showid: makeId(x.id) })} />
           <InputField label='Location' value={showtime.location} update={value => setShowtime({ ...showtime, location: value })} />
           <InputField label='Date' error={dateError} value={dateString} update={value => { setShowtime({ ...showtime, date: parseDate(value) }); setDateString(value); }} />
           <InputField type='number' label='Max seats' value={String(showtime.maxSeats)} update={value => setShowtime({ ...showtime, maxSeats: Number(value) })} />

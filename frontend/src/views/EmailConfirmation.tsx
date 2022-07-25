@@ -39,8 +39,8 @@ function EmailConfirmation() {
     return <NotFound />;
   }
 
-  const showtime = showtimes.find(x => x.id === ticket.showtimeid);
-  const show = shows.find(x => x.id === showtime?.showid);
+  const showtime = showtimes.find(x => x.id === ticket.showtimeid?.toString());
+  const show = shows.find(x => x.id === showtime?.showid?.toString());
 
   if (!show || !showtime) {
     return <NotFound />;
