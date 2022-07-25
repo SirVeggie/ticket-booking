@@ -3,25 +3,23 @@ import { useParams } from 'react-router';
 import { Container, Icon, Message } from 'semantic-ui-react';
 import TitleStrip from '../components/TitleStrip';
 import Toggle from '../components/Toggle';
-import { Ticket } from 'shared';
+import { useNotification } from '../hooks/useNotification';
 import database from '../tools/database';
 
-function TicketConfirm() {
+export function TicketConfirm() {
   const id = (useParams() as any).id;
-  const [ticket, setTicket] = useState(null as Ticket | null);
-  const [missing, setMissing] = useState(false);
+  const [state, setState] = useState('waiting' as 'waiting' | 'confirmed' | 'missing');
+  const notify = useNotification();
 
   useEffect(() => {
-    database.tickets.get(id).then(x => {
-      if (!x.confirmed) {
-        setTicket(x);
-        confirmTicket(id, x);
-      } else {
-        setMissing(true);
-      }
-    }).catch(() => {
-      setMissing(true);
-    });
+    database.tickets.confirm(id)
+      .then(() => setState('confirmed'))
+      .catch(error => {
+        if (error.status === 410 || error.status === 404)
+          setState('missing');
+        else
+          notify.create('error', 'Something went wrong');
+      });
   }, []);
 
   return (
@@ -29,21 +27,21 @@ function TicketConfirm() {
       <TitleStrip title='Arctic Ensemble Lipunvaraus' button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
       <Container style={{ marginTop: 30 }}>
 
-        <Toggle enabled={!!ticket}>
+        <Toggle enabled={state === 'confirmed'}>
           <Message icon success>
             <Icon name='check' />
             <Message.Header>Lippusi on nyt varattu onnistuneesti</Message.Header>
           </Message>
         </Toggle>
 
-        <Toggle enabled={!ticket && !missing}>
+        <Toggle enabled={state === 'waiting'}>
           <Message icon warning>
             <Icon name='circle notch' loading />
             <Message.Header>Odota hetki</Message.Header>
           </Message>
         </Toggle>
 
-        <Toggle enabled={missing}>
+        <Toggle enabled={state === 'missing'}>
           <Message icon error>
             <Icon name='times' />
             <Message.Header>Tämä sivu ei ole käytössä, tarkista sivun osoite</Message.Header>
@@ -54,9 +52,3 @@ function TicketConfirm() {
     </div>
   );
 }
-
-function confirmTicket(id: string, ticket: Ticket) {
-  database.tickets.replace(id, { ...ticket, confirmed: true });
-}
-
-export default TicketConfirm;

@@ -58,6 +58,10 @@ function updateTicketSeats(id: string, seats: Seats): Promise<void> {
     return axios.post(`${ticketPath}/${id}/update_seats`, seats, auth.getConfig()).catch(handleError);
 }
 
+function checkConfirmTicket(id: string): Promise<void> {
+    return axios.get(`${ticketPath}/confirm/${id}`).catch(handleError);
+}
+
 function confirmTicket(id: string): Promise<void> {
     return axios.post(`${ticketPath}/confirm/${id}`).catch(handleError);
 }
@@ -85,6 +89,7 @@ export default {
         ...generate<Ticket>(ticketPath),
         getAmounts: getTicketAmounts,
         updateSeats: updateTicketSeats,
-        confirm: confirmTicket
+        confirm: confirmTicket,
+        checkConfirm: checkConfirmTicket
     }
 };
