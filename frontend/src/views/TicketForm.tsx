@@ -110,16 +110,15 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
 
     try {
       ticket = await database.tickets.add(ticket);
+      console.log(`Form submit succeeded\n${JSON.stringify(ticket)}`);
+      dispatch(setTicket(ticket));
+      history.push('/waiting_confirmation');
     } catch (error) {
       console.log('Server failed to handle ticket submit request');
       setErrors({ ...errors, server: 'Häiriö palvelimen kanssa, yritä hetken kuluttua uudelleen' });
       setLoading(false);
       return;
     }
-
-    console.log('Form submit succeeded');
-    dispatch(setTicket(ticket));
-    history.push('/waiting_confirmation');
   };
 
   return (

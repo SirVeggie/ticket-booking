@@ -1,5 +1,5 @@
 import { timer } from './tools/timer';
-import { DataPacket, errors, MiscData, Seats, Show, Showtime, ShowtimeExtra, sumSeats, Ticket } from 'shared';
+import { DataPacket, errors, MiscData, Seats, Show, Showtime, ShowtimeExtra, sumSeats, Ticket, uuid } from 'shared';
 import { validateShow, validateShowtime, validateTicket } from './tools/dataValidation';
 
 //#region //====| debug data |====//
@@ -294,30 +294,6 @@ let tickets: Ticket[] = [{
 
 //#region //====| helpers |====//
 
-function generateShowID(): string {
-    let id = '0';
-    while (shows.find(x => x.id === id)) {
-        id = Math.floor((Math.random() * 1000000000)).toString();
-    }
-    return id;
-}
-
-function generateShowtimeID(): string {
-    let id = '0';
-    while (showtimes.find(x => x.id === id)) {
-        id = Math.floor((Math.random() * 1000000000)).toString();
-    }
-    return id;
-}
-
-function generateTicketID(): string {
-    let id = '0';
-    while (tickets.find(x => x.id === id)) {
-        id = Math.floor((Math.random() * 1000000000)).toString();
-    }
-    return id;
-}
-
 function error(error: any): never {
     throw error;
 }
@@ -369,7 +345,7 @@ async function getShowByID(id: string): Promise<Show> {
 
 async function addShow(show: Show): Promise<Show> {
     await timer(1);
-    show.id = generateShowID();
+    show.id = uuid();
     show = validateShow(show);
     shows.push(show);
     return show;
@@ -408,7 +384,7 @@ async function getShowtimeByID(id: string): Promise<ShowtimeExtra> {
 
 async function addShowtime(showtime: Showtime): Promise<ShowtimeExtra> {
     await timer(1);
-    showtime.id = generateShowtimeID();
+    showtime.id = uuid();
     showtime = await validateShowtime(showtime);
     showtimes.push(showtime);
     return mapShowtimeToExtra(showtime);
@@ -452,7 +428,7 @@ async function getTicketByID(id: string): Promise<Ticket> {
 
 async function addTicket(ticket: Ticket): Promise<Ticket> {
     await timer(1);
-    ticket.id = generateTicketID();
+    ticket.id = uuid();
     ticket = await validateTicket(ticket);
     tickets.push(ticket);
     return ticket;

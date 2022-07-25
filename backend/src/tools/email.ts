@@ -1,8 +1,9 @@
 import mailer from 'nodemailer';
 
-const email = 'no.reply.arcticensemblebooking@gmail.com';
+const email = 'test.mail.arctic@gmail.com';
 const pass = process.env.EMAIL_PASS;
-const baseUrl = 'http://localhost:3000/api/tickets/confirm/';
+const baseUrl = `http://${process.env.DOMAIN}/confirm/`;
+const ticketUrl = `http://${process.env.DOMAIN}/ticket/`;
 
 const transporter = mailer.createTransport({
     service: 'gmail',
@@ -27,10 +28,21 @@ export function ticketConfirmation(receiverEmail: string, id: string) {
             console.log('Email sent: ' + JSON.stringify(info));
         }
     });
-    
-    return;
 }
 
-export function ticketConfirmAccept(id: string) {
-    return;
+export function ticketConfirmAccept(receiverEmail: string, id: string) {
+    const options = {
+        from: 'Arctic Ensemble ' + email,
+        to: receiverEmail,
+        subject: 'Arctic Ensemble lippuvaraus',
+        text: `Lippuvarauksesi on hyväksytty!\n\nTässä linkki varaukseesi:\n${ticketUrl}${id}`
+    };
+
+    transporter.sendMail(options, (error, info) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + JSON.stringify(info));
+        }
+    });
 }

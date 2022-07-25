@@ -1,3 +1,4 @@
+import { v1 } from 'uuid';
 
 export const errors = {
     noData: new Error('Data not found'),
@@ -123,4 +124,8 @@ export function extractType<T>(data: unknown, model: T): T {
         result[key] = obj[key];
     });
     return result;
+}
+
+export function uuid(): string {
+    return v1();
 }

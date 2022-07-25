@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Header, Icon, Message, Segment } from 'semantic-ui-react';
 import { Ticket } from 'shared';
+import { useNotification } from '../hooks/useNotification';
 import { StateType } from '../store';
+import database from '../tools/database';
 import { printDate, printTime } from '../tools/stringTool';
+import { ConfirmationModal } from './ConfirmationModal';
 import Toggle from './Toggle';
 
-function TicketInfo({ ticket, buttons, style }: { ticket: Ticket, buttons?: boolean, style?: React.CSSProperties }) {
+function TicketInfo({ ticket, buttons, style }: { ticket: Ticket, buttons?: boolean, style?: React.CSSProperties; }) {
+  const notify = useNotification();
   const history = useHistory();
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
+  const [modal, setModal] = useState(false);
 
   const tickets = (
     <div>
@@ -21,19 +26,40 @@ function TicketInfo({ ticket, buttons, style }: { ticket: Ticket, buttons?: bool
 
   const showtime = showtimes.find(x => x.id === ticket.showtimeid);
   const show = shows.find(x => x.id === showtime?.showid);
+  
+  const cancelTicket = () => {
+    setModal(true);
+  };
+  
+  const onConfirm = (confirm: boolean) => {
+    setModal(false);
+    if (!confirm) return;
+    database.tickets.delete(ticket.id);
+    notify.create('success', 'Ticket deleted successfully');
+    history.push('/');
+  };
 
   if (!show || !showtime)
     return <Message negative header='Lipputietojen lataus epäonnistui' />;
   return (
     <Segment>
       <div style={{ position: 'relative', ...style }}>
+        <ConfirmationModal
+          open={modal}
+          onInput={onConfirm}
+          title='Cancel ticket'
+          message='Are you sure you want to cancel this ticket?'
+          yesNo
+          warning
+        />
+        
         <Toggle enabled={!!buttons}>
           <Button basic onClick={() => history.push(`/ticket/${ticket.id}/edit`)} style={{ position: 'absolute', right: 0, marginRight: 0 }}>
             <Icon name='edit' />
             Muokkaa
           </Button>
 
-          <Button basic color='red' style={{ position: 'absolute', right: 0, bottom: 0, marginRight: 0 }}>
+          <Button basic color='red' onClick={cancelTicket} style={{ position: 'absolute', right: 0, bottom: 0, marginRight: 0 }}>
             <Icon name='times' />
             Peruuta varaus
           </Button>

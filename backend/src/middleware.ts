@@ -5,7 +5,7 @@ export function unknownEndpoint(req: any, res: any) {
     res.status(404).send('unknown endpoint');
 }
 
-export function errorHandler(error: any, req: any, res: any, next: any) {
+export function errorHandler(error: any, req: any, res: any, _next: any) {
     console.error(`Error: ${error.message ?? error}`);
 
     if (error?.message.startsWith(errors.noData.message))
