@@ -48,7 +48,7 @@ function TicketInfo({ ticket, buttons, style }: { ticket: Ticket, buttons?: bool
           open={modal}
           onInput={onConfirm}
           title='Cancel ticket'
-          message='Are you sure you want to cancel this ticket?'
+          text='Are you sure you want to cancel this ticket?'
           yesNo
           warning
         />

@@ -28,19 +28,16 @@ async function reset() {
     await Promise.all(createShows().map(async (show, i) => {
         const res = await ShowModel.create(show);
         showIds[i] = res.id;
-        console.log(`Created show ${res.id}`);
     }));
 
     const showtimeIds: string[] = [];
     await Promise.all(createShowtimes(showIds).map(async (showtime, i) => {
         const res = await ShowtimeModel.create(showtime);
         showtimeIds[i] = res.id;
-        console.log(`Created showtime ${res.id} : ${res.showid}`);
     }));
     
     await Promise.all(createTickets(showtimeIds).map(async ticket => {
-        const res = await TicketModel.create(ticket);
-        console.log(`Created ticket ${res.id} : ${res.showtimeid}`);
+        await TicketModel.create(ticket);
     }));
 }
 
@@ -311,10 +308,8 @@ function error(error: any): never {
 function mapShowtimeToExtra(tickets: Ticket[]): (st: Showtime) => ShowtimeExtra {
     return (showtime: Showtime) => {
         const reserved = tickets.filter(x => x.showtimeid.toString() === showtime.id).reduce((a, b) => a + sumSeats(b.seats), 0);
-        console.log(showtime);
         const extra = showtime as ShowtimeExtra;
         extra.reservedSeats = reserved;
-        console.log(extra);
         return extra;
     };
 }

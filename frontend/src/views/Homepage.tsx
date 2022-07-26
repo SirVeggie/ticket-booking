@@ -13,7 +13,7 @@ function Homepage() {
   const { shows, showtimes, misc } = useSelector((state: StateType) => state.data);
   const history = useHistory();
 
-  const cards: CardInfo[] = showMapper(shows, showtimes, misc, history);
+  const cards: CardInfo[] = showMapper(shows, showtimes, misc, history).map(x => x[1]);
   
   return (
     <div style={{ position: 'relative' }}>
@@ -40,8 +40,8 @@ function getShowDates(show: Show, showtimes: Showtime[]): string {
   return meta;
 }
 
-export function showMapper(shows: Show[], showtimes: Showtime[], misc: MiscData, history?: any): CardInfo[] {
-  return shows.map(show => ({
+export function showMapper(shows: Show[], showtimes: Showtime[], misc: MiscData, history?: any): [Show, CardInfo][] {
+  return shows.map(show => [show, {
     title: show.name,
     description: show.shortDescription,
     meta: getShowDates(show, showtimes),
@@ -49,7 +49,7 @@ export function showMapper(shows: Show[], showtimes: Showtime[], misc: MiscData,
     color: show.color?.substr(0, 7) + misc.cardOpacity,
     height: 200,
     action: history ? () => history.push('/show/' + show.id) : undefined
-  }));
+  }]);
 }
 
 export default Homepage;

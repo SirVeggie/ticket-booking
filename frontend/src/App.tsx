@@ -6,28 +6,19 @@ import NotFound from './views/NotFound';
 import TicketForm from './views/TicketForm';
 import EmailConfirmation from './views/EmailConfirmation';
 import CondNotFound from './components/CondNotFound';
-import { setData } from './reducers/dataReducer';
-import database from './tools/database';
-import { useDispatch } from 'react-redux';
 import AdminHome from './views/admin/AdminHome';
 import TicketDetails from './views/TicketDetails';
 import { TicketConfirm } from './views/TicketConfirm';
-import auth from './tools/auth';
-import { setLoginStatus } from './reducers/adminReducer';
 import { NotificationEmitter } from './components/NotificationEmitter';
+import { useRefresh } from './hooks/useRefresh';
 
 function App() {
-  const dispatch = useDispatch();
-
+  const { refreshData, refreshAuth, cancelRefresh } = useRefresh();
+  
   useEffect(() => {
-    database.getPacket().then(x => dispatch(setData(x)));
-    if (localStorage.getItem('token')) {
-      auth.check().then(x => {
-        if (!x)
-          localStorage.removeItem('token');
-        dispatch(setLoginStatus(x));
-      });
-    }
+    refreshData();
+    refreshAuth();
+    return cancelRefresh;
   }, []);
 
   return (

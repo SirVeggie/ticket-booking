@@ -12,9 +12,9 @@ function Card({ data, onClick, children, style }: { data: CardInfo, onClick?: (c
     background: (data.color?.length ?? 0) >= 4 ? data.color : undefined,
     height: data.height ? data.height : undefined
   };
-  
-  const click = data.disabled || !onClick ? undefined : () => onClick(data);
 
+  const click = data.disabled || !onClick ? undefined : () => onClick(data);
+  
   return (
     <div className={styles.container} style={style}>
       <button className={styles.button} onClick={click} />
@@ -64,7 +64,7 @@ const useStyles = createUseStyles({
     position: 'relative',
     width: '100%',
     display: 'flex',
-    
+
     '& > button:focus ~ div': hover
   },
 
