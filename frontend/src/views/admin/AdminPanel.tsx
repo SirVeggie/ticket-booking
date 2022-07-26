@@ -25,7 +25,7 @@ function AdminPanel() {
   useEffect(() => {
     database.tickets.getall().then(tickets => dispatch(setTicketList(tickets)));
     const interval = setInterval(refreshAuth, 10000);
-    
+
     return clearInterval(interval);
   }, []);
 
@@ -104,6 +104,7 @@ function Content() {
 }
 
 function Sidebar() {
+  const { refreshData } = useRefresh();
   const history = useHistory();
 
   return (
@@ -114,18 +115,22 @@ function Sidebar() {
         <SidebarButton text='Add show' icon='plus circle' action={() => history.push('/admin/add_show')} />
         <SidebarButton text='Add showtime' icon='plus circle' action={() => history.push('/admin/add_showtime')} />
         <SidebarButton text='Add ticket' icon='plus circle' action={() => history.push('/admin/add_ticket')} />
+
+        <SidebarButton text='' />
+
+        <SidebarButton text='Reset data' icon='refresh' action={() => database.resetDatabase().then(() => refreshData())} />
       </div>
     </div>
   );
 }
 
-function SidebarButton({ text, icon, action }: { text: string, icon: SemanticICONS, action?: () => void; }) {
+function SidebarButton({ text, icon, action }: { text: string, icon?: SemanticICONS, action?: () => void; }) {
   const styles = useStyles();
 
   return (
     <div className={styles.button} onClick={action}>
       <Align left={0} style={{ marginLeft: 10 }}>
-        <Icon name={icon} style={{ marginRight: 10 }} />
+        {icon && <Icon name={icon} style={{ marginRight: 10 }} />}
         <span style={{ fontSize: 16 }}>{text}</span>
       </Align>
     </div>
