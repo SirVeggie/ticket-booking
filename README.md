@@ -7,6 +7,11 @@ To access and test the admin panel, go to address /admin.
 
 Password is 'admin'.
 
+## Database
+The MongoDB database only contains test data. Feel free to play around.
+
+The test data can be reset to initial state with the 'Reset data' button in the admin panel.
+
 ## External sites
 
 ### [Trello board](https://trello.com/b/hmJE9Cqb/ticket-booking-system)
