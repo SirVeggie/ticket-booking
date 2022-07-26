@@ -1,5 +1,7 @@
 # Ticket Booking
 
+_This application is not in official use_
+
 A ticket booking website created for the circus group Arctic Ensemble. Made with React, Node and Typescript.
 
 ## Admin panel
@@ -12,8 +14,9 @@ The MongoDB database only contains test data. Feel free to play around.
 
 The test data can be reset to initial state with the 'Reset data' button in the admin panel.
 
-## External sites
+## Task board
+### [Trello](https://trello.com/b/hmJE9Cqb/ticket-booking-system)
 
-### [Trello board](https://trello.com/b/hmJE9Cqb/ticket-booking-system)
+## Servers running the application
 ### [Heroku](https://arctic-ensemble-booking.herokuapp.com/)
-### [VPS Server](https://fullstack-project.xyz/)
+### [Contabo VPS](https://fullstack-project.xyz/)
