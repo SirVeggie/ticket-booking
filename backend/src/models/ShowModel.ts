@@ -9,7 +9,8 @@ const showSchema = new mongoose.Schema<Show>({
     description: String,
     shortDescription: String,
     color: String,
-    imageUrl: String
+    imageUrl: String,
+    hidden: Boolean
 });
 
 showSchema.set('toJSON', {

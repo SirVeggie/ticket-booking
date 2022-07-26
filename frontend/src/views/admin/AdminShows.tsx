@@ -30,6 +30,16 @@ export default function AdminShows() {
     setModal(true);
   };
 
+  const hideShow = (show: Show, state: boolean) => {
+    database.shows.setHidden(show.id, state)
+      .then(() => {
+        refreshData();
+        notify.create('info', `${show.name} is now ${state ? 'hidden' : 'visible'}`);
+      }).catch(e => {
+        notify.create('error', e.error ?? 'Failed to hide show');
+      });
+  };
+
   const onModal = (confirm: boolean) => {
     setModal(false);
     if (!confirm) {
@@ -44,7 +54,7 @@ export default function AdminShows() {
     else
       notify.create('error', 'Unable to delete show');
   };
-  
+
   const affectedSt = showtimes.reduce((sum, st) => sum + (st.showid.toString() === modalData?.[0].id ? 1 : 0), 0);
   const affectedTi = tickets.reduce((sum, t) => {
     const st = showtimes.find(x => x.id === t.showtimeid.toString());
@@ -69,8 +79,8 @@ export default function AdminShows() {
         {!showData ? 'No shows available' : showData.map(([show, card]) => (
           <Card style={{ marginBottom: 10 }} key={show.id} data={card} onClick={card.action}>
             <CardButtons
-              // aEdit={() => console.log('Edit pressed')}
-              // aHide={() => console.log('Hide pressed')}
+              eyeSlash={show.hidden}
+              aHide={() => hideShow(show, !show.hidden)}
               aDelete={() => deleteShow([show, card])}
             />
           </Card>

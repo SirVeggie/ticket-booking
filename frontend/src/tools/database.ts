@@ -36,6 +36,10 @@ function del(target: string): (id: string) => Promise<void> {
     return id => axios.delete(`${target}/${id}`, auth.getConfig()).catch(handleError);
 }
 
+function setShowHidden(id: string, hidden: boolean): Promise<void> {
+    return axios.post(`${showPath}/${id}/hidden`, { hidden }, auth.getConfig()).catch(handleError);
+}
+
 function addTicket(ticket: Ticket, admin?: boolean): Promise<Ticket> {
     return axios.post(ticketPath, ticket, admin ? auth.getConfig() : undefined)
         .then(x => fixDates(x.data))
@@ -91,7 +95,10 @@ function generate<Type>(target: string) {
 export default {
     getPacket,
     resetDatabase,
-    shows: generate<Show>(showPath),
+    shows: {
+        ...generate<Show>(showPath),
+        setHidden: setShowHidden
+    },
     showtimes: {
         ...generate<Showtime>(showtimePath),
         getAvailableSeats

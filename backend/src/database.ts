@@ -376,6 +376,13 @@ async function deleteShowByID(id: string): Promise<void> {
     await ShowModel.findByIdAndDelete(id);
 }
 
+async function setShowHidden(id: string, state: boolean): Promise<void> {
+    const found = await ShowModel.findById(id);
+    if (!found)
+        throw errors.noData;
+    await ShowModel.findByIdAndUpdate(id, { hidden: state });
+}
+
 //#endregion
 
 //#region //====| showtimes |====//
@@ -477,7 +484,8 @@ export default {
         get: getShowByID,
         add: addShow,
         delete: deleteShowByID,
-        replace: replaceShowByID
+        replace: replaceShowByID,
+        setHidden: setShowHidden
     },
     showtimes: {
         getall: getShowtimes,
