@@ -455,7 +455,9 @@ async function updateTicketSeats(id: string, seats: Seats, admin: boolean): Prom
     if (seats.discount < 0 || seats.normal < 0 || seats.family < 0)
         throw errors.invalidData;
     const ticket = await getTicketByID(id);
-    if (!(admin || sumSeats(seats) <= sumSeats(ticket.seats) + await getAvailableSeats(ticket.showtimeid.toString())))
+    const delta = sumSeats(seats) - sumSeats(ticket.seats);
+    // if not admin, if seat amount increases and increase is higher than available seats, then cancel
+    if (!admin && delta > 0 && delta > await getAvailableSeats(ticket.showtimeid.toString()))
         throw errors.illegalData;
     ticket.seats = seats;
     await TicketModel.findByIdAndUpdate(id, ticket);

@@ -5,7 +5,7 @@ import { printDate, printTime } from './stringTool';
 export function mapShowtimeCard(name: string, showtime: Showtime, amounts: Record<string, number>, history?: History): CardInfo {
     const date = printDate(showtime.date);
     const location = (showtime.location ? ' - ' + showtime.location : '');
-    const seats = showtime.maxSeats - amounts[showtime.id];
+    const seats = Math.max(0, showtime.maxSeats - amounts[showtime.id]);
     const seatText = ' - vain ' + seats + (seats === 1 ? ' paikka jäljellä!' : ' paikkaa jäljellä!');
 
     return {

@@ -40,7 +40,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
   const updateSeats = (data: Seats) => {
     setSeats(data);
 
-    if (sumSeats(data) > available + sumSeats(ticket.seats)) {
+    if (sumSeats(data) > available + sumSeats(ticket.seats) && sumSeats(data) > sumSeats(ticket.seats)) {
       setError(`Ei riittävästi paikkoja vapaana. Paikkamäärä ylittyy ${sumSeats(data) - (sumSeats(ticket.seats) + available)} paikalla.`);
     } else {
       setError('');
@@ -58,7 +58,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
       return;
     }
 
-    if (!admin && (sumSeats(seats) > available + sumSeats(ticket.seats))) {
+    if (!admin && (sumSeats(seats) > available + sumSeats(ticket.seats)) && sumSeats(seats) >= sumSeats(ticket.seats)) {
       setError('Valitut liput ylittävät vapaidet paikkojen määrän. Vähennä lippujen määrää.');
       return;
     }
@@ -96,7 +96,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
         <Toggle enabled={!!error}>
           <Message negative>
             <Icon name='warning sign' />
-            Huomio: Paikkamäärä ylittyy {sumSeats(seats) - sumSeats(ticket.seats) + available} paikalla
+            Huomio: Paikkamäärä ylittyy {sumSeats(seats) - sumSeats(ticket.seats) - available} paikalla
           </Message>
         </Toggle>
 
