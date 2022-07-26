@@ -8,6 +8,9 @@ export function unknownEndpoint(req: any, res: any) {
 export function errorHandler(error: any, req: any, res: any, _next: any) {
     console.error(`Error: ${error.message ?? error}`);
 
+    if (error instanceof ValidationError)
+        return res.status(400).send({ error: error.message });
+
     if (error?.message.startsWith(errors.noData.message))
         return res.status(404).send({ error: 'unknown endpoint' });
     if (error?.message.startsWith(errors.invalidData.message))
@@ -22,9 +25,6 @@ export function errorHandler(error: any, req: any, res: any, _next: any) {
         return res.status(401).send({ error: 'Token has already expired' });
     if (error?.message ?? error === 'jwt expired')
         return res.status(401).send({ error: 'Token has already expired' });
-
-    if (error instanceof ValidationError)
-        return res.status(400).send({ error: error.message });
 
     console.log('Error was unhandled');
     

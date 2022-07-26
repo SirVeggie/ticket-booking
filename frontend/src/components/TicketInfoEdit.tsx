@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, Message } from 'semantic-ui-react';
+import { Button, Icon, Message } from 'semantic-ui-react';
 import { Seats, sumSeats, sumTickets, Ticket } from 'shared';
 import { StateType } from '../store';
 import database from '../tools/database';
@@ -58,7 +58,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
       return;
     }
 
-    if (!admin && sumSeats(seats) > available + sumSeats(ticket.seats)) {
+    if (!admin && (sumSeats(seats) > available + sumSeats(ticket.seats))) {
       setError('Valitut liput ylittävät vapaidet paikkojen määrän. Vähennä lippujen määrää.');
       return;
     }
@@ -93,6 +93,13 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
         title='Vahvista varauksen päivitys'
         text='Varmista lippujen oikea määrä'
       >
+        <Toggle enabled={!!error}>
+          <Message negative>
+            <Icon name='warning sign' />
+            Huomio: Paikkamäärä ylittyy {sumSeats(seats) - sumSeats(ticket.seats) + available} paikalla
+          </Message>
+        </Toggle>
+
         Perusliput: {ticket.seats.normal} {'->'} {seats.normal}<br />
         Alennusliput: {ticket.seats.discount} {'->'} {seats.discount}<br />
         Perheliput: {ticket.seats.family} {'->'} {seats.family}<br />
@@ -100,15 +107,18 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
 
       <h2>Vaihda varattujen lippujen määrää</h2>
 
-      <Toggle enabled={!!error}>
-        <Message icon='warning sign' warning size='small' header={error} />
-      </Toggle>
-
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <LabelDropdown label='Perusliput' value={x => x === seats.normal} items={numbers} mapName={item => String(item)} update={x => updateSeats({ ...seats, normal: x })} />
         <LabelDropdown label='Alennusliput' value={x => x === seats.discount} items={numbers} mapName={item => String(item)} update={x => updateSeats({ ...seats, discount: x })} />
         <LabelDropdown label='Perheliput' value={x => x === seats.family} items={numbers} mapName={item => String(item)} update={x => updateSeats({ ...seats, family: x })} />
       </div>
+
+      <Toggle enabled={!!error}>
+        <Message negative>
+          <Icon name='warning sign' />
+          {error}
+        </Message>
+      </Toggle>
 
       <Button basic loading={loading} onClick={onSave}>Confirm</Button>
       <Button basic onClick={() => history.push(`/ticket/${ticket.id}`)}>Back</Button>

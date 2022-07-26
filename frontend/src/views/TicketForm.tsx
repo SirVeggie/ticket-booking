@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Form, Button, Table, Message, Icon } from 'semantic-ui-react';
 import Footer from '../components/Footer';
 import TitleStrip from '../components/TitleStrip';
 import { printDate, printTime } from '../tools/stringTool';
-import { makeId, Phonenumber, Show, Showtime, sumTickets, Ticket } from 'shared';
+import { makeId, MiscData, Phonenumber, Show, Showtime, sumSeats, sumTickets, Ticket } from 'shared';
 import { useDispatch, useSelector } from 'react-redux';
 import { StateType } from '../store';
 import { setTicket } from '../reducers/ticketReducer';
@@ -17,7 +17,7 @@ import Toggle from '../components/Toggle';
 import database from '../tools/database';
 
 function TicketForm() {
-  const { shows, showtimes } = useSelector((state: StateType) => state.data);
+  const { shows, showtimes, misc } = useSelector((state: StateType) => state.data);
   const id = (useParams() as any).id;
 
   const showtime = showtimes.find(x => x.id === id);
@@ -29,7 +29,7 @@ function TicketForm() {
     <div style={{ minWidth: 520 }}>
       <TitleStrip title={show.name} button='Kotisivu' onClick={() => window.location.href = 'https://www.arcticensemble.com/where-are-we'} />
       <div style={{ height: 50 }} />
-      <FormBlock show={show} showtime={showtime} />
+      <FormBlock show={show} showtime={showtime} misc={misc} />
       <Footer />
     </div>
   );
@@ -46,7 +46,7 @@ class Errors {
   server: string = '';
 }
 
-function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
+function FormBlock({ show, showtime, misc }: { show: Show, showtime: Showtime, misc: MiscData; }) {
   const initialFormData = new Ticket();
   initialFormData.id = 'null';
   initialFormData.showtimeid = makeId(showtime.id);
@@ -55,11 +55,15 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   const [data, setData] = useState(initialFormData);
   const [errors, setErrors] = useState(new Errors());
   const [loading, setLoading] = useState(false);
+  const [seatsLeft, setSeatsLeft] = useState(0);
   const dispatch = useDispatch();
 
-  const ticketNormal = 'Yli 18 vuotiaat';
-  const ticketDiscount = 'Lapset, opiskelijat, eläkeläiset, toimintarajoitteiset ja toimintarajoitteisten hoitajat';
-  const ticketFamily = '2 aikuista ja 2 lasta';
+  useEffect(() => {
+    database.showtimes.getAvailableSeats(showtime.id)
+      .then(x => setSeatsLeft(x))
+      .catch(x => console.error(x));
+  }, []);
+  
   const changeTickets = (type: string, amount: number) => {
     setData({ ...data, seats: { ...data.seats, [type]: amount } });
     setErrors({ ...errors, tickets: '' });
@@ -99,7 +103,7 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
     let ticket = { ...data, reserveDate: new Date() };
     console.log('Submitting form:\n' + JSON.stringify(ticket));
     
-    const validationErrors = validateForm(data, nameData, checked);
+    const validationErrors = validateForm(data, nameData, checked, seatsLeft);
     if (validationErrors.hasErrors) {
       setErrors(validationErrors);
       console.log('Form submit failed due to invalid data');
@@ -113,9 +117,9 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
       console.log(`Form submit succeeded\n${JSON.stringify(ticket)}`);
       dispatch(setTicket(ticket));
       history.push('/waiting_confirmation');
-    } catch (error) {
+    } catch (error: any) {
       console.log('Server failed to handle ticket submit request');
-      setErrors({ ...errors, server: 'Häiriö palvelimen kanssa, yritä hetken kuluttua uudelleen' });
+      setErrors({ ...errors, server: error.error ?? 'Häiriö palvelimen kanssa, yritä hetken kuluttua uudelleen' });
       setLoading(false);
       return;
     }
@@ -139,9 +143,24 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
             </div>
           </Toggle>
 
-          <TicketSelector name='Perusliput' price={showtime.prices.normal} hint={ticketNormal} data={data.seats.normal} setData={amount => changeTickets('normal', amount)} />
-          <TicketSelector name='Alennusliput' price={showtime.prices.discount} hint={ticketDiscount} data={data.seats.discount} setData={amount => changeTickets('discount', amount)} />
-          <TicketSelector name='Perheliput' price={showtime.prices.family} hint={ticketFamily} data={data.seats.family} setData={amount => changeTickets('family', amount)} />
+          <TicketSelector name='Perusliput'
+            price={showtime.prices.normal}
+            hint={misc.explanations.normal}
+            data={data.seats.normal}
+            setData={amount => changeTickets('normal', amount)}
+          />
+          <TicketSelector name='Alennusliput'
+            price={showtime.prices.discount}
+            hint={misc.explanations.discount}
+            data={data.seats.discount}
+            setData={amount => changeTickets('discount', amount)}
+          />
+          <TicketSelector name='Perheliput'
+            price={showtime.prices.family}
+            hint={misc.explanations.family}
+            data={data.seats.family}
+            setData={amount => changeTickets('family', amount)}
+          />
           
           <div style={{ marginTop: 10, fontSize: 15 }}>
             Kokonaishinta: {data.seats.normal * showtime.prices.normal + data.seats.discount * showtime.prices.discount + data.seats.family * showtime.prices.family}€
@@ -177,12 +196,17 @@ function FormBlock({ show, showtime }: { show: Show, showtime: Showtime; }) {
   );
 }
 
-function validateForm(ticket: Ticket, nameData: { first: string, last: string; }, checked: boolean): Errors {
+function validateForm(ticket: Ticket, nameData: { first: string, last: string; }, checked: boolean, seatsLeft: number): Errors {
   const errors = new Errors();
 
   if (sumTickets(ticket.seats) === 0) {
     errors.hasErrors = true;
     errors.tickets = 'Lisää ainakin yksi lippu';
+  }
+  
+  if (sumSeats(ticket.seats) > seatsLeft) {
+    errors.hasErrors = true;
+    errors.tickets = `Näytöksessä ei ole tarpeeksi paikkoja jäljellä (${sumSeats(ticket.seats) - seatsLeft} liikaa)`;
   }
 
   if (!nameData.first) {

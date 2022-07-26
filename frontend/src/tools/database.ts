@@ -22,18 +22,24 @@ function get<Type>(target: string): (id: string) => Promise<Type> {
         .catch(handleError);
 }
 
-function add<Type>(target: string): (show: Type) => Promise<Type> {
-    return show => axios.post(target, show, auth.getConfig())
+function add<Type>(target: string): (item: Type) => Promise<Type> {
+    return item => axios.post(target, item, auth.getConfig())
         .then(x => fixDates(x.data))
         .catch(handleError);
 }
 
-function replace<Type>(target: string): (id: string, show: Type) => Promise<void> {
-    return (id, show) => axios.put(`${target}/${id}`, show, auth.getConfig()).catch(handleError);
+function replace<Type>(target: string): (id: string, item: Type) => Promise<void> {
+    return (id, item) => axios.put(`${target}/${id}`, item, auth.getConfig()).catch(handleError);
 }
 
 function del(target: string): (id: string) => Promise<void> {
     return id => axios.delete(`${target}/${id}`, auth.getConfig()).catch(handleError);
+}
+
+function addTicket(ticket: Ticket, admin?: boolean): Promise<Ticket> {
+    return axios.post(ticketPath, ticket, admin ? auth.getConfig() : undefined)
+        .then(x => fixDates(x.data))
+        .catch(handleError);
 }
 
 function getPacket(): Promise<DataPacket> {
@@ -86,7 +92,10 @@ export default {
         getAvailableSeats
     },
     tickets: {
-        ...generate<Ticket>(ticketPath),
+        ...{
+            ...generate<Ticket>(ticketPath),
+            add: addTicket
+        },
         getSeatAmounts,
         updateSeats: updateTicketSeats,
         confirm: confirmTicket,
