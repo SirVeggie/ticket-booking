@@ -17,6 +17,7 @@ export function AdminShowtimes() {
   const { refreshData } = useRefresh();
   const id = (useParams() as any).id as string;
   const { shows, showtimes } = useSelector((state: StateType) => state.data);
+  const tickets = useSelector((state: StateType) => state.admin.tickets);
   const [seatAmounts, setSeatAmounts] = useState<Record<string, number>>({});
   const notify = useNotification();
   const [modal, setModal] = useState(false);
@@ -58,6 +59,8 @@ export function AdminShowtimes() {
     else
       notify.create('error', 'Unable to delete showtime');
   };
+  
+  const affectedTickets = tickets.reduce((sum, t) => sum + (t.showtimeid.toString() === modalData?.[0].id ? 1 : 0), 0);
 
   return (
     <div>
@@ -65,7 +68,7 @@ export function AdminShowtimes() {
         open={modal}
         onInput={onModal}
         title='Delete showtime?'
-        text='Are you sure you want to delete this showtime?'
+        text={`This will also delete ${affectedTickets} ticket${affectedTickets === 1 ? '' : 's'} associated with this showtime`}
         warning yesNo
       >
         {modalData && <Card data={modalData[1]} />}

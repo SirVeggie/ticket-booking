@@ -372,6 +372,7 @@ async function replaceShowByID(id: string, show: Omit<Show, 'id'>): Promise<void
 }
 
 async function deleteShowByID(id: string): Promise<void> {
+    (await ShowtimeModel.find({ showid: id })).forEach(x => deleteShowtimeByID(x.id));
     await ShowModel.findByIdAndDelete(id);
 }
 
@@ -407,6 +408,7 @@ async function replaceShowtimeByID(id: string, showtime: Omit<Showtime, 'id'>): 
 }
 
 async function deleteShowtimeByID(id: string): Promise<void> {
+    await TicketModel.deleteMany({ showtimeid: id });
     await ShowtimeModel.findByIdAndDelete(id);
 }
 
