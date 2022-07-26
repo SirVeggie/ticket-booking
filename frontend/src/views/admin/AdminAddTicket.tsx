@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Divider, Input } from 'semantic-ui-react';
+import { Button, Divider, Icon, Input, Message } from 'semantic-ui-react';
 import LabelDropdown from '../../components/LabelDropdown';
 import PhoneInput from '../../components/PhoneInput';
 import TicketInfo from '../../components/TicketInfo';
-import { makeId, Show, Showtime, Ticket } from 'shared';
+import { makeId, Show, Showtime, sumSeats, Ticket } from 'shared';
 import { setTicketList } from '../../reducers/adminReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
 import { useNotification } from '../../hooks/useNotification';
 import { ConfirmationModal } from '../../components/ConfirmationModal';
+import Toggle from '../../components/Toggle';
 
 const numbers = Array(201).fill(0).map((_, i) => i);
 
@@ -20,10 +21,18 @@ export default function AdminAddTicket() {
   const [show, setShow] = useState(new Show());
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
+  const [seatsLeft, setSeatsLeft] = useState(0);
+  
+  useEffect(() => {
+    if (ticket.showtimeid)
+      database.showtimes.getAvailableSeats(ticket.showtimeid.toString())
+        .then(setSeatsLeft)
+        .catch(err => notify.create('error', err.error ?? 'Failed to get available seats'));
+  }, [ticket.showtimeid]);
 
   const updateShow = (show: Show) => {
-    setTicket({ ...ticket, showtimeid: makeId('') });
     setShow(show);
+    setTicket({ ...ticket, showtimeid: null as any });
   };
 
   const onSave = () => {
@@ -36,7 +45,7 @@ export default function AdminAddTicket() {
 
     try {
       const data = { ...ticket, confirmed: true };
-      await database.tickets.add(data);
+      await database.tickets.add(data, true);
       notify.create('success', 'Ticket added successfully');
       setTicket(new Ticket());
       setShow(new Show());
@@ -71,6 +80,14 @@ export default function AdminAddTicket() {
           <LabelDropdown label='Discount' value={x => x === ticket.seats.discount} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, discount: Number(x) } })} />
           <LabelDropdown label='Family' value={x => x === ticket.seats.family} items={numbers} mapName={item => String(item)} update={x => setTicket({ ...ticket, seats: { ...ticket.seats, family: Number(x) } })} />
         </div>
+        
+        <Toggle enabled={sumSeats(ticket.seats) > seatsLeft}>
+          <Message negative>
+            <Icon name='warning sign' />
+            You have selected more seats than are available by {sumSeats(ticket.seats) - seatsLeft}
+          </Message>
+        </Toggle>
+        
         <Button onClick={onSave} >Save</Button>
         <Divider />
         <h2>Preview</h2>

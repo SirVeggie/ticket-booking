@@ -31,7 +31,7 @@ export function add(target: DataType, admin: boolean) {
     return async (req: any, res: any) => {
         if (admin)
             checkAdmin(req);
-        const result = await database[target].add(req.body);
+        const result = await database[target].add(req.body, false);
         res.json(result);
     };
 }

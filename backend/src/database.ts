@@ -1,5 +1,5 @@
 import { DataPacket, errors, makeId, MiscData, Seats, Show, Showtime, ShowtimeExtra, sumSeats, Ticket } from 'shared';
-import { validateShow, validateShowtime, validateTicket } from './tools/dataValidation';
+import { valError, validateShow, validateShowtime, validateTicket } from './tools/dataValidation';
 import { ShowModel } from './models/ShowModel';
 import { ShowtimeModel } from './models/ShowtimeModel';
 import { TicketModel } from './models/TicketModel';
@@ -35,7 +35,7 @@ async function reset() {
         const res = await ShowtimeModel.create(showtime);
         showtimeIds[i] = res.id;
     }));
-    
+
     await Promise.all(createTickets(showtimeIds).map(async ticket => {
         await TicketModel.create(ticket);
     }));
@@ -430,8 +430,12 @@ async function getTicketByID(id: string): Promise<Ticket> {
     return (await TicketModel.findById(id)) ?? error(errors.noData);
 }
 
-async function addTicket(ticket: Omit<Ticket, 'id'>): Promise<Ticket> {
+async function addTicket(ticket: Omit<Ticket, 'id'>, admin: boolean): Promise<Ticket> {
     ticket = await validateTicket(ticket);
+    const seats = sumSeats(ticket.seats);
+    const available = await getAvailableSeats(ticket.showtimeid.toString());
+    if (!admin && seats > available)
+        throw valError('Not enough seats available');
     return await TicketModel.create(ticket);
 }
 

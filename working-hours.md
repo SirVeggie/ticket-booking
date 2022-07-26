@@ -56,4 +56,6 @@
 | 24.7. |  3 | Confirmation popup component |
 | 25.7. |  6 | Fixing and improving email and ticket reservation |
 | 25.7. |  4 | MongoDB integration |
-| total | 165 | 9.4 op |
+| 26.7. |  6 | Admin can browse showtimes, deletion of shows and showtimes, bug fixing |
+| 26.7. |  2 | Fixing ticket seat limits |
+| total | 173 | 9.9 op |

@@ -20,7 +20,8 @@ ticketRouter.get('/:id', async (req, res, next) => {
 });
 ticketRouter.post('/', async (req, res) => {
     const data = extractType(req.body, ticketModel);
-    const result = await database.tickets.add(data);
+    const result = await database.tickets.add(data, isAdmin(req));
+    
     if (!result.confirmed) {
         ticketConfirmation(result.email, result.id);
         setTimeout(async () => {
@@ -31,6 +32,7 @@ ticketRouter.post('/', async (req, res) => {
             database.tickets.delete(result.id);
         }, 1000 * 60 * 60);
     }
+    
     res.json(result);
 });
 ticketRouter.put('/:id', replace('tickets', false));
