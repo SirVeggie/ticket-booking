@@ -15,12 +15,18 @@ import database from '../../tools/database';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import NotFound from '../NotFound';
 import { AdminShowtimes } from './AdminShowtimes';
+import { useRefresh } from '../../hooks/useRefresh';
+import { setInterval } from 'timers';
 
 function AdminPanel() {
   const dispatch = useDispatch();
+  const { refreshAuth } = useRefresh();
 
   useEffect(() => {
     database.tickets.getall().then(tickets => dispatch(setTicketList(tickets)));
+    const interval = setInterval(refreshAuth, 10000);
+    
+    return clearInterval(interval);
   }, []);
 
   return (
@@ -68,7 +74,7 @@ function Content() {
         <Route path='/admin/shows'>
           <AdminShows />
         </Route>
-        
+
         <Route path='/admin/show/:id'>
           <AdminShowtimes />
         </Route>
@@ -88,7 +94,7 @@ function Content() {
         <Route path='/admin/add_ticket'>
           <AdminAddTicket />
         </Route>
-        
+
         <Route>
           <NotFound noStrip noButton />
         </Route>
@@ -99,7 +105,7 @@ function Content() {
 
 function Sidebar() {
   const history = useHistory();
-  
+
   return (
     <div id='AdminSidebar' style={sidebar}>
       <div style={sidebarButtons}>
