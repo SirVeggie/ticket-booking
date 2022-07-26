@@ -49,9 +49,9 @@ ticketRouter.post('/:id/update_seats', async (req, res) => {
     res.status(200).end();
 });
 
-ticketRouter.get('/ticket_amounts', async (req, res) => {
+ticketRouter.get('/seat_amounts', async (req, res) => {
     console.log('fetch ticket_amounts');
-    const data = await database.tickets.getAmounts();
+    const data = await database.tickets.getSeatAmounts();
     res.json(data);
 });
 

@@ -11,7 +11,16 @@ function Cards({ title, cards, emptyText }: { title: string, cards: CardInfo[] |
       <h1>{title}</h1>
       <ConditionalRender index={index}>
         <LoadingCards />
-        <div>{!cards ? 'Error' : cards.map((card, index) => <Card style={{ marginBottom: 10 }} key={index} data={card} onClick={card.action ?? (() => console.log('Clicked ' + index))} />)}</div>
+        <div>
+          {!cards ? 'Error' : cards.map((card, index) =>
+            <Card
+              style={{ marginBottom: 10 }}
+              key={index}
+              data={card}
+              onClick={card.action ?? (() => console.log('Clicked ' + index))}
+            />
+          )}
+        </div>
         <EmptyCards emptyText={emptyText} />
       </ConditionalRender>
     </div>
@@ -20,7 +29,7 @@ function Cards({ title, cards, emptyText }: { title: string, cards: CardInfo[] |
 
 function EmptyCards({ emptyText }: { emptyText?: string; }) {
   return (
-    <div style={{ textAlign: 'center', fontSize: 20 }}>{ emptyText ? emptyText : 'No content to show'}</div>
+    <div style={{ textAlign: 'center', fontSize: 20 }}>{emptyText ? emptyText : 'No content to show'}</div>
   );
 }
 

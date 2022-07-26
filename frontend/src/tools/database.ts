@@ -42,8 +42,8 @@ function getPacket(): Promise<DataPacket> {
         .catch(handleError);
 }
 
-function getTicketAmounts(): Promise<Record<string, number>> {
-    return axios.get(`${ticketPath}/ticket_amounts`)
+function getSeatAmounts(): Promise<Record<string, number>> {
+    return axios.get(`${ticketPath}/seat_amounts`)
         .then(x => x.data)
         .catch(handleError);
 }
@@ -87,7 +87,7 @@ export default {
     },
     tickets: {
         ...generate<Ticket>(ticketPath),
-        getAmounts: getTicketAmounts,
+        getSeatAmounts,
         updateSeats: updateTicketSeats,
         confirm: confirmTicket,
         checkConfirm: checkConfirmTicket

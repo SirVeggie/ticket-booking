@@ -91,7 +91,7 @@ export default function TicketInfoEdit({ ticket, update }: { ticket: Ticket, upd
         open={modal}
         onInput={onConfirm}
         title='Vahvista varauksen päivitys'
-        message='Varmista lippujen oikea määrä'
+        text='Varmista lippujen oikea määrä'
       >
         Perusliput: {ticket.seats.normal} {'->'} {seats.normal}<br />
         Alennusliput: {ticket.seats.discount} {'->'} {seats.discount}<br />

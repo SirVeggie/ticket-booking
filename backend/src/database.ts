@@ -28,19 +28,16 @@ async function reset() {
     await Promise.all(createShows().map(async (show, i) => {
         const res = await ShowModel.create(show);
         showIds[i] = res.id;
-        console.log(`Created show ${res.id}`);
     }));
 
     const showtimeIds: string[] = [];
     await Promise.all(createShowtimes(showIds).map(async (showtime, i) => {
         const res = await ShowtimeModel.create(showtime);
         showtimeIds[i] = res.id;
-        console.log(`Created showtime ${res.id} : ${res.showid}`);
     }));
     
     await Promise.all(createTickets(showtimeIds).map(async ticket => {
-        const res = await TicketModel.create(ticket);
-        console.log(`Created ticket ${res.id} : ${res.showtimeid}`);
+        await TicketModel.create(ticket);
     }));
 }
 
@@ -311,10 +308,8 @@ function error(error: any): never {
 function mapShowtimeToExtra(tickets: Ticket[]): (st: Showtime) => ShowtimeExtra {
     return (showtime: Showtime) => {
         const reserved = tickets.filter(x => x.showtimeid.toString() === showtime.id).reduce((a, b) => a + sumSeats(b.seats), 0);
-        console.log(showtime);
         const extra = showtime as ShowtimeExtra;
         extra.reservedSeats = reserved;
-        console.log(extra);
         return extra;
     };
 }
@@ -343,7 +338,7 @@ function replaceMisc(data: MiscData): MiscData {
     return data;
 }
 
-async function getTicketAmounts(): Promise<Record<string, number>> {
+async function getSeatAmounts(): Promise<Record<string, number>> {
     const tickets = await TicketModel.find({});
     const showtimes = await ShowtimeModel.find({});
 
@@ -377,6 +372,7 @@ async function replaceShowByID(id: string, show: Omit<Show, 'id'>): Promise<void
 }
 
 async function deleteShowByID(id: string): Promise<void> {
+    (await ShowtimeModel.find({ showid: id })).forEach(x => deleteShowtimeByID(x.id));
     await ShowModel.findByIdAndDelete(id);
 }
 
@@ -412,6 +408,7 @@ async function replaceShowtimeByID(id: string, showtime: Omit<Showtime, 'id'>): 
 }
 
 async function deleteShowtimeByID(id: string): Promise<void> {
+    await TicketModel.deleteMany({ showtimeid: id });
     await ShowtimeModel.findByIdAndDelete(id);
 }
 
@@ -490,7 +487,7 @@ export default {
         add: addTicket,
         delete: deleteTicketByID,
         replace: replaceTicketByID,
-        getAmounts: getTicketAmounts,
+        getSeatAmounts,
         updateSeats: updateTicketSeats
     }
 };

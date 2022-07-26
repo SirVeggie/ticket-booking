@@ -7,7 +7,7 @@ export type ConfirmationModalProps = {
   open: boolean;
   onInput: (value: boolean) => void;
   title?: string;
-  message?: string;
+  text?: string;
   warning?: boolean;
   children?: React.ReactNode;
   noButtons?: boolean;
@@ -18,7 +18,7 @@ export function ConfirmationModal(p: ConfirmationModalProps) {
   const s = useStyles();
 
   const title = p.title ?? 'Are you sure?';
-  const message = p.message ?? '';
+  const message = p.text ?? '';
 
   const parentClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget)
@@ -40,8 +40,8 @@ export function ConfirmationModal(p: ConfirmationModalProps) {
 
           <Toggle enabled={!p.noButtons}>
             <div className={s.buttons}>
-              <button className={s.button} onClick={() => p.onInput(true)}>{p.yesNo ? 'Yes' : 'Ok'}</button>
-              <button className={cx(s.button, 'cancel')} onClick={() => p.onInput(false)}>{p.yesNo ? 'No' : 'Cancel'}</button>
+              <button className={cx(s.button, p.warning ? 'danger' : 'accept')} onClick={() => p.onInput(true)}>{p.yesNo ? 'Yes' : 'Ok'}</button>
+              <button className={s.button} onClick={() => p.onInput(false)}>{p.yesNo ? 'No' : 'Cancel'}</button>
             </div>
           </Toggle>
 
@@ -115,10 +115,14 @@ const useStyles = createUseStyles({
     cursor: 'pointer',
     width: '100px',
 
-    '&.cancel': {
-      backgroundColor: '#fff',
+    '&.danger': {
       borderColor: '#faa',
       color: '#faa',
+    },
+    
+    '&.accept': {
+      borderColor: '#aaf',
+      color: '#aaf',
     },
 
     '&:hover': {

@@ -13,8 +13,9 @@ export default function AdminAddShow() {
   const notify = useNotification();
   const dispatch = useDispatch();
   const [show, setShow] = useState(new Show());
-  const card = showMapper([show], [new Showtime()], new MiscData())[0];
   const [modal, setModal] = useState(false);
+  
+  const card = showMapper([show], [new Showtime()], new MiscData())[0][1];
 
   const onSave = async () => {
     setModal(true);
