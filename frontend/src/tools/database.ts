@@ -72,6 +72,10 @@ function confirmTicket(id: string): Promise<void> {
     return axios.post(`${ticketPath}/confirm/${id}`).catch(handleError);
 }
 
+function resetDatabase(): Promise<void> {
+    return axios.post(`${apiPath}/reset`).catch(handleError);
+}
+
 //====| exports |====//
 
 function generate<Type>(target: string) {
@@ -86,6 +90,7 @@ function generate<Type>(target: string) {
 
 export default {
     getPacket,
+    resetDatabase,
     shows: generate<Show>(showPath),
     showtimes: {
         ...generate<Showtime>(showtimePath),
