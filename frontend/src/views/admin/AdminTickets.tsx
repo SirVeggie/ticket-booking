@@ -75,7 +75,7 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
       return false;
     if (props.today && (st.date.getDate() !== now.getDate() || st.date.getMonth() !== now.getMonth() || st.date.getFullYear() !== now.getFullYear()))
       return false;
-    return (props.search || hasSelection) && match(props.search, t.name, t.email, t.phonenumber.code + t.phonenumber.number);
+    return (true || props.search || hasSelection) && match(props.search, t.name, t.email, t.phonenumber.code + t.phonenumber.number);
   };
 
   const sort = (a: Ticket, b: Ticket) => {
@@ -129,7 +129,7 @@ function Results(props: { search: string, today: boolean, old: boolean, show: Sh
         {!cards.length ? 'No matches...' : cards}
       </div>
       <Toggle enabled={items.length > cards.length}>
-        <Button onClick={() => setLimit(limit + 10)}>Show more ({items.length - cards.length})</Button>
+        <Button style={{ marginTop: 10 }} onClick={() => setLimit(limit + 10)}>Show more ({items.length - cards.length})</Button>
       </Toggle>
     </div>
   );
