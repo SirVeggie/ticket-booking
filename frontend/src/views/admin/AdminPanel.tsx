@@ -14,6 +14,7 @@ import { lines } from '../../tools/shapes';
 import database from '../../tools/database';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import NotFound from '../NotFound';
+import { AdminShowtimes } from './AdminShowtimes';
 
 function AdminPanel() {
   const dispatch = useDispatch();
@@ -66,6 +67,10 @@ function Content() {
 
         <Route path='/admin/shows'>
           <AdminShows />
+        </Route>
+        
+        <Route path='/admin/show/:id'>
+          <AdminShowtimes />
         </Route>
 
         <Route path='/admin/tickets'>

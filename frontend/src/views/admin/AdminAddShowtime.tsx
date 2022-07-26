@@ -7,9 +7,9 @@ import { makeId, Showtime } from 'shared';
 import { setData } from '../../reducers/dataReducer';
 import { StateType } from '../../store';
 import database from '../../tools/database';
-import { mapShowtimeCard } from '../Showtimes';
 import { useNotification } from '../../hooks/useNotification';
 import { ConfirmationModal } from '../../components/ConfirmationModal';
+import { mapShowtimeCard } from '../../tools/maps';
 
 const defaultDate = new Date(2000, 0, 1, 0, 0);
 

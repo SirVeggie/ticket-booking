@@ -343,7 +343,7 @@ function replaceMisc(data: MiscData): MiscData {
     return data;
 }
 
-async function getTicketAmounts(): Promise<Record<string, number>> {
+async function getSeatAmounts(): Promise<Record<string, number>> {
     const tickets = await TicketModel.find({});
     const showtimes = await ShowtimeModel.find({});
 
@@ -490,7 +490,7 @@ export default {
         add: addTicket,
         delete: deleteTicketByID,
         replace: replaceTicketByID,
-        getAmounts: getTicketAmounts,
+        getSeatAmounts,
         updateSeats: updateTicketSeats
     }
 };

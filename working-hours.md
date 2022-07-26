@@ -50,10 +50,10 @@
 | 22.7. |  1 | Buying and setting up domain and nginx and https |
 | 23.7. |  2 | Refactoring routes and other stuff |
 | 23.7. |  2 | Simple backup/rollback + deployment notification |
-| 23.7. |  2 | Notification popup |
+| 23.7. |  2 | Notification popup component |
 | 23.7. |  1 | Minor features/fixes |
 | 24.7. |  5 | Admin tool notifications, data validation, error messages |
-| 24.7. |  3 | Confirmation popup |
+| 24.7. |  3 | Confirmation popup component |
 | 25.7. |  6 | Fixing and improving email and ticket reservation |
 | 25.7. |  4 | MongoDB integration |
 | total | 165 | 9.4 op |
