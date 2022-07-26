@@ -13,7 +13,7 @@ function Homepage() {
   const { shows, showtimes, misc } = useSelector((state: StateType) => state.data);
   const history = useHistory();
 
-  const cards: CardInfo[] = showMapper(shows, showtimes, misc, history).map(x => x[1]);
+  const cards: CardInfo[] = showMapper(shows.filter(x => !x.hidden), showtimes, misc, history).map(x => x[1]);
   
   return (
     <div style={{ position: 'relative' }}>

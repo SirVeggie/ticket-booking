@@ -30,6 +30,7 @@ export class Show {
     shortDescription?: string = '';
     color?: string = undefined;
     imageUrl?: string = undefined;
+    hidden?: boolean = false;
 }
 
 export class Showtime {

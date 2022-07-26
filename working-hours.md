@@ -59,4 +59,5 @@
 | 26.7. |  6 | Admin can browse showtimes, deletion of shows and showtimes, bug fixing |
 | 26.7. |  2 | Fixing ticket seat limits |
 | 26.7. |  1 | Modify readme, fix some bugs, database reset button |
-| total | 174 | 9.9 op |
+| 26.7. |  1 | Admin can hide shows from public view |
+| total | 175 | 10 op |

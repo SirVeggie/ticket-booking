@@ -1,10 +1,13 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
+import cx from 'classnames';
+import Toggle from './Toggle';
 
 type Props = {
   aEdit?: () => void,
   aHide?: () => void,
   aDelete?: () => void;
+  eyeSlash?: boolean;
 };
 
 export default function CardButtons(p: Props) {
@@ -19,9 +22,36 @@ export default function CardButtons(p: Props) {
 
   return (
     <div className={styles.buttons}>
-      {p.aEdit && <button className='edit' onClick={preventProp(p.aEdit)}><i className='fas fa-edit'></i></button>}
-      {p.aHide && <button className='hide' onClick={preventProp(p.aHide)}><i className='fas fa-eye-slash'></i></button>}
-      {p.aDelete && <button className='delete' onClick={preventProp(p.aDelete)}><i className='fas fa-trash-alt'></i></button>}
+      <Toggle enabled={!!p.aEdit}>
+        <button className='edit' onClick={preventProp(p.aEdit!)}>
+          <i className='fas fa-edit' />
+          <Tooltip text='Edit' />
+        </button>
+      </Toggle>
+
+      <Toggle enabled={!!p.aHide}>
+        <button className='hide' onClick={preventProp(p.aHide!)}>
+          <i className={cx('fas', `fa-eye${p.eyeSlash ? '-slash' : ''}`)} />
+          <Tooltip text={p.eyeSlash ? 'Show' : 'Hide'} />
+        </button>
+      </Toggle>
+
+      <Toggle enabled={!!p.aDelete}>
+        <button className='delete' onClick={preventProp(p.aDelete!)}>
+          <i className='fas fa-trash-alt' />
+          <Tooltip text={'Delete'} />
+        </button>
+      </Toggle>
+    </div>
+  );
+}
+
+function Tooltip({ text }: { text: string; }) {
+  const s = useStyles();
+
+  return (
+    <div className={s.tooltip}>
+      {text}
     </div>
   );
 }
@@ -34,6 +64,7 @@ const useStyles = createUseStyles({
     display: 'flex',
 
     '& > button': {
+      position: 'relative',
       width: 50,
       height: 40,
       borderStyle: 'none none solid none',
@@ -76,5 +107,28 @@ const useStyles = createUseStyles({
       backgroundColor: 'hsl(0, 45%, 45%)',
       boxShadow: 'inset 0 0 5px, -1px #000b'
     },
+  },
+
+  tooltip: {
+    position: 'absolute',
+    top: 45,
+    right: 5,
+    padding: '0.5em',
+    backgroundColor: '#dddd',
+    color: '#000d',
+    fontSize: 12,
+    borderRadius: 5,
+    boxShadow: '0 0 5px #0004',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transition: 'opacity 100ms ease',
+    zIndex: 1,
+    pointerEvents: 'none',
+    opacity: 0,
+
+    'button:hover > &': {
+      opacity: 1
+    }
   }
 });

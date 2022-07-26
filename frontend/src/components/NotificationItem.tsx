@@ -61,13 +61,14 @@ const useStyles = createUseStyles({
     },
 
     '&.success': {
-      backgroundColor: '#a0f0a0b0',
+      backgroundColor: '#eaf0eae0',
       borderColor: '#80c08040',
       color: '#008000',
     },
 
     '&.error': {
-      backgroundColor: '#f0a0a0b0',
+      // backgroundColor: '#f0a0a0b0',
+      backgroundColor: '#f0eaeae0',
       borderColor: '#c0808040',
       color: '#ff0000',
     },

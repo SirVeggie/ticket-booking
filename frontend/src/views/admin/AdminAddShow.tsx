@@ -26,7 +26,7 @@ export default function AdminAddShow() {
     if (!confirm) return;
 
     try {
-      await database.shows.add(show);
+      await database.shows.add({ ...show, hidden: true });
       notify.create('success', 'Show added successfully');
     } catch (error: any) {
       const message = error.error ?? error;

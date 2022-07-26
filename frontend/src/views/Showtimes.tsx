@@ -39,6 +39,7 @@ export default function Showtimes() {
       <Toggle enabled={!!show.imageUrl}>
         <BackButton text='Takaisin esityksiin' />
       </Toggle>
+      {!show.imageUrl && <br />}
       {show.description ? <Description desc={show.description!} /> : ''}
       <Cards title='Näytökset' cards={cards} emptyText='Ei tulevia näytöksiä' />
       <BackButton text='Takaisin esityksiin' />
