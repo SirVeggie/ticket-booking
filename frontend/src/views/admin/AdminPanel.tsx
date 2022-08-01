@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect } from 'react';
+import { CSSProperties, useEffect } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
 import Align from '../../components/Align';

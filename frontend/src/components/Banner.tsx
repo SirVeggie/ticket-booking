@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Image, Placeholder } from 'semantic-ui-react';
 import curves from '../tools/curves';
 import gradient from '../tools/gradient';

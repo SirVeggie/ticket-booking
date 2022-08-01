@@ -1,4 +1,3 @@
-import React from 'react';
 import { createUseStyles } from 'react-jss';
 
 export default function CardCheckbox(props: { checked: boolean, update: (value: boolean) => void; }) {

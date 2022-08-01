@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Form, Button, Table, Message, Icon } from 'semantic-ui-react';
 import Footer from '../components/Footer';

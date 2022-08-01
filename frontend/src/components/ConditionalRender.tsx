@@ -1,4 +1,3 @@
-import React from 'react';
 
 function ConditionalRender({ index, children }: { index: number, children: any[]; }) {
   return (

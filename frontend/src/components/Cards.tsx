@@ -1,4 +1,3 @@
-import React from 'react';
 import { Placeholder, Segment } from 'semantic-ui-react';
 import Card from './Card';
 import ConditionalRender from './ConditionalRender';

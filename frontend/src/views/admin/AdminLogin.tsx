@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Label } from 'semantic-ui-react';
 import Align from '../../components/Align';

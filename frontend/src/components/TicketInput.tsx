@@ -1,4 +1,3 @@
-import React from 'react';
 import { Dropdown, Icon, Label, Popup } from 'semantic-ui-react';
 
 const ticketOptions: any = [];

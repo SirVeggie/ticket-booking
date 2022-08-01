@@ -1,4 +1,3 @@
-import React from 'react';
 import TitleStrip from '../components/TitleStrip';
 import Banner from '../components/Banner';
 import Cards from '../components/Cards';
