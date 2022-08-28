@@ -19,25 +19,25 @@ jobs:
     - name: lint
       run: npm run lint
       
-  heroku:
-    if: ${{ github.event_name == 'push' }}
-    needs: [pipeline]  
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_SECRET }}
-        heroku_app_name: 'arctic-ensemble-booking'
-        heroku_email: 'sirveggie@hotmail.com'
-        healthcheck: 'https://arctic-ensemble-booking.herokuapp.com/api/health'
-        checkstring: 'ok'
-        delay: 5
-        rollbackonhealthcheckfailed: true
+  # heroku:
+  #   if: ${{ github.event_name == 'push' }}
+  #   needs: [pipeline]  
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - uses: akhileshns/heroku-deploy@v3.12.12
+  #     with:
+  #       heroku_api_key: ${{ secrets.HEROKU_SECRET }}
+  #       heroku_app_name: 'arctic-ensemble-booking'
+  #       heroku_email: 'sirveggie@hotmail.com'
+  #       healthcheck: 'https://arctic-ensemble-booking.herokuapp.com/api/health'
+  #       checkstring: 'ok'
+  #       delay: 5
+  #       rollbackonhealthcheckfailed: true
   
   contabo:
     if: ${{ github.event_name == 'push' }}
-    needs: [heroku]
+    needs: [pipeline]
     runs-on: ubuntu-latest
     steps:
     - name: Deploy using ssh
