@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dropdown, Input, Label } from 'semantic-ui-react';
 import { Phonenumber } from 'shared';
 import countryData from '../resources/countries.json';

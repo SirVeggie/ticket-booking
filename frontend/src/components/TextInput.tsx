@@ -1,4 +1,3 @@
-import React from 'react';
 import { Input, Label } from 'semantic-ui-react';
 
 function TextInput({ label, extra, data, setData, error }: { label: string, extra?: string, data: string, setData: (data: string) => void, error?: string }) {

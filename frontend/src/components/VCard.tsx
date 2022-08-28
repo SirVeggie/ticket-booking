@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Image, Header, Item, Label } from 'semantic-ui-react';
 import gradient from '../tools/gradient';
 import curves from '../tools/curves';

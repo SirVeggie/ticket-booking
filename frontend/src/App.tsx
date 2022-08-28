@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Homepage from './views/Homepage';
 import Showtimes from './views/Showtimes';

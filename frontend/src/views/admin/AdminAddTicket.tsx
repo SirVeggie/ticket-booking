@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Divider, Icon, Input, Message } from 'semantic-ui-react';
 import LabelDropdown from '../../components/LabelDropdown';

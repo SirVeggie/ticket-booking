@@ -1,4 +1,3 @@
-import React from 'react';
 
 function Align({ left, right, top, bottom, style, children }: { left?: number, right?: number, top?: number, bottom?: number, style?: React.CSSProperties, children: any; }) {
   return (

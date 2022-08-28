@@ -1,4 +1,3 @@
-import React from 'react';
 import { Form, Message } from 'semantic-ui-react';
 
 function Notice({ data, setData, children, error }: { data: boolean, setData: (data: boolean) => void, children: string, error?: string; }) {

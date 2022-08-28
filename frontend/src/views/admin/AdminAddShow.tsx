@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Divider, Input } from 'semantic-ui-react';
 import Card from '../../components/Card';

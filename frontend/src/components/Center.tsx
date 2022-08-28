@@ -1,6 +1,5 @@
-import React from 'react';
 
-function Center({ className, style, children }: { className?: string, style?: React.CSSProperties, children: any }) {
+function Center({ className, style, children }: { className?: string, style?: React.CSSProperties, children: any; }) {
   return (
     <div className={className} style={{ ...center, ...style }}>
       {children}

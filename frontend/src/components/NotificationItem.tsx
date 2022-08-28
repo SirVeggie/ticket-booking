@@ -1,4 +1,3 @@
-import React from 'react';
 import { createUseStyles } from 'react-jss';
 import cx from 'classnames';
 import { useNotification } from '../hooks/useNotification';
